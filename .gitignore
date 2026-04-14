@@ -24,3 +24,8 @@ target
 # Added by cargo
 
 /target
+
+# Project
+
+resources/**
+!resources/.gitkeep
