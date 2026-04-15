@@ -1,6 +1,10 @@
-mod utils;
-mod data;
+use dotenv::dotenv;
 
-fn main() {
+mod data;
+mod utils;
+
+#[tokio::main]
+async fn main() {
+    dotenv().ok();
     println!("Hello, world!");
 }
