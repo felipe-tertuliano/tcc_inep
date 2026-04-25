@@ -1,0 +1,145 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx,url}
+\usepackage{sbc-template}
+\usepackage{comment}
+
+\sloppy
+
+\title{Mineração de Microdados do ENEM para Identificação de Escolas com Bom Desempenho em TIC em Contextos Socioeconômicos Desfavoráveis}
+
+\author{Felipe Lacerda Tertuliano\inst{1}, Maria Inês Martins\inst{1}}
+
+\address{Pontifícia Universidade Católica de Minas Gerais (PUC Minas)\\30.535-901 - Belo Horizonte - MG - Brazil}
+
+\begin{document}
+
+\maketitle
+
+% TODO: Fazer Abstract / Resumo
+\begin{abstract}
+
+This work proposes the development of an analytical mechanism to identify schools in the public basic education network as targets for training interventions in Information and Communication Technologies (ICT). Using microdata from ENEM and the School Census, the methodology involves large-scale data analysis, crossing student performance in the national exam with socioeconomic indicators and school characteristics. The objective is to identify institutions with performance that deviates from expectations to direct public policies and resources more effectively, resulting in a prototype, such as reproducible scripts or a panel of indicators, contributing to applied data science, education and training in ICT in Brazil.
+
+\end{abstract}
+
+\begin{resumo}
+
+Este trabalho propõe o desenvolvimento de um mecanismo analítico para identificar escolas da rede pública de ensino básico como alvo para intervenções em capacitação em Tecnologias da Informação e Comunicação (TIC). Utilizando microdados do ENEM e do Censo Escolar, a metodologia envolve a análise de dados em larga escala, cruzando o desempenho dos estudantes no exame nacional com indicadores socioeconômicos e características das escolas. O objetivo é identificar instituições com desempenho que fogem ao esperado para direcionar políticas públicas e recursos de forma mais eficaz, resultando em um protótipo, como scripts reprodutíveis ou um painel de indicadores, contribuindo para a ciência de dados aplicada, à educação e a formação em TIC no Brasil.
+
+\end{resumo}
+
+\section{Introdução}
+
+A educação é o principal pilar para o desenvolvimento de qualquer área técnica, especialmente no processo de capacitação em que as condições materiais e sociais como a renda, ambiente de estudo, etnia ou gênero podem afetar as oportunidades e o desenvolvimento desses futuros profissionais. No Brasil a desigualdade social, violência, baixos investimentos e vários outros fatores (característicos de países de terceiro mundo) afetam diretamente o processo de escolarização ainda podemos verificar casos de sucesso, entretanto no meio de tantos exemplos é difícil identificar quais e como essas exceções geraram esses resultados. Esse trabalho tem como objetivo o desenvolvimento de um mecanismo analítico para identificar escolas-alvo para intervenções de capacitação em Tecnologias da Informação e Comunicação (TIC) para alunos da rede pública de ensino básico. O mecanismo de identificação se pautará em dados públicos, sobretudo no cruzamento de de informações extraídas dos microdados do Exame Nacional do Ensino Médio (ENEM) e dos microdados do Censo Escolar, ambos disponibilizados anualmente pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP).
+
+Partindo do pressuposto de que o desempenho educacional em competências digitais depende, para além da infraestrutura tecnológica disponível, de fatores pedagógicos e institucionais, podemos identifica-los por meio da análise de dados educacionais em larga escala. Nesse contexto, a construção de um sistema de análise orientado por dados pode contribuir para orientar políticas públicas de formação e apoio às escolas, especialmente em contextos socioeconômicos mais vulneráveis. Os microdados contêm informações detalhadas sobre o desempenho dos participantes nas diferentes áreas do exame, variáveis relacionadas ao perfil socioeconômico dos estudantes e dados das escolas.
+
+A proposta consiste em extrair, tratar e organizar esses dados utilizando técnicas de tratamento de grandes bases de dados, análise estatística e de agrupamento, possibilitando a construção de indicadores comparáveis entre escolas. A análise privilegiará o cruzamento entre três conjuntos de variáveis: 1. o desempenho dos estudantes em competências associadas ao uso e à compreensão de Tecnologias da Informação e Comunicação, 2. os indicadores socioeconômicos declarados pelos participantes no questionário contextual do ENEM e 3. As características específicas da instituição de ensino em que esse participante se formou. Para o desempenho, serão consideradas competências presentes na Matriz de Referência (MR) do ENEM da área de Linguagens, Códigos e suas Tecnologias (C1 e C9) e na MR de Matemática e suas Tecnologias (C7), por estarem relacionadas a habilidades de interpretação de informações, resolução de problemas e uso de recursos tecnológicos e informacionais. Os indicadores socioeconômicos permitirão, de outro lado, caracterizar o perfil dos estudantes e/ou da escola e construir índices sintéticos ou classificações que representem as instituições. O cruzamento entre desempenho nas competências selecionadas e a situação das escolas permitirá identificar padrões de desempenho que escapam às expectativas associadas às condições SE e, se possível, infraestruturais.
+
+A identificação dessas unidades escolares, com desempenho resiliente, permitirá orientar ações de capacitação em TIC baseadas em evidências, direcionando recursos e estratégias para contextos em que tais intervenções possam produzir maior impacto. Como produto final, pretende-se desenvolver um protótipo de mecanismo de identificação de escolas-alvo, que poderá assumir a forma de um conjunto de rotinas de análise de dados, scripts reprodutíveis ou mesmo um painel analítico que permita visualizar e comparar indicadores educacionais e socioeconômicos. Espera-se que a proposta contribua tanto para o campo da ciência de dados aplicada à educação quanto para o aprimoramento de estratégias de formação em TIC no sistema educacional brasileiro.
+
+\begin{comment}
+
+\section{First Page}
+
+The first page must display the paper title, the name and address of the
+authors, the abstract in English and ``resumo'' in Portuguese (``resumos'' are
+required only for papers written in Portuguese). The title must be centered
+over the whole page, in 16 point boldface font and with 12 points of space
+before itself. Author names must be centered in 12 point font, bold, all of
+them disposed in the same line, separated by commas and with 12 points of
+space after the title. Addresses must be centered in 12 point font, also with
+12 points of space after the authors' names. E-mail addresses should be
+written using font Courier New, 10 point nominal size, with 6 points of space
+before and 6 points of space after.
+
+The abstract and ``resumo'' (if is the case) must be in 12 point Times font,
+indented 0.8cm on both sides. The word \textbf{Abstract} and \textbf{Resumo},
+should be written in boldface and must precede the text.
+
+\section{CD-ROMs and Printed Proceedings}
+
+In some conferences, the papers are published on CD-ROM while only the
+abstract is published in the printed Proceedings. In this case, authors are
+invited to prepare two final versions of the paper. One, complete, to be
+published on the CD and the other, containing only the first page, with
+abstract and ``resumo'' (for papers in Portuguese).
+
+\section{Sections and Paragraphs}
+
+Section titles must be in boldface, 13pt, flush left. There should be an extra
+12 pt of space before each title. Section numbering is optional. The first
+paragraph of each section should not be indented, while the first lines of
+subsequent paragraphs should be indented by 1.27 cm.
+
+\subsection{Subsections}
+
+The subsection titles must be in boldface, 12pt, flush left.
+
+\section{Figures and Captions}\label{sec:figs}
+
+Figure and table captions should be centered if less than one line
+(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
+both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
+be Helvetica, 10 point, boldface, with 6 points of space before and after each
+caption.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{fig1.jpg}
+\caption{A typical figure}
+\label{fig:exampleFig1}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.3\textwidth]{fig2.jpg}
+\caption{This figure is an example of a figure caption taking more than one
+  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
+\label{fig:exampleFig2}
+\end{figure}
+
+In tables, try to avoid the use of colored or shaded backgrounds, and avoid
+thick, doubled, or unnecessary framing lines. When reporting empirical data,
+do not use more decimal digits than warranted by their precision and
+reproducibility. Table caption must be placed before the table (see Table 1)
+and the font used must also be Helvetica, 10 point, boldface, with 6 points of
+space before and after each caption.
+
+\begin{table}[ht]
+\centering
+\caption{Variables to be considered on the evaluation of interaction
+  techniques}
+\label{tab:exTable1}
+\includegraphics[width=.7\textwidth]{table.jpg}
+\end{table}
+
+\section{Images}
+
+All images and illustrations should be in black-and-white, or gray tones,
+excepting for the papers that will be electronically available (on CD-ROMs,
+internet, etc.). The image resolution on paper should be about 600 dpi for
+black-and-white images, and 150-300 dpi for grayscale images.  Do not include
+images with excessive resolution, as they may take hours to print, without any
+visible difference in the result.
+
+\section{References}
+
+Bibliographic references must be unambiguous and uniform.  We recommend giving
+the author names references in brackets, e.g. \cite{knuth:84},
+\cite{boulic:91}, and \cite{smith:99}.
+
+The references must be listed using 12 point font size, with 6 points of space
+before each reference. The first line of each reference should not be
+indented, while the subsequent should be indented by 0.5 cm.
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+
+\end{comment}
+
+\end{document}

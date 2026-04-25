@@ -1,6 +1,6 @@
 use std::fs::File;
-use std::io::{self, BufReader, Write};
-use std::path::{Path, PathBuf};
+use std::io::{self, BufReader};
+use std::path::Path;
 use zip::ZipArchive;
 
 pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> io::Result<()> {

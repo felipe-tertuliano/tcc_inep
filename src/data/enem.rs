@@ -4,10 +4,14 @@ const SOURCE: &str = "https://download.inep.gov.br/microdados/microdados_enem_20
 
 struct EnemDataSource {}
 
-impl EnemDataSource for DataSource {
-    fn get_web_source(&self) -> String;
+impl DataSource for EnemDataSource {
+    fn get_web_source(&self) -> String {
+        return String::new();
+    }
 
-    fn get_path(&self) -> String;
+    fn get_path(&self) -> String {
+        return String::new();
+    }
 
     fn new() -> Self {
         return Self {};
