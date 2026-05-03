@@ -3,10 +3,11 @@ use chrono::Local;
 use std::error::Error;
 use std::fs::File;
 use std::io::Write;
+use std::panic::AssertUnwindSafe;
 use std::path::PathBuf;
 use std::{env, fs};
 
-pub trait DataSource: Sized {
+pub trait DataSource<'a>: Sized {
     fn get_web_source(&self) -> String;
 
     fn get_path(&self) -> String;
@@ -15,7 +16,7 @@ pub trait DataSource: Sized {
 
     fn get_ref(&self) -> Result<PathBuf, Box<dyn Error>> {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
-        return Ok(PathBuf::from(&env_dsp).join(self.get_path()));
+        Ok(PathBuf::from(&env_dsp).join(self.get_path()))
     }
 
     async fn init() -> Result<Self, Box<dyn Error>> {
@@ -30,15 +31,37 @@ pub trait DataSource: Sized {
             let zip_path = PathBuf::from(&env_dsp).join(&zip_file);
             let mut zip_file = File::create(&zip_path)?;
 
-            let content = reqwest::get(inst.get_web_source()).await?.bytes().await?;
-            zip_file.write_all(&content)?;
+            let web_source = inst.get_web_source();
+            let res = tokio::spawn(AssertUnwindSafe(async move {
+                let content = reqwest::Client::builder()
+                    .danger_accept_invalid_certs(true)
+                    .build()
+                    .expect("Error while building the reqwest client")
+                    .get(web_source)
+                    .send()
+                    .await
+                    .expect("Error while fetching the data source from the web")
+                    .bytes()
+                    .await
+                    .expect("Error while casting the data source into bytes");
+                zip_file
+                    .write_all(&content)
+                    .expect("Error while saving the data source into a .zip file");
+            }))
+            .await;
 
-            let parent = path.split('/').next().unwrap().to_string();
-            let parent_path = PathBuf::from(&env_dsp).join(parent);
-            unzip(&zip_path, &parent_path)?;
+            if res.is_ok() {
+                let parent = path.split('/').next().unwrap().to_string();
+                let parent_path = PathBuf::from(&env_dsp).join(parent);
+                unzip(&zip_path, &parent_path)?;
+            }
+
             fs::remove_file(&zip_path)?;
+            if let Err(err) = res {
+                return Err(Box::new(std::io::Error::other(format!("{:?}", err))));
+            }
         }
 
-        return Ok(inst);
+        Ok(inst)
     }
 }

@@ -15,10 +15,8 @@ pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> io::Result<()> {
         if file.is_dir() {
             std::fs::create_dir_all(&out_path)?;
         } else {
-            if let Some(parent) = out_path.parent() {
-                if !parent.exists() {
-                    std::fs::create_dir_all(parent)?;
-                }
+            if let Some(parent) = out_path.parent() && !parent.exists() {
+                std::fs::create_dir_all(parent)?;
             }
 
             let mut out_file = File::create(&out_path)?;

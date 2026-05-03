@@ -1,19 +1,23 @@
 use super::base::DataSource;
+use std::marker::PhantomData;
 
-const SOURCE: &str = "https://download.inep.gov.br/microdados/microdados_enem_2024.zip";
+const WEB_SOURCE: &str = "https://download.inep.gov.br/microdados/microdados_enem_2024.zip";
+const PATH: &str = "microdados_enem_2024/DADOS/RESULTADOS_2024.csv";
 
-struct EnemDataSource {}
+pub struct EnemDataSource<'a> {
+    _marker: PhantomData<&'a ()>,
+}
 
-impl DataSource for EnemDataSource {
+impl<'a> DataSource<'a> for EnemDataSource<'a> {
     fn get_web_source(&self) -> String {
-        return String::new();
+        WEB_SOURCE.to_owned()
     }
 
     fn get_path(&self) -> String {
-        return String::new();
+        PATH.to_owned()
     }
 
     fn new() -> Self {
-        return Self {};
+        Self { _marker: PhantomData }
     }
 }
