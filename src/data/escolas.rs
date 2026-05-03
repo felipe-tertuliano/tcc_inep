@@ -2,7 +2,7 @@ use super::base::DataSource;
 use std::marker::PhantomData;
 
 const WEB_SOURCE: &str = "https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_2024.zip";
-const PATH: &str = "microdados_censo_escolar_2024/dados/microdados_ed_basica_2024.csv";
+const PATH: &str = "microdados_censo_escolar_2024/microdados_censo_escolar_2024/dados/microdados_ed_basica_2024.csv";
 
 pub struct EscolasDataSource<'a> {
     _marker: PhantomData<&'a ()>,

@@ -1,8 +1,8 @@
+use crate::types::GlobalRes;
 use crate::utils::unzip;
 use chrono::Local;
-use std::error::Error;
 use std::fs::File;
-use std::io::Write;
+use std::io::{BufRead, BufReader, Write};
 use std::panic::AssertUnwindSafe;
 use std::path::PathBuf;
 use std::{env, fs};
@@ -14,12 +14,27 @@ pub trait DataSource<'a>: Sized {
 
     fn new() -> Self;
 
-    fn get_ref(&self) -> Result<PathBuf, Box<dyn Error>> {
+    fn get_ref(&self) -> GlobalRes<PathBuf> {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
         Ok(PathBuf::from(&env_dsp).join(self.get_path()))
     }
 
-    async fn init() -> Result<Self, Box<dyn Error>> {
+    fn get_header(&self) -> GlobalRes<Vec<String>> {
+        let mut reader = BufReader::new(
+            File::open(
+                self.get_ref()
+                    .expect("Error while fetching data source path reference"),
+            )
+            .expect("Error while opening data source file"),
+        );
+        let mut header = String::new();
+        reader
+            .read_line(&mut header)
+            .expect("Error while reading from data source");
+        Ok(header.split(';').map(|s| s.to_string()).collect())
+    }
+
+    async fn init() -> GlobalRes<Self> {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
 
         let inst = Self::new();
@@ -58,7 +73,7 @@ pub trait DataSource<'a>: Sized {
 
             fs::remove_file(&zip_path)?;
             if let Err(err) = res {
-                return Err(Box::new(std::io::Error::other(format!("{:?}", err))));
+                return other_error!(err);
             }
         }
 
