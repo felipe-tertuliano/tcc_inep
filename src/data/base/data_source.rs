@@ -1,8 +1,7 @@
 use crate::types::GlobalRes;
 use crate::utils::unzip;
-use chrono::Local;
 use std::fs::File;
-use std::io::{BufRead, BufReader, Write};
+use std::io::{BufRead, BufReader, Seek, Write};
 use std::panic::AssertUnwindSafe;
 use std::path::PathBuf;
 use std::{env, fs};
@@ -20,18 +19,14 @@ pub trait DataSource<'a>: Sized {
     }
 
     fn get_header(&self) -> GlobalRes<Vec<String>> {
-        let mut reader = BufReader::new(
-            File::open(
-                self.get_ref()
-                    .expect("Error while fetching data source path reference"),
-            )
-            .expect("Error while opening data source file"),
-        );
+        let mut reader = BufReader::new(File::open(
+            self.get_ref()
+                .expect("Error while fetching data source path reference"),
+        )?);
+        reader.seek(std::io::SeekFrom::Start(0))?;
         let mut header = String::new();
-        reader
-            .read_line(&mut header)
-            .expect("Error while reading from data source");
-        Ok(header.split(';').map(|s| s.to_string()).collect())
+        reader.read_line(&mut header)?;
+        Ok(header.split(';').map(|s| s.trim().to_string()).collect())
     }
 
     async fn init() -> GlobalRes<Self> {
@@ -42,7 +37,11 @@ pub trait DataSource<'a>: Sized {
         let full_path = PathBuf::from(&env_dsp).join(&path);
 
         if !full_path.exists() {
-            let zip_file = format!("{}", Local::now().format("%Y%m%d_%H%M%S.zip"));
+            let zip_file = format!(
+                "{}.zip",
+                regex::Regex::new(r"[^a-z]")?
+                    .replace_all(&inst.get_web_source().trim().to_lowercase(), "")
+            );
             let zip_path = PathBuf::from(&env_dsp).join(&zip_file);
             let mut zip_file = File::create(&zip_path)?;
 
