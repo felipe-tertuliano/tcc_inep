@@ -1,2 +1,2 @@
 mod unzip;
-pub use unzip::unzip;
+pub use unzip::*;

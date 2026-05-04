@@ -27,5 +27,5 @@ target
 
 # Project
 
-resources/data/**
-!resources/data/.gitkeep
+resources/data/sources/**
+!resources/data/sources/.gitkeep

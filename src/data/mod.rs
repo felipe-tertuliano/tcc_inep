@@ -1,6 +1,6 @@
 mod base;
 mod enem;
 mod escolas;
-pub use base::DataSource;
-pub use enem::EnemDataSource;
-pub use escolas::EscolasDataSource;
+pub use base::*;
+pub use enem::*;
+pub use escolas::*;

@@ -9,13 +9,15 @@ use std::{env, fs};
 pub trait DataSource<'a>: Sized {
     fn get_web_source(&self) -> String;
 
-    fn get_path(&self) -> String;
+    fn get_source_path(&self) -> String;
+
+    fn get_struct_path(&self) -> String;
 
     fn new() -> Self;
 
     fn get_ref(&self) -> GlobalRes<PathBuf> {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
-        Ok(PathBuf::from(&env_dsp).join(self.get_path()))
+        Ok(PathBuf::from(&env_dsp).join(self.get_source_path()))
     }
 
     fn get_header(&self) -> GlobalRes<Vec<String>> {
@@ -33,7 +35,7 @@ pub trait DataSource<'a>: Sized {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
 
         let inst = Self::new();
-        let path = inst.get_path();
+        let path = inst.get_source_path();
         let full_path = PathBuf::from(&env_dsp).join(&path);
 
         if !full_path.exists() {

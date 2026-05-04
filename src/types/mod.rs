@@ -1,2 +1,4 @@
+mod enums;
 mod global_res;
-pub use global_res::GlobalRes;
+pub use enums::*;
+pub use global_res::*;
