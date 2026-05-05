@@ -41,6 +41,30 @@ A proposta consiste em extrair, tratar e organizar esses dados utilizando técni
 
 A identificação dessas unidades escolares, com desempenho resiliente, permitirá orientar ações de capacitação em TIC baseadas em evidências, direcionando recursos e estratégias para contextos em que tais intervenções possam produzir maior impacto. Como produto final, pretende-se desenvolver um protótipo de mecanismo de identificação de escolas-alvo, que poderá assumir a forma de um conjunto de rotinas de análise de dados, scripts reprodutíveis ou mesmo um painel analítico que permita visualizar e comparar indicadores educacionais e socioeconômicos. Espera-se que a proposta contribua tanto para o campo da ciência de dados aplicada à educação quanto para o aprimoramento de estratégias de formação em TIC no sistema educacional brasileiro.
 
+\section{Trabalhos Correlatos}
+
+Para um melhor entendimento do problema e analise de possíveis soluções foram analisados alguns trabalhos correlatos. 
+
+\subsection{What does the National High School Exam (ENEM) tell Brazilian society?}
+
+\textit{What does the National High School Exam (ENEM) tell Brazilian society?} analisa o exame do ENEM e dados das escolas no contexto de 2009 e 2010 para avaliar o impacto e eficiência do exame no Brasil. A partir do trabalho foi possível concluir que condições socioeconômicas explicavam a maior parte das diferenças de notas por escolas, e que pode ser injusta a avaliação dessas instituições por medias brutas, devido ao contexto.
+
+\subsection{Socioeconomic Analysis of students who took the Enem between 2019 and 2022 using Machine Learning}
+
+Em \textit{Socioeconomic Analysis of students who took the Enem between 2019 and 2022 using Machine Learning} \cite{article:se_ml_enem} baseado nos testes do ENEM dos anos de 2019 até 2022 foi aplicado algoritmos de \textit{machine learning} para traçar grupos e características que correlacionarem os resultados da prova com as condições socioeconômicas (SEs) dos participantes. Os resultados formaram dois grupos: alunos mal e bem sucedidos no exame, esses com correlação direta ao seu contexto SE, o que confirma a relevância desses indicadores para nosso objetivo. Entretanto foi observado que o numero reduzido de grupos pode ser um fator que limita conclusões mais profundas sobre possíveis intervenções, junto disso dado que a correlação entre o questionário SE e os resultados das provas foi removido para o ano de 2024, nossa metodologia deve considerar outras formas de extrair informações equivalentes.
+
+\subsection{Impact of Knowledge of Natural Sciences on ENEM Performance: Considerations about Scientific and Technological Inequality to Social Justice}
+
+No artigo \textit{Impact of Knowledge of Natural Sciences on ENEM Performance: Considerations about Scientific and Technological Inequality to Social Justice} \cite{article:nc_enem} avalia o desempenho dos alunos na área das ciências naturais da prova do ENEM de 2017 e como esses resultados são afetados pela estrutura das escolas em que esses estudaram (rede de ensino e presença de laboratório de ciências). Os resultados mostram uma grande diferença na nota de alunos da rede publica e privada, onde mais da metade dos primeiros não alcançou 600 pontos, o que contrasta com o segundo grupo que teve um resultado oposto. A analise dos dados do ENEM por área de conhecimento junto do das escolas mostra uma importante forma de obter grupos e indicadores relevantes para o objetivo do trabalho.
+
+\subsection{Understanding a Profile of the Participants of the Exame Nacional do Ensino Médio (ENEM), Brazil, in the Year 2019, Through Data Analysis}
+
+\textit{Understanding a Profile of the Participants of the Exame Nacional do Ensino Médio (ENEM), Brazil, in the Year 2019, Through Data Analysis} \cite{article:p_da_enem} analisa dentro da base de dados dos participantes do ENEM 2019 fatores que podem influenciar os resultados na prova. Utilizando de algoritmos de analise de dados foi possível traçar relação direta entre condições socioeconômicas e as notas, igualmente para grupo étnico. Mesmo que para os dados do ENEM 2024 não seja possível mais fazer essa relação ainda o estudo é uma base para formas de tratar os dados e direcionar a perspectiva da análise.
+
+\subsection{Análise dos microdados do Enade: proposta de uma ferramenta de exploração utilizando mineração de dados}
+
+A dissertação \textit{Análise dos microdados do Enade: proposta de uma ferramenta de exploração utilizando mineração de dados} \cite{thesis:md_enade} utiliza da base de dados do Enade e metodologias de mineração e \textit{machine learning} para construir uma ferramenta \textit{web} de análise. Entre os achados da mineração foi possível gerar regras que representam condições de alunos dentro do ensino superior, o que pode ser uma forma de identifica públicos alvo. No geral a metodologia da dissertação pode ser utilizada como referencia para atingir resultados com mais qualidade.
+
 \begin{comment}
 
 \section{First Page}
@@ -126,20 +150,20 @@ black-and-white images, and 150-300 dpi for grayscale images.  Do not include
 images with excessive resolution, as they may take hours to print, without any
 visible difference in the result.
 
+
 \section{References}
 
 Bibliographic references must be unambiguous and uniform.  We recommend giving
 the author names references in brackets, e.g. \cite{knuth:84},
-\cite{boulic:91}, and \cite{smith:99}.
+\cite{boulic:91}, \cite{smith:99}, \cite{Teste}.
 
 The references must be listed using 12 point font size, with 6 points of space
 before each reference. The first line of each reference should not be
 indented, while the subsequent should be indented by 0.5 cm.
 
+\end{comment}
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
-
-\end{comment}
 
 \end{document}
