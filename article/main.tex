@@ -5,6 +5,7 @@
 \usepackage{graphicx,url}
 \usepackage{sbc-template}
 \usepackage{comment}
+\urlstyle{same}
 
 \sloppy
 
@@ -18,7 +19,6 @@
 
 \maketitle
 
-% TODO: Fazer Abstract / Resumo
 \begin{abstract}
 
 This work proposes the development of an analytical mechanism to identify schools in the public basic education network as targets for training interventions in Information and Communication Technologies (ICT). Using microdata from ENEM and the School Census, the methodology involves large-scale data analysis, crossing student performance in the national exam with socioeconomic indicators and school characteristics. The objective is to identify institutions with performance that deviates from expectations to direct public policies and resources more effectively, resulting in a prototype, such as reproducible scripts or a panel of indicators, contributing to applied data science, education and training in ICT in Brazil.
@@ -41,7 +41,7 @@ A proposta consiste em extrair, tratar e organizar esses dados utilizando técni
 
 A identificação dessas unidades escolares, com desempenho resiliente, permitirá orientar ações de capacitação em TIC baseadas em evidências, direcionando recursos e estratégias para contextos em que tais intervenções possam produzir maior impacto. Como produto final, pretende-se desenvolver um protótipo de mecanismo de identificação de escolas-alvo, que poderá assumir a forma de um conjunto de rotinas de análise de dados, scripts reprodutíveis ou mesmo um painel analítico que permita visualizar e comparar indicadores educacionais e socioeconômicos. Espera-se que a proposta contribua tanto para o campo da ciência de dados aplicada à educação quanto para o aprimoramento de estratégias de formação em TIC no sistema educacional brasileiro.
 
-\section{Trabalhos Correlatos}
+\section{Revisão Bibliográfica}
 
 Para um melhor entendimento do problema e analise de possíveis soluções foram analisados alguns trabalhos correlatos. 
 
@@ -84,6 +84,44 @@ Nessa dissertação \cite{mastersthesis:md_enem} se aplicou técnicas de minera�
 \subsection{Influência do acesso à internet e ao computador na proficiência de estudantes de baixa renda: uma análise com os participantes do ENEM entre 2015 e 2023}
 
 O estudo apresentado \cite{mastersthesis:i_t_enem} investiga o impacto do acesso domiciliar à internet e ao computador no desempenho de estudantes de baixa renda no ENEM, utilizando uma amostra de 1,5 milhão de alunos entre 2015 e 2023. Por meio de modelos de regressão e técnicas de machine learning, a autora demonstra que o acesso combinado a ambos os recursos produz efeito significativo na proficiência, especialmente durante e após a pandemia de COVID-19, enquanto o acesso apenas à internet, predominantemente via dispositivos móveis, apresenta impacto positivo, porém modesto. O trabalho também evidencia desigualdades de gênero e regionais, reforçando a necessidade de políticas públicas alinhadas ao ODS 4.
+
+\section{Metodologia}
+
+Para o objetivo do projeto foram escolhidas duas base de dados a serem tratadas: microdados do ENEM 2024 \cite{misc:micro_enem} e microdados do censo escolar 2024 \cite{misc:micro_escolas}. A partir desas bases foi iniciada a produção de uma ferramenta na linguagem de programação \textit{Rust} \cite{misc:rust_lang} que seja capaz de ler os microdados, trata-los e processa-los gerando em fim indicadores relevantes para a proposta. Um repositório \cite{misc:proj_repo} no \textit{GitHib} \cite{misc:github_repo} foi criado para o versionamento e escolhida a \textit{IDE VSCode} \cite{misc:vscode_ide} para o desenvolvimento.
+
+\subsection{Extração dos dados}
+
+Para extrair os dados de ambas as bases \cite{misc:micro_enem} \cite{misc:micro_escolas} foi criado uma característica chamada \textit{Data Source} capaz de acessar a fonte na \textit{internet}, baixar, descompactar e salvar essas localmente. Junto disso a \textit{Data Source} seria capaz de percorrer o arquivo e obter os elementos a serem processados pelo programa.
+
+\begin{verbatim}
+...
+pub trait DataSource<'a>: Sized {
+    fn get_web_source(&self) -> String;
+
+    fn get_source_path(&self) -> String;
+
+    fn get_struct_path(&self) -> String;
+
+    fn new() -> Self;
+
+    fn get_ref(&self) -> GlobalRes<PathBuf> ...
+
+    fn get_header(&self) -> GlobalRes<Vec<String>> ...
+
+    async fn init() -> GlobalRes<Self> ...
+}
+...
+\end{verbatim}
+
+Para a extração das múltiplas bases, devido a dependência de comunicação com a \textit{internet} que gera grandes períodos de espera, essas foram colocadas para serem executadas de forma assíncrona. Dessa forma por enquanto ocorre hiatos em um processo o outro pode executar livremente, acelerando a obtenção desses recursos simultaneamente.
+
+\begin{verbatim}
+...
+let ds_inits = tokio::join!(
+  EnemDataSource::init(),
+  EscolasDataSource::init());
+...
+\end{verbatim}
 
 \begin{comment}
 
