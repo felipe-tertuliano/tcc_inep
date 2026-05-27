@@ -1,9 +1,10 @@
+use crate::types::GlobalRes;
 use std::fs::File;
 use std::io::{self, BufReader};
 use std::path::Path;
 use zip::ZipArchive;
 
-pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> io::Result<()> {
+pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> GlobalRes<()> {
     let file = File::open(zip_path)?;
     let reader = BufReader::new(file);
     let mut archive = ZipArchive::new(reader)?;
@@ -15,7 +16,9 @@ pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> io::Result<()> {
         if file.is_dir() {
             std::fs::create_dir_all(&out_path)?;
         } else {
-            if let Some(parent) = out_path.parent() && !parent.exists() {
+            if let Some(parent) = out_path.parent()
+                && !parent.exists()
+            {
                 std::fs::create_dir_all(parent)?;
             }
 

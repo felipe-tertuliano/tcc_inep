@@ -27,5 +27,6 @@ target
 
 # Project
 
+.~lock.*
 resources/data/sources/**
 !resources/data/sources/.gitkeep

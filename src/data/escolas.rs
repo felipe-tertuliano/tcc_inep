@@ -11,15 +11,15 @@ pub struct EscolasDataSource<'a> {
 }
 
 impl<'a> DataSource<'a> for EscolasDataSource<'a> {
-    fn get_web_source(&self) -> String {
+    fn _web_source(&self) -> String {
         WEB_SOURCE.to_owned()
     }
 
-    fn get_source_path(&self) -> String {
+    fn _source_path(&self) -> String {
         SOURCE_PATH.to_owned()
     }
 
-    fn get_struct_path(&self) -> String {
+    fn _struct_path(&self) -> String {
         STRUCT_PATH.to_owned()
     }
 

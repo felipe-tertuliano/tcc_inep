@@ -15,20 +15,8 @@ async fn main() {
     dotenv().ok();
     let ds_inits = tokio::join!(EnemDataSource::init(), EscolasDataSource::init());
     if let (Ok(enem_ds), Ok(escolas_ds)) = ds_inits {
-        println!(
-            "ENEM DS number of columns: {:?}",
-            enem_ds
-                .get_header()
-                .expect("Error while fetching headers from ENEM data source")
-                .len()
-        );
-        println!(
-            "Escolas DS number of columns: {:?}",
-            escolas_ds
-                .get_header()
-                .expect("Error while fetching headers from Escolas data source")
-                .len()
-        );
+        // let items = enem_ds.filter();
+        // let value = item.get("NAME");
     } else {
         if let Err(err) = ds_inits.0 {
             panic!("{:?}", err);
