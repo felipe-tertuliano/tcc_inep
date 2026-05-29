@@ -1,11 +1,13 @@
-use super::DataItem;
-use crate::types::GlobalRes;
-use crate::utils::{get_csv_cols, unzip};
-use std::fs::File;
+use core::hash;
 use std::io::{BufRead, BufReader, Seek, Write};
+use crate::utils::{get_csv_cols, unzip};
 use std::panic::AssertUnwindSafe;
+use std::collections::HashMap;
+use crate::types::GlobalRes;
+use std::fs::{self, File};
 use std::path::PathBuf;
-use std::{env, fs};
+use super::DataItem;
+use std::env;
 
 pub trait DataSource<'a>: Sized {
     fn _web_source(&self) -> String;
@@ -78,7 +80,7 @@ pub trait DataSource<'a>: Sized {
         Ok(header.split(';').map(|s| s.trim().to_string()).collect())
     }
 
-    fn filter<F>(&self, f: F) -> GlobalRes<Vec<DataItem>>
+    fn filter<F>(&self, mut f: F) -> GlobalRes<Vec<DataItem>>
     where
         F: FnMut(&mut DataItem) -> bool,
     {
@@ -86,13 +88,22 @@ pub trait DataSource<'a>: Sized {
             self._ref()
                 .expect("Error while fetching data source path reference"),
         )?);
+        let mut res = vec![];
         let mut lines = r.lines();
         if let Some(h_line) = lines.next() {
             let header = get_csv_cols(h_line?, ';')?;
-            while let Some(res) = lines.next() {
-                let line = get_csv_cols(res?, ';')?;
+            for r_line in lines {
+                let line = get_csv_cols(r_line?, ';')?;
+                let mut hash = HashMap::new();
+                for (i, col) in line.into_iter().enumerate() {
+                    hash.insert(header[i].clone(), col);
+                }
+                let mut di = DataItem::new(hash);
+                if f(&mut di) {
+                    res.push(di);
+                }
             }
         }
-        Ok(vec![])
+        Ok(res)
     }
 }

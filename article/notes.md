@@ -121,4 +121,3 @@ Computação},
   - Homens tiram notas maiores que mulheres em Matemática
 - Escolas privadas tem maiores notas
 - Impacto das escolas nas notas
-
