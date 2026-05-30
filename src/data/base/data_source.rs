@@ -1,4 +1,3 @@
-use core::hash;
 use std::io::{BufRead, BufReader, Seek, Write};
 use crate::utils::{get_csv_cols, unzip};
 use std::panic::AssertUnwindSafe;
@@ -73,14 +72,7 @@ pub trait DataSource<'a>: Sized {
         Ok(inst)
     }
 
-    fn _header(&self, r: &mut BufReader<File>) -> GlobalRes<Vec<String>> {
-        r.rewind();
-        let mut header = String::new();
-        r.read_line(&mut header)?;
-        Ok(header.split(';').map(|s| s.trim().to_string()).collect())
-    }
-
-    fn filter<F>(&self, mut f: F) -> GlobalRes<Vec<DataItem>>
+    fn filter<F>(&self, mut f: F) -> GlobalRes<Vec<DataItem<'_>>>
     where
         F: FnMut(&mut DataItem) -> bool,
     {
@@ -89,19 +81,24 @@ pub trait DataSource<'a>: Sized {
                 .expect("Error while fetching data source path reference"),
         )?);
         let mut res = vec![];
-        let mut lines = r.lines();
-        if let Some(h_line) = lines.next() {
-            let header = get_csv_cols(h_line?, ';')?;
-            for r_line in lines {
-                let line = get_csv_cols(r_line?, ';')?;
+        let mut buf = vec![0; 1024];
+        r.read_until(b'\n', &mut buf)?;
+        let mut line = String::from_utf8_lossy(&buf).trim().to_string();
+        buf.clear();
+        if !line.is_empty() {
+            let header = get_csv_cols(&line, ';')?;
+            while r.read_until(b'\n', &mut buf)? > 0 {
+                line = String::from_utf8_lossy(&buf).trim().to_string();
+                let cols = get_csv_cols(&line, ';')?;
                 let mut hash = HashMap::new();
-                for (i, col) in line.into_iter().enumerate() {
+                for (i, col) in cols.into_iter().enumerate() {
                     hash.insert(header[i].clone(), col);
                 }
                 let mut di = DataItem::new(hash);
                 if f(&mut di) {
                     res.push(di);
                 }
+                buf.clear();
             }
         }
         Ok(res)

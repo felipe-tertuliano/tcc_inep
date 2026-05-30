@@ -1,4 +1,6 @@
-use std::{collections::HashMap, marker::PhantomData};
+use std::collections::HashMap;
+use std::marker::PhantomData;
+use std::str::FromStr;
 
 pub struct DataItem<'a> {
     _marker: PhantomData<&'a ()>,
@@ -10,7 +12,7 @@ impl<'a> DataItem<'a> {
         Self { _marker: PhantomData, _hash: hash }
     }
 
-    // pub fn get<T: FromStr>(&self, name: &str) -> Option<T> {
-    //     let value = self._hash.get(name);
-    // }
+    pub fn get<T: FromStr>(&self, name: &str) -> Option<T> {
+        self._hash.get(name).and_then(|v| v.parse::<T>().ok())
+    }
 }

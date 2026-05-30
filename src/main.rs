@@ -15,7 +15,13 @@ async fn main() {
     dotenv().ok();
     let ds_inits = tokio::join!(EnemDataSource::init(), EscolasDataSource::init());
     if let (Ok(enem_ds), Ok(escolas_ds)) = ds_inits {
-        // let items = enem_ds.filter();
+        let items = enem_ds
+            .filter(|di| 
+                di.get::<i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1) &&
+                di.get::<i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1)
+            )
+            .expect("Error while filtering ENEM Data Source");
+        println!("Lines: {}", items.len());
         // let value = item.get("NAME");
     } else {
         if let Err(err) = ds_inits.0 {
