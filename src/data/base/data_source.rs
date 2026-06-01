@@ -1,4 +1,4 @@
-use std::io::{BufRead, BufReader, Seek, Write};
+use std::io::{BufRead, BufReader, Write};
 use crate::utils::{get_csv_cols, unzip};
 use std::panic::AssertUnwindSafe;
 use std::collections::HashMap;
