@@ -3,35 +3,94 @@ use crate::types::GlobalRes;
 use crate::utils::{get_csv_cols, unzip};
 use std::collections::HashMap;
 use std::env;
+use std::ffi::OsString;
 use std::fs::{self, File};
-use std::io::{BufRead, BufReader, Error, ErrorKind, Write};
-use std::marker::PhantomData;
+use std::io::{BufRead, BufReader, Error, ErrorKind, Seek, SeekFrom, Write};
 use std::panic::AssertUnwindSafe;
 use std::path::PathBuf;
 
-pub struct DataSource<'a> {
-    _marker: PhantomData<&'a ()>,
+pub type DataHeader = HashMap<String, usize>;
+
+pub struct DataSource {
+    _header: Option<DataHeader>,
     _is_initialized: bool,
     _source_path: String,
     _web_source: String,
+    _path: OsString,
 }
 
-impl<'a> DataSource<'a> {
-    pub fn new(web_source: &str, source_path: &str) -> Self {
-        Self {
-            _marker: PhantomData,
+impl DataSource {
+    pub fn new(web_source: &str, source_path: &str) -> GlobalRes<Self> {
+        let path = PathBuf::from(&env::var("DATA_SOURCE_PATH")?)
+            .join(source_path)
+            .as_os_str()
+            .to_owned();
+        Ok(Self {
+            _path: path,
+            _header: None,
             _is_initialized: false,
             _web_source: web_source.to_string(),
             _source_path: source_path.to_string(),
+        })
+    }
+
+    fn _read_line(
+        &self,
+        reader: &mut BufReader<File>,
+        buf: &mut Vec<u8>,
+    ) -> GlobalRes<Option<Vec<String>>> {
+        let mut res = Ok(None);
+        buf.clear();
+        if reader.read_until(b'\n', buf)? > 0 {
+            let line = get_csv_cols(String::from_utf8_lossy(&buf).trim(), ';')?;
+            res = Ok(Some(line));
+        }
+        res
+    }
+
+    fn _get_header(&mut self, reader: &mut BufReader<File>) -> GlobalRes<&DataHeader> {
+        if self._header.is_none() {
+            let mut buf = vec![0; 1024];
+            let p = reader.stream_position()?;
+            reader.rewind()?;
+            self._header = Some(
+                self._read_line(reader, &mut buf)?
+                    .expect("No header found for the DataSource")
+                    .iter()
+                    .enumerate()
+                    .fold(HashMap::new(), |mut acc, (v, k)| {
+                        acc.insert(k.to_owned(), v);
+                        acc
+                    }),
+            );
+            reader.seek(SeekFrom::Start(p))?;
+        }
+
+        if let Some(header) = &self._header {
+            return Ok(header);
+        } else {
+            return Err(Error::new(
+                ErrorKind::UnexpectedEof,
+                "Unable to fetch DataSource's header",
+            )
+            .into());
         }
     }
 
-    fn _ref(&self) -> GlobalRes<PathBuf> {
-        let env_dsp = env::var("DATA_SOURCE_PATH")?;
-        Ok(PathBuf::from(&env_dsp).join(&self._source_path))
+    fn _get_reader(&self, at: Option<u64>) -> GlobalRes<BufReader<File>> {
+        let mut reader = BufReader::new(File::open(&self._path)?);
+        if let Some(end) = at {
+            let mut i = 0;
+            let mut b = 1;
+            while b > 0 && i < end {
+                b = reader.skip_until(b'\n')?;
+                i += 1;
+            }
+        }
+        Ok(reader)
     }
 
-    pub async fn init(&mut self) -> GlobalRes<&Self> {
+    pub async fn init(&mut self) -> GlobalRes<&mut Self> {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
         let full_path = PathBuf::from(&env_dsp).join(&self._source_path);
 
@@ -74,41 +133,32 @@ impl<'a> DataSource<'a> {
             }
         }
 
+        if self._header.is_none() {}
+
         self._is_initialized = true;
         Ok(self)
     }
 
-    pub fn filter<F>(&self, mut f: F) -> GlobalRes<Vec<DataItem<'_>>>
+    pub fn filter<F>(&mut self, mut f: F) -> GlobalRes<Vec<DataItem<'_>>>
     where
         F: FnMut(&mut DataItem) -> bool,
     {
-        let mut res: GlobalRes<Vec<DataItem<'_>>> =
+        let mut res =
             Err(Error::new(ErrorKind::NotConnected, "DataSource is not initialized").into());
         if self._is_initialized {
-            let mut r = BufReader::new(File::open(
-                self._ref()
-                    .expect("Error while fetching data source path reference"),
-            )?);
+            let mut r = self._get_reader(Some(1))?;
             let mut filtered = vec![];
             let mut buf = vec![0; 1024];
-            r.read_until(b'\n', &mut buf)?;
-            let mut line = String::from_utf8_lossy(&buf).trim().to_string();
-            buf.clear();
-            if !line.is_empty() {
-                let header = get_csv_cols(&line, ';')?;
-                while r.read_until(b'\n', &mut buf)? > 0 {
-                    line = String::from_utf8_lossy(&buf).trim().to_string();
-                    let cols = get_csv_cols(&line, ';')?;
-                    let mut hash = HashMap::new();
-                    for (i, col) in cols.into_iter().enumerate() {
-                        hash.insert(header[i].clone(), col);
-                    }
-                    let mut di = DataItem::new(hash);
-                    if f(&mut di) {
-                        filtered.push(di);
-                    }
-                    buf.clear();
+            while let Some(line) = self._read_line(&mut r, &mut buf)? {
+                let mut hash = HashMap::new();
+                for (k, v) in self._get_header(&mut r)? {
+                    hash.insert(k.clone(), line[*v].clone());
                 }
+                let mut di = DataItem::new(hash);
+                if f(&mut di) {
+                    filtered.push(di);
+                }
+                buf.clear();
             }
             res = Ok(filtered);
         }
