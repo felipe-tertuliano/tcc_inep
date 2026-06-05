@@ -1,18 +1,24 @@
-use std::collections::HashMap;
-use std::marker::PhantomData;
+use super::DataHeader;
+use crate::types::MaybeMut;
 use std::str::FromStr;
 
 pub struct DataItem<'a> {
-    _marker: PhantomData<&'a ()>,
-    _hash: HashMap<String, String>,
+    _header: MaybeMut<'a, DataHeader>,
+    _value: Vec<String>,
 }
 
 impl<'a> DataItem<'a> {
-    pub fn new(hash: HashMap<String, String>) -> Self {
-        Self { _marker: PhantomData, _hash: hash }
+    pub fn new(header: MaybeMut<'a, DataHeader>, value: Vec<String>) -> Self {
+        Self {
+            _header: header,
+            _value: value,
+        }
     }
 
     pub fn get<T: FromStr>(&self, name: &str) -> Option<T> {
-        self._hash.get(name).and_then(|v| v.parse::<T>().ok())
+        self._header
+            .get()
+            .get(name)
+            .and_then(|i| self._value[*i].parse::<T>().ok())
     }
 }

@@ -1,5 +1,5 @@
 use super::DataItem;
-use crate::types::GlobalRes;
+use crate::types::{GlobalRes, MaybeMut};
 use crate::utils::{get_csv_cols, unzip};
 use std::collections::HashMap;
 use std::env;
@@ -66,7 +66,7 @@ impl DataSource {
             reader.seek(SeekFrom::Start(p))?;
         }
 
-        if let Some(header) = &self._header {
+        if let Some(header) = &mut self._header {
             return Ok(header);
         } else {
             return Err(Error::new(
@@ -139,29 +139,25 @@ impl DataSource {
         Ok(self)
     }
 
-    pub fn filter<F>(&mut self, mut f: F) -> GlobalRes<Vec<DataItem<'_>>>
+    pub fn filter<F>(&mut self, f: F) -> GlobalRes<()>
     where
-        F: FnMut(&mut DataItem) -> bool,
+        F: for<'a> Fn(&'a DataItem) -> Option<DataItem<'a>>,
     {
-        let mut res =
-            Err(Error::new(ErrorKind::NotConnected, "DataSource is not initialized").into());
         if self._is_initialized {
             let mut r = self._get_reader(Some(1))?;
-            let mut filtered = vec![];
             let mut buf = vec![0; 1024];
-            while let Some(line) = self._read_line(&mut r, &mut buf)? {
-                let mut hash = HashMap::new();
-                for (k, v) in self._get_header(&mut r)? {
-                    hash.insert(k.clone(), line[*v].clone());
+            let header = self._get_header(&mut r)?.clone();
+            while let Some(value) = self._read_line(&mut r, &mut buf)? {
+                let input = DataItem::new(MaybeMut::Immutable(&header), value);
+                if let Some(output) = f(&input) {
+                    println!("OK!");
                 }
-                let mut di = DataItem::new(hash);
-                if f(&mut di) {
-                    filtered.push(di);
-                }
-                buf.clear();
             }
-            res = Ok(filtered);
+            return Ok(());
+        } else {
+            return Err(
+                Error::new(ErrorKind::NotConnected, "DataSource is not initialized").into(),
+            );
         }
-        res
     }
 }
