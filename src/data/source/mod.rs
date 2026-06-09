@@ -1,13 +1,14 @@
 use super::DataItem;
-use crate::types::{GlobalRes, MaybeMut, Source};
+use crate::types::{GlobalRes, Source, UniRef};
 use crate::utils::{get_csv_cols, unzip};
 use std::collections::HashMap;
 use std::env;
 use std::ffi::OsString;
-use std::fs::{self, File};
-use std::io::{BufRead, BufReader, Error, ErrorKind, Seek, SeekFrom, Write};
+use std::fs::{self, File, OpenOptions};
+use std::io::{BufRead, BufReader, BufWriter, Seek, SeekFrom, Write};
 use std::panic::AssertUnwindSafe;
 use std::path::{Path, PathBuf};
+use uuid::Uuid;
 
 pub type DataHeader = HashMap<String, usize>;
 
@@ -38,7 +39,15 @@ impl DataSource {
         })
     }
 
+    /* #region Helpers */
+    pub fn exists(&self) -> bool {
+        Path::new(&self._os_path).exists()
+    }
+    /* #endregion */
+
+    /* #region Initializers */
     async fn _local_init(&mut self, _path: &str) -> GlobalRes<()> {
+        File::create(&self._os_path)?;
         Ok(())
     }
 
@@ -82,7 +91,7 @@ impl DataSource {
     }
 
     pub async fn init(&mut self) -> GlobalRes<&mut Self> {
-        if !Path::new(&self._os_path).exists() {
+        if !self.exists() {
             match &self._source.clone() {
                 Source::Local(path) => self._local_init(path).await,
                 Source::Remote(path, url) => self._remote_init(path, url).await,
@@ -90,6 +99,21 @@ impl DataSource {
         }
         self._is_initialized = true;
         Ok(self)
+    }
+    /* #endregion */
+
+    /* #region Readers */
+    fn _get_reader(&self, line: Option<u64>) -> GlobalRes<BufReader<File>> {
+        let mut reader = BufReader::new(OpenOptions::new().read(true).open(&self._os_path)?);
+        if let Some(l) = line {
+            let mut i = 0;
+            let mut b = 1;
+            while b > 0 && i < l {
+                b = reader.skip_until(b'\n')?;
+                i += 1;
+            }
+        }
+        Ok(reader)
     }
 
     fn _read_line(
@@ -100,7 +124,7 @@ impl DataSource {
         let mut res = Ok(None);
         buf.clear();
         if reader.read_until(b'\n', buf)? > 0 {
-            let line = get_csv_cols(String::from_utf8_lossy(&buf).trim(), ';')?;
+            let line = get_csv_cols(String::from_utf8_lossy(buf).trim(), ';')?;
             res = Ok(Some(line));
         }
         res
@@ -124,49 +148,79 @@ impl DataSource {
             reader.seek(SeekFrom::Start(p))?;
         }
 
-        if let Some(header) = &mut self._header {
-            return Ok(header);
+        if let Some(header) = &self._header {
+            Ok(header)
         } else {
-            return Err(Error::new(
-                ErrorKind::UnexpectedEof,
-                "Unable to fetch DataSource's header",
-            )
-            .into());
+            other_error!("Unable to fetch DataSource's header")
         }
     }
+    /* #endregion */
 
-    fn _get_reader(&self, at: Option<u64>) -> GlobalRes<BufReader<File>> {
-        let mut reader = BufReader::new(File::open(&self._os_path)?);
-        if let Some(end) = at {
-            let mut i = 0;
-            let mut b = 1;
-            while b > 0 && i < end {
-                b = reader.skip_until(b'\n')?;
-                i += 1;
-            }
-        }
-        Ok(reader)
+    /* #region Writers */
+    fn _get_writer(&self) -> GlobalRes<BufWriter<File>> {
+        Ok(BufWriter::new(OpenOptions::new().write(true).open(&self._os_path)?))
     }
 
-    pub fn filter<F>(&mut self, f: F) -> GlobalRes<()>
+    fn _write_line(&self, writer: &mut BufWriter<File>, line: String) -> GlobalRes<()> {
+        writeln!(writer, "{}", line)?;
+        Ok(())
+    }
+
+    fn _set_header(
+        &mut self,
+        writer: &mut BufWriter<File>,
+        header: &DataHeader,
+    ) -> GlobalRes<&DataHeader> {
+        if self._header.is_none() {
+            self._header = Some(header.clone());
+            let mut buf: Vec<(&String, &usize)> = header.iter().collect();
+            buf.sort_by(|(_, a), (_, b)| a.cmp(b));
+            let value = buf
+                .iter()
+                .map(|(v, _)| v.to_string())
+                .collect::<Vec<String>>()
+                .join(";");
+            writer.rewind()?;
+            self._write_line(writer, value)?;
+        }
+
+        if let Some(header) = &self._header {
+            Ok(header)
+        } else {
+            other_error!("Unable to fetch DataSource's header")
+        }
+    }
+    /* #endregion */
+
+    pub async fn filter<F>(&mut self, to: Option<&str>, f: F) -> GlobalRes<Self>
     where
-        F: for<'a> Fn(&'a DataItem) -> Option<DataItem<'a>>,
+        F: Fn(DataItem) -> Option<DataItem>,
     {
         if self._is_initialized {
-            let mut buf = vec![0; 1024];
-            let mut r = self._get_reader(Some(1))?;
-            let header = self._get_header(&mut r)?.clone();
-            while let Some(value) = self._read_line(&mut r, &mut buf)? {
-                let input = DataItem::new(MaybeMut::Immutable(&header), value);
-                if let Some(output) = f(&input) {
-                    println!("OK!");
+            let mut filtered = Self::new(Source::Local(
+                to.map(|s| s.to_string())
+                    .unwrap_or(format!("{}.csv", Uuid::new_v4())),
+            ))?;
+            if !filtered.exists() {
+                filtered.init().await?;
+                let mut buf = vec![0; 1024];
+                let mut w = filtered._get_writer()?;
+                let mut r = self._get_reader(Some(1))?;
+                let header = self._get_header(&mut r)?.clone();
+                while let Some(value) = self._read_line(&mut r, &mut buf)? {
+                    if let Some(output) = f(DataItem::new(UniRef::Ref(&header), value))
+                        && let Some(output_h) = output.get_header()
+                    {
+                        filtered._set_header(&mut w, output_h)?;
+                        filtered._write_line(&mut w, output.to_string())?;
+                    }
                 }
+            } else {
+                filtered.init().await?;
             }
-            return Ok(());
+            Ok(filtered)
         } else {
-            return Err(
-                Error::new(ErrorKind::NotConnected, "DataSource is not initialized").into(),
-            );
+            other_error!("DataSource is not initialized")
         }
     }
 }
