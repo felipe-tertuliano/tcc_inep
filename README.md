@@ -1,5 +1,4 @@
 # Mineração de Microdados do ENEM para Identificação de Escolas com Bom Desempenho em TIC em Contextos Socioeconômicos Desfavoráveis
-
 > Felipe Lacerda Tertuliano
 
 ## Sobre

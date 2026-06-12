@@ -11,13 +11,14 @@ use dotenv::dotenv;
 use crate::types::Source;
 
 #[tokio::main]
-async fn main() {
+async fn main() 
     dotenv().ok();
     let mut enem_off = DataSource::new(Source::Remote(
         "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
         "https://download.inep.gov.br/microdados/microdados_enem_2024.zip".to_owned(),
     ))
     .expect("Error while creating ENEM's DataSource");
+    //TODO: Utilizar PCA para reduzir dimensionalidade? Somente para campos do tipo QT?
     let mut escolas_off = DataSource::new(Source::Remote(
         "microdados_censo_escolar_2024/microdados_censo_escolar_2024/dados/microdados_ed_basica_2024.csv".to_owned(),
         "https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_2024.zip".to_owned(),
@@ -42,4 +43,4 @@ async fn main() {
             panic!("{:?}", err);
         }
     }
-}
+
