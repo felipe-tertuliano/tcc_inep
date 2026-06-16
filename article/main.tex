@@ -4,6 +4,7 @@
 \usepackage[brazilian]{babel}
 \usepackage{graphicx,url}
 \usepackage{sbc-template}
+\usepackage{mermaid}
 \usepackage{comment}
 \urlstyle{same}
 
@@ -102,6 +103,41 @@ O estudo apresentado \cite{mastersthesis:i_t_enem} investiga o impacto do acesso
 \section{Metodologia}
 
 Para o objetivo do projeto foram escolhidas duas bases de dados a serem tratadas: microdados do ENEM 2024 \cite{misc:micro_enem} e microdados do censo escolar 2024 \cite{misc:micro_escolas}. A partir dessas bases foi iniciada a produção de uma ferramenta na linguagem de programação \textit{Rust} \cite{misc:rust_lang} que seja capaz de ler os microdados, tratá-los e processá-los, gerando enfim indicadores relevantes para a proposta. Um repositório \cite{misc:proj_repo} no \textit{GitHub} \cite{misc:github_repo} foi criado para o versionamento e escolhida a \textit{IDE VSCode} \cite{misc:vscode_ide} para o desenvolvimento. Entendendo que o projeto desenvolvido está sujeito a mudanças e possíveis extensões à depender de futuras pesquisas, foi optado pelo uso da arquitetura em N camadas \cite{book:n_layers} seguindo os princípios \textit{SOLID} \cite{misc:solid} de desenvolvimento.
+
+Para guiar a metodologia foi utilizado o processo \textit{Knowledge Discovery in Databases} (KDD) \cite{article:kdd}, no qual se é dividido a mineração dos dados em etapas, cada uma com um objetivo a fim de melhorar a transformação de dados em informação, conhecimento e enfim em ação. Essa sessão será dividida em cinco subseções, cada uma representando e desenvolvendo uma parte do processo KDD, que são: 1. Seleção, 2. Pre-processamento, 3. Transformação, 4. Mineração e 5. Interpretação.
+
+\begin{mermaid}
+flowchart LR
+  D1@{ shape: cyl, label: "Dados" }
+  P1@{ shape: rect, label: "#1 Seleção" }
+  D2@{ shape: lin-cyl, label: "Dados\nSelecionados" }
+  P2@{ shape: rect, label: "#2 Pre-processamento" }
+  D3@{ shape: docs, label: "Dados\nPre-processados" }
+  P3@{ shape: rect, label: "#3 Transformação" }
+  D4@{ shape: docs, label: "Dados\nTransformados" }
+  P4@{ shape: rect, label: "#4 Mineração" }
+  D5@{ shape: doc, label: "Padrões" }
+  P5@{ shape: rect, label: "#5 Interpretação" }
+  D6@{ shape: tri, label: "Conhecimentos" }
+
+  D1 --> P1 --> D2 --> P2 --> D3 --> P3 --> D4 --> P4 --> D5 --> P5 --> D6
+
+  classDef p fill:#7BA7D0,stroke:#4A7AA9,color:#1a1a1a,stroke-width:1px
+  classDef d1 fill:#D98F8F,stroke:#B56565,color:#1a1a1a,stroke-width:1px
+  classDef d2 fill:#CD9F7A,stroke:#A87D5A,color:#1a1a1a,stroke-width:1px
+  classDef d3 fill:#BDB06F,stroke:#978D4F,color:#1a1a1a,stroke-width:1px
+  classDef d4 fill:#A4BA6B,stroke:#7E944B,color:#1a1a1a,stroke-width:1px
+  classDef d5 fill:#8DC07A,stroke:#6A9657,color:#1a1a1a,stroke-width:1px
+  classDef d6 fill:#7CC08C,stroke:#559662,color:#1a1a1a,stroke-width:1px
+
+  class P1,P2,P3,P4,P5 p
+  class D1 d1
+  class D2 d2
+  class D3 d3
+  class D4 d4
+  class D5 d5
+  class D6 d6
+\end{mermaid}
 
 \subsection{Extração dos dados}
 

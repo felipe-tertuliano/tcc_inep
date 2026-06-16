@@ -12,10 +12,10 @@ No desenvolvimento desse projeto foi utilizado o processo _Knowledge Discovery i
 ```mermaid
 flowchart LR
     D1@{ shape: cyl, label: "Dados" }
-    P1@{ shape: rect, label: "#1 Filtragem" }
-    D2@{ shape: lin-cyl, label: "Dados\nFiltrados" }
-    P2@{ shape: rect, label: "#2 Processamento" }
-    D3@{ shape: docs, label: "Dados\nProcessados" }
+    P1@{ shape: rect, label: "#1 Seleção" }
+    D2@{ shape: lin-cyl, label: "Dados\nSelecionados" }
+    P2@{ shape: rect, label: "#2 Pre-processamento" }
+    D3@{ shape: docs, label: "Dados\nPre-processados" }
     P3@{ shape: rect, label: "#3 Transformação" }
     D4@{ shape: docs, label: "Dados\nTransformados" }
     P4@{ shape: rect, label: "#4 Mineração" }
@@ -43,11 +43,11 @@ flowchart LR
 ```
 > Diagrama baseado no modelo de _[Fayyad, U., Piatetsky-Shapiro, G., & Smyth, P. (1996). From data mining to knowledge discovery in databases. AI Magazine, 17(3)]_
 
-### #1 Filtragem
+### #1 Seleção
 
 - Seleção de dados relevantes
 
-### #2 Processamento
+### #2 Pre-processamento
 
 - Formatação
 - Normalização
@@ -78,15 +78,15 @@ Para melhor acompanhamento e execução do trabalho desenvolvido foi utilizado a
 ```mermaid
 timeline
     title Cronograma de Sprints
-    Maio/2026 : Sprint de Filtragem
-    Junho/2026 : Sprint de Processamento
+    Maio/2026 : Sprint de Seleção
+    Junho/2026 : Sprint de Pre-processamento
     Julho/2026 : Sprint de Transformação
     Agosto/2026 : Sprint de Mineração
     Setembro/2026 : Sprint de Interpretação
 ```
 > Cronograma de _Sprints_ baseado na metodologia _Scrum_ (10/06/2026, sujeito a alterações)
 
-Para cada novo inicio de _sprint_ é avaliado o que foi desenvolvido na etapa anterior e criado um novo _backlog_ (lista de tarefas) que serão executadas durante o período estimado. Atualmente (10/06/2026) o projeto se encontra na **Sprint de Processamento** com as seguintes tarefas sendo desenvolvidas:
+Para cada novo inicio de _sprint_ é avaliado o que foi desenvolvido na etapa anterior e criado um novo _backlog_ (lista de tarefas) que serão executadas durante o período estimado. Atualmente (10/06/2026) o projeto se encontra na **Sprint de Pre-processamento** com as seguintes tarefas sendo desenvolvidas:
 
 ```mermaid
 kanban
