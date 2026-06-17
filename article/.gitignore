@@ -95,7 +95,7 @@ tmp/
 *.tex.swo
 
 # Mermaid files
-*.mmd
+mermaid/**
 
 # Custom: If you want to keep the final PDF, comment out the PDF line above
 # Or use selective ignoring like:

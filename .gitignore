@@ -25,6 +25,10 @@ target
 
 /target
 
+#vscode
+
+.vscode
+
 # Project
 
 .~lock.*

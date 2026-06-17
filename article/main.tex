@@ -6,6 +6,7 @@
 \usepackage{sbc-template}
 \usepackage{mermaid}
 \usepackage{comment}
+
 \urlstyle{same}
 
 \sloppy
@@ -106,6 +107,8 @@ Para o objetivo do projeto foram escolhidas duas bases de dados a serem tratadas
 
 Para guiar a metodologia foi utilizado o processo \textit{Knowledge Discovery in Databases} (KDD) \cite{article:kdd}, no qual se é dividido a mineração dos dados em etapas, cada uma com um objetivo a fim de melhorar a transformação de dados em informação, conhecimento e enfim em ação. Essa sessão será dividida em cinco subseções, cada uma representando e desenvolvendo uma parte do processo KDD, que são: 1. Seleção, 2. Pre-processamento, 3. Transformação, 4. Mineração e 5. Interpretação.
 
+\begin{figure}[htbp]
+\centering
 \begin{mermaid}
 flowchart LR
   D1@{ shape: cyl, label: "Dados" }
@@ -138,20 +141,67 @@ flowchart LR
   class D5 d5
   class D6 d6
 \end{mermaid}
+\caption{Diagrama baseado no processo KDD \cite{article:kdd}}
+\label{fig:kdd}
+\end{figure}
 
-\subsection{Extração dos dados}
+
+\subsection{Seleção}
 
 Tanto as bases dos resultados do ENEM quanto do Censo Escolar são obtidas a partir de um \textit{link} na \textit{internet} que permite o acesso livre à um arquivo \textit{.zip} onde dentro desse se encontra um conjunto de elementos e, como foco para o projeto, um documento \textit{.csv} contendo os dados. Seguindo o princípio de subsunção de Liskov (SOLID) foi projetado um elemento pai chamado \textit{DataSource} que permite herança de suas funcionalidades para diferentes fontes e dois filhos representando cada uma das bases alvo.
 
 Dentre as funcionalidades implementadas foi criado um fluxo de extração dos dados em três etapas, onde: 1. É buscado via um cliente \textit{HTTP} o arquivo compactado das fontes, 2. Esse é descompactado e salvo em um diretório local e 3. O documento \textit{.csv} é acessado utilizando de um caminho pré-definido pelo usuário. Após o acesso a planilha, é lida linha à linha e as colunas e seus respectivos valores são identificados e finalmente entram na parte de filtragem.
 
-\subsection{Filtragem dos dados}
-
 Seguindo a proposta de trabalho para os resultados do EMEM é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
+
+\subsection{Pre-processamento}
+
+\subsection{Transformação}
+
+\subsection{Mineração}
+
+\subsection{Interpretação}
 
 \section{Resultados Esperados}
 
 A partir desse trabalho se espera ter construída uma plataforma capaz de fornecer visualmente informações relevantes sobre a rede de ensino básico em situações socioeconômicas desfavoráveis, seja no país ou recorte geográfico (município por exemplo), em relação a qualidade da formação de competências em TIC. Essa ferramenta deve ser de fácil manipulação e modificação, ou seja, garantir uma baixa curva de aprendizado para projecionais de diversas áreas e permitir complementos ou alterações para usos em futuros projetos. Outro resultado, e não menos importante, é o desenvolvimento de uma metodologia para a identificação das escolas alvo partindo dos princípios já descritos, assim garantindo uma base sólida para intervenções e pesquisas.
+
+\section{Cronograma}
+
+Para melhor acompanhamento e execução do trabalho desenvolvido foi utilizado as metodologias \textit{Scrum} e \textit{Kanban}, onde cada \textit{sprints} é associada a uma etapa do processo KDD.
+
+\begin{figure}[htbp]
+\centering
+\begin{mermaid}
+timeline
+    title Cronograma de Sprints
+    Maio/2026 : Sprint de Seleção
+    Junho/2026 : Sprint de Pre-processamento
+    Julho/2026 : Sprint de Transformação
+    Agosto/2026 : Sprint de Mineração
+    Setembro/2026 : Sprint de Interpretação
+\end{mermaid}
+\caption{Cronograma de \textit{Sprints} baseado na metodologia \textit{Scrum} (10/06/2026, sujeito a alterações)}
+\label{fig:sprints}
+\end{figure}
+
+Para cada novo inicio de \textit{sprint} é avaliado o que foi desenvolvido na etapa anterior e criado um novo \textit{backlog} (lista de tarefas) que serão executadas durante o período estimado. Atualmente (10/06/2026) o projeto se encontra na **Sprint de Pre-processamento** com as seguintes tarefas sendo desenvolvidas:
+
+\begin{figure}[htbp]
+\centering
+\begin{mermaid}
+kanban
+    Fazer
+        [Normalizar/Formatar dados das escolas]
+    Fazendo
+        [Avaliar filtragem de escolas: incluir somente município de BH?]
+    Feito
+        [Criar tabelas temporárias para armazenar dados entre etapas de processamento]
+        [Filtrar estudantes por participação nas provas MT e LC e por escola]
+\end{mermaid}
+\caption{Tabela baseada na metodologia \textit{Kanban} (10/06/2026, sujeito a alterações)}
+\label{fig:kanban}
+\end{figure}
 
 \begin{comment}
 
