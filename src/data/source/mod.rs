@@ -13,6 +13,8 @@ use uuid::Uuid;
 pub type DataHeader = HashMap<String, usize>;
 
 pub struct DataSource {
+    _writer: Option<BufWriter<File>>,
+    _reader: Option<BufReader<File>>,
     _header: Option<DataHeader>,
     _is_initialized: bool,
     _os_path: OsString,
@@ -33,10 +35,23 @@ impl DataSource {
         Ok(Self {
             _dsp: dsp,
             _header: None,
+            _reader: None,
+            _writer: None,
             _source: source,
             _os_path: os_path,
             _is_initialized: false,
         })
+    }
+
+    pub fn child(&self, name: Option<&str>) -> GlobalRes<Self> {
+        if self._is_initialized {
+            Self::new(Source::Local(
+                name.map(|s| s.to_string())
+                    .unwrap_or(format!("{}.csv", Uuid::new_v4())),
+            ))
+        } else {
+            other_error!("DataSource is not initialized")
+        }
     }
 
     /* #region Helpers */
@@ -103,17 +118,25 @@ impl DataSource {
     /* #endregion */
 
     /* #region Readers */
-    fn _get_reader(&self, line: Option<u64>) -> GlobalRes<BufReader<File>> {
-        let mut reader = BufReader::new(OpenOptions::new().read(true).open(&self._os_path)?);
-        if let Some(l) = line {
-            let mut i = 0;
-            let mut b = 1;
-            while b > 0 && i < l {
-                b = reader.skip_until(b'\n')?;
-                i += 1;
+    pub fn read(&mut self, on: bool, line: Option<u64>) -> GlobalRes<()> {
+        if on {
+            if self._reader.is_none() {
+                let mut reader =
+                    BufReader::new(OpenOptions::new().read(true).open(&self._os_path)?);
+                if let Some(l) = line {
+                    let mut i = 0;
+                    let mut b = 1;
+                    while b > 0 && i < l {
+                        b = reader.skip_until(b'\n')?;
+                        i += 1;
+                    }
+                }
+                self._reader = Some(reader);
             }
+        } else {
+            self._reader = None;
         }
-        Ok(reader)
+        Ok(())
     }
 
     fn _read_line(
@@ -130,7 +153,13 @@ impl DataSource {
         res
     }
 
-    fn _get_header(&mut self, reader: &mut BufReader<File>) -> GlobalRes<&DataHeader> {
+    pub fn get_header(&mut self) -> GlobalRes<&DataHeader> {
+        if self._reader.is_none() {
+            other_error!("Read mode is not actvated")
+        }
+
+        let reader = &self._reader.unwrap();
+
         if self._header.is_none() {
             let mut buf = vec![0; 1024];
             let p = reader.stream_position()?;
@@ -158,7 +187,9 @@ impl DataSource {
 
     /* #region Writers */
     fn _get_writer(&self) -> GlobalRes<BufWriter<File>> {
-        Ok(BufWriter::new(OpenOptions::new().write(true).open(&self._os_path)?))
+        Ok(BufWriter::new(
+            OpenOptions::new().write(true).open(&self._os_path)?,
+        ))
     }
 
     fn _write_line(&self, writer: &mut BufWriter<File>, line: String) -> GlobalRes<()> {
@@ -192,33 +223,19 @@ impl DataSource {
     }
     /* #endregion */
 
-    pub async fn filter<F>(&mut self, to: Option<&str>, f: F) -> GlobalRes<Self>
+    pub async fn foreach<F>(&mut self, mut f: F) -> GlobalRes<()>
     where
-        F: Fn(DataItem) -> Option<DataItem>,
+        F: FnMut(DataItem) -> GlobalRes<()>,
     {
         if self._is_initialized {
-            let mut filtered = Self::new(Source::Local(
-                to.map(|s| s.to_string())
-                    .unwrap_or(format!("{}.csv", Uuid::new_v4())),
-            ))?;
-            if !filtered.exists() {
-                filtered.init().await?;
-                let mut buf = vec![0; 1024];
-                let mut w = filtered._get_writer()?;
-                let mut r = self._get_reader(Some(1))?;
-                let header = self._get_header(&mut r)?.clone();
-                while let Some(value) = self._read_line(&mut r, &mut buf)? {
-                    if let Some(output) = f(DataItem::new(UniRef::Ref(&header), value))
-                        && let Some(output_h) = output.get_header()
-                    {
-                        filtered._set_header(&mut w, output_h)?;
-                        filtered._write_line(&mut w, output.to_string())?;
-                    }
-                }
-            } else {
-                filtered.init().await?;
+            let mut buf = vec![0; 1024];
+            self.read(true, Some(1))?;
+            let header = self._get_header(&mut r)?.clone();
+            while let Some(value) = self._read_line(&mut r, &mut buf)? {
+                f(DataItem::new(UniRef::Ref(&header), value))?;
             }
-            Ok(filtered)
+            self.read(false, None)?;
+            Ok(())
         } else {
             other_error!("DataSource is not initialized")
         }
