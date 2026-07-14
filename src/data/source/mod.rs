@@ -139,86 +139,97 @@ impl DataSource {
         Ok(())
     }
 
-    fn _read_line(
-        &self,
-        reader: &mut BufReader<File>,
-        buf: &mut Vec<u8>,
-    ) -> GlobalRes<Option<Vec<String>>> {
-        let mut res = Ok(None);
-        buf.clear();
-        if reader.read_until(b'\n', buf)? > 0 {
-            let line = get_csv_cols(String::from_utf8_lossy(buf).trim(), ';')?;
-            res = Ok(Some(line));
+    pub fn read_line(&mut self, buf: &mut Vec<u8>, seek: Option<SeekFrom>, rewind: bool) -> GlobalRes<Option<Vec<String>>> {
+        if let Some(reader) = self._reader.as_mut() {
+            let mut res = Ok(None);
+            let old = reader.stream_position()?;
+            buf.clear();
+            if let Some(pos) = seek {
+                reader.seek(pos)?;
+            }
+            if reader.read_until(b'\n', buf)? > 0 {
+                let line = get_csv_cols(String::from_utf8_lossy(buf).trim(), ';')?;
+                res = Ok(Some(line));
+            }
+            if rewind {
+                reader.seek(SeekFrom::Start(old))?;
+            }
+            res
+        } else {
+            other_error!("Read mode is not activated")
         }
-        res
     }
 
     pub fn get_header(&mut self) -> GlobalRes<&DataHeader> {
         if self._reader.is_none() {
-            other_error!("Read mode is not actvated")
-        }
-
-        let reader = &self._reader.unwrap();
-
-        if self._header.is_none() {
-            let mut buf = vec![0; 1024];
-            let p = reader.stream_position()?;
-            reader.rewind()?;
-            self._header = Some(
-                self._read_line(reader, &mut buf)?
-                    .expect("No header found for the DataSource")
-                    .iter()
-                    .enumerate()
-                    .fold(HashMap::new(), |mut acc, (v, k)| {
-                        acc.insert(k.to_owned(), v);
-                        acc
-                    }),
-            );
-            reader.seek(SeekFrom::Start(p))?;
-        }
-
-        if let Some(header) = &self._header {
-            Ok(header)
+            other_error!("Read mode is not activated")
         } else {
-            other_error!("Unable to fetch DataSource's header")
+            if self._header.is_none() {
+                let mut buf = vec![0; 1024];
+                self._header = Some(
+                    self.read_line(&mut buf, Some(SeekFrom::Start(0)), true)?
+                        .expect("No header found for the DataSource")
+                        .iter()
+                        .enumerate()
+                        .fold(HashMap::new(), |mut acc, (v, k)| {
+                            acc.insert(k.to_owned(), v);
+                            acc
+                        }),
+                );
+            }
+            if let Some(header) = &self._header {
+                Ok(header)
+            } else {
+                other_error!("Unable to fetch DataSource's header")
+            }
         }
     }
     /* #endregion */
 
     /* #region Writers */
-    fn _get_writer(&self) -> GlobalRes<BufWriter<File>> {
-        Ok(BufWriter::new(
-            OpenOptions::new().write(true).open(&self._os_path)?,
-        ))
-    }
-
-    fn _write_line(&self, writer: &mut BufWriter<File>, line: String) -> GlobalRes<()> {
-        writeln!(writer, "{}", line)?;
+    pub fn write(&mut self, on: bool) -> GlobalRes<()> {
+        if on {
+            if self._writer.is_none() {
+                self._writer = Some(BufWriter::new(
+                    OpenOptions::new().write(true).open(&self._os_path)?,
+                ));
+            }
+        } else {
+            self._writer = None;
+        }
         Ok(())
     }
 
-    fn _set_header(
-        &mut self,
-        writer: &mut BufWriter<File>,
-        header: &DataHeader,
-    ) -> GlobalRes<&DataHeader> {
-        if self._header.is_none() {
-            self._header = Some(header.clone());
-            let mut buf: Vec<(&String, &usize)> = header.iter().collect();
-            buf.sort_by(|(_, a), (_, b)| a.cmp(b));
-            let value = buf
-                .iter()
-                .map(|(v, _)| v.to_string())
-                .collect::<Vec<String>>()
-                .join(";");
-            writer.rewind()?;
-            self._write_line(writer, value)?;
-        }
-
-        if let Some(header) = &self._header {
-            Ok(header)
+    pub fn write_line(&mut self, line: String) -> GlobalRes<()> {
+        if let Some(writer) = self._writer.as_mut() {
+            writeln!(writer, "{}", line)?;
+            Ok(())
         } else {
-            other_error!("Unable to fetch DataSource's header")
+            other_error!("Write mode is not activated")
+        }
+    }
+
+    pub fn set_header(&mut self, header: &DataHeader) -> GlobalRes<&DataHeader> {
+        if let Some(writer) = self._writer.as_mut() {
+            if self._header.is_none() {
+                self._header = Some(header.clone());
+                let mut buf: Vec<(&String, &usize)> = header.iter().collect();
+                buf.sort_by(|(_, a), (_, b)| a.cmp(b));
+                let value = buf
+                    .iter()
+                    .map(|(v, _)| v.to_string())
+                    .collect::<Vec<String>>()
+                    .join(";");
+                writer.rewind()?;
+                self.write_line(value)?;
+            }
+            if let Some(header) = &self._header {
+                Ok(header)
+            } else {
+                other_error!("Unable to fetch DataSource's header")
+            }
+        } else {
+            other_error!("Write mode is not activated")
         }
     }
     /* #endregion */
@@ -230,8 +241,8 @@ impl DataSource {
         if self._is_initialized {
             let mut buf = vec![0; 1024];
             self.read(true, Some(1))?;
-            let header = self._get_header(&mut r)?.clone();
-            while let Some(value) = self._read_line(&mut r, &mut buf)? {
+            let header = self.get_header()?.clone();
+            while let Some(value) = self.read_line(&mut buf, None, false)? {
                 f(DataItem::new(UniRef::Ref(&header), value))?;
             }
             self.read(false, None)?;

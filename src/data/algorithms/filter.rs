@@ -9,17 +9,18 @@ impl DataSource {
         let mut filtered = self.child(to)?;
         if !filtered.exists() {
             filtered.init().await?;
-            let mut w = filtered._get_writer()?;
+            filtered.write(true)?;
             self.foreach(|di| {
                 if let Some(output) = f(di)
                     && let Some(output_h) = output.get_header()
                 {
-                    filtered._set_header(&mut w, output_h)?;
-                    filtered._write_line(&mut w, output.to_string())?;
+                    filtered.set_header(output_h)?;
+                    filtered.write_line(output.to_string())?;
                 }
                 Ok(())
             })
             .await?;
+            filtered.write(false)?;
         } else {
             filtered.init().await?;
         }
