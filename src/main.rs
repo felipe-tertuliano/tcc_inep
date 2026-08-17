@@ -25,7 +25,7 @@ async fn main() {
     let ds_inits = tokio::join!(enem_off.init(), escolas_off.init());
     if let (Ok(enem_on), Ok(_escolas_on)) = ds_inits {
         let _ = enem_on
-            .filter(Some("enem_v1.csv"), |di| {
+            .filter(Some("enem_v1"), |di| {
                 if di.get::<String>("CO_ESCOLA").is_some_and(|v| !v.is_empty())
                     && di.get::<i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1)
                     && di.get::<i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1)

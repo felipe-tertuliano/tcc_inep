@@ -45,13 +45,18 @@ impl DataSource {
 
     pub fn child(&self, name: Option<&str>) -> GlobalRes<Self> {
         if self._is_initialized {
-            Self::new(Source::Local(
+            Self::new(Source::Local(format!(
+                "{}.csv",
                 name.map(|s| s.to_string())
-                    .unwrap_or(format!("{}.csv", Uuid::new_v4())),
-            ))
+                    .unwrap_or(Uuid::new_v4().to_string())
+            )))
         } else {
             other_error!("DataSource is not initialized")
         }
+    }
+
+    pub fn delete(self) -> GlobalRes<()> {
+        Ok(fs::remove_file(&self._os_path)?)
     }
 
     /* #region Helpers */
@@ -139,7 +144,12 @@ impl DataSource {
         Ok(())
     }
 
-    pub fn read_line(&mut self, buf: &mut Vec<u8>, seek: Option<SeekFrom>, rewind: bool) -> GlobalRes<Option<Vec<String>>> {
+    pub fn read_line(
+        &mut self,
+        buf: &mut Vec<u8>,
+        seek: Option<SeekFrom>,
+        rewind: bool,
+    ) -> GlobalRes<Option<Vec<String>>> {
         if let Some(reader) = self._reader.as_mut() {
             let mut res = Ok(None);
             let old = reader.stream_position()?;
