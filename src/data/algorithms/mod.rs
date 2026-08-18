@@ -1,6 +1,6 @@
-mod standardize;
 mod filter;
 mod pca;
-pub use standardize::*;
+mod standardize;
 pub use filter::*;
 pub use pca::*;
+pub use standardize::*;
