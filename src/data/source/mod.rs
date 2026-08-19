@@ -210,6 +210,13 @@ impl DataSource {
         Ok(())
     }
 
+    pub fn write_item(&mut self, item: DataItem) -> GlobalRes<()> {
+        if self._header.is_none() {
+            self.set_header(item.get_header().unwrap())?;
+        }
+        self.write_line(item.to_string())
+    }
+
     pub fn write_line(&mut self, line: String) -> GlobalRes<()> {
         if let Some(writer) = self._writer.as_mut() {
             writeln!(writer, "{}", line)?;

@@ -11,11 +11,8 @@ impl DataSource {
             filtered.init().await?;
             filtered.write(true)?;
             self.foreach(|di| {
-                if let Some(output) = f(di)
-                    && let Some(output_h) = output.get_header()
-                {
-                    filtered.set_header(output_h)?;
-                    filtered.write_line(output.to_string())?;
+                if let Some(output) = f(di) {
+                    filtered.write_item(output)?;
                 }
                 Ok(())
             })

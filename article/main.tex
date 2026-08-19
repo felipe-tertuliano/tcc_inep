@@ -4,6 +4,7 @@
 \usepackage[brazilian]{babel}
 \usepackage{graphicx,url}
 \usepackage{sbc-template}
+\usepackage{amsmath}
 \usepackage{mermaid}
 \usepackage{comment}
 
@@ -39,7 +40,7 @@ A educação é o principal pilar para o desenvolvimento de qualquer área técn
 
 Partindo do pressuposto de que o desempenho educacional em competências digitais depende, para além da infraestrutura tecnológica disponível, de fatores pedagógicos e institucionais, podemos identificá-los por meio da análise de dados educacionais em larga escala. Nesse contexto, a construção de um sistema de análise orientado por dados pode contribuir para orientar políticas públicas de formação e apoio às escolas, especialmente em contextos socioeconômicos mais vulneráveis. Os microdados contêm informações detalhadas sobre o desempenho dos participantes nas diferentes áreas do exame, variáveis relacionadas ao perfil socioeconômico dos estudantes e dados das escolas.
 
-A proposta consiste em extrair, tratar e organizar esses dados utilizando técnicas de tratamento de grandes bases de dados, análise estatística e de agrupamento, possibilitando a construção de indicadores comparáveis entre escolas. A análise privilegiará o cruzamento entre três conjuntos de variáveis: 1. o desempenho dos estudantes em competências associadas ao uso e à compreensão de Tecnologias da Informação e Comunicação, 2. os indicadores socioeconômicos declarados pelos participantes no questionário contextual do ENEM e 3. As características específicas da instituição de ensino em que esse participante se formou. Para o desempenho, serão consideradas competências presentes na Matriz de Referência (MR) do ENEM da área de Linguagens, Códigos e suas Tecnologias (C1 e C9) e na MR de Matemática e suas Tecnologias (C7), por estarem relacionadas a habilidades de interpretação de informações, resolução de problemas e uso de recursos tecnológicos e informacionais. Os indicadores socioeconômicos permitirão, de outro lado, caracterizar o perfil dos estudantes e/ou da escola e construir índices sintéticos ou classificações que representem as instituições. O cruzamento entre desempenho nas competências selecionadas e a situação das escolas permitirá identificar padrões de desempenho que escapam às expectativas associadas às condições SE e, se possível, infraestruturais.
+A proposta consiste em extrair, tratar e organizar esses dados utilizando técnicas de tratamento de grandes bases de dados, análise estatística e de agrupamento, possibilitando a construção de indicadores comparáveis entre escolas. A análise privilegiará o cruzamento entre dois conjuntos de variáveis: 1. o desempenho dos estudantes em competências associadas ao uso e à compreensão de Tecnologias da Informação e Comunicação e 2. As características específicas da instituição de ensino em que esse participante se formou. Para o desempenho, serão consideradas competências presentes na Matriz de Referência (MR) do ENEM da área de Linguagens, Códigos e suas Tecnologias (C1 e C9) e na MR de Matemática e suas Tecnologias (C7), por estarem relacionadas a habilidades de interpretação de informações, resolução de problemas e uso de recursos tecnológicos e informacionais. Os indicadores das escolas permitirão, de outro lado, caracterizar o perfil socioeconômico dos estudantes e construir índices sintéticos ou classificações que representem as instituições. O cruzamento entre desempenho nas competências selecionadas e a situação das escolas permitirá identificar padrões de desempenho que escapam às expectativas associadas às condições SE e, se possível, infraestruturais.
 
 A identificação dessas unidades escolares, com desempenho resiliente, permitirá orientar ações de capacitação em TIC baseadas em evidências, direcionando recursos e estratégias para contextos em que tais intervenções possam produzir maior impacto. Como produto final, pretende-se desenvolver um protótipo de mecanismo de identificação de escolas-alvo, que poderá assumir a forma de um conjunto de rotinas de análise de dados, scripts reprodutíveis ou mesmo um painel analítico que permita visualizar e comparar indicadores educacionais e socioeconômicos. Espera-se que a proposta contribua tanto para o campo da ciência de dados aplicada à educação quanto para o aprimoramento de estratégias de formação em TIC no sistema educacional brasileiro.
 
@@ -152,11 +153,15 @@ As bases dos resultados do ENEM quanto do Censo Escolar são obtidas a partir de
 
 Dentre as funcionalidades implementadas foi criado um fluxo de extração dos dados em três etapas, a saber: 1. Busca-se em um cliente \textit{HTTP} o arquivo compactado das fontes, 2. Descompacta-se e salvo-se o arquivo em um diretório local e 3. O documento \textit{.csv} é acessado utilizando de um caminho pré-definido pelo usuário. Após o acesso a planilha, lê-se linha à linha e as colunas e seus respectivos valores são identificados e finalmente entram na parte de filtragem.
 
-Seguindo a proposta de trabalho para os resultados do EMEM é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
-
 \subsection{Pre-processamento}
 
+Seguindo a proposta de trabalho para os resultados do EMEM é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
+
+Ao analisar os dados do Censo Escolar\cite{misc:micro_escolas} encontramos uma base com 426 campos, onde muitos desses podem causar ruídos durante o processo de classificação, então para diminuir a dimensionalidade do conjunto aplicamos a técnica de redação \textit{PCA}\cite{book:pca}. Foram incluídos somente os elementos quantitativos descritos pelo prefixo "QT" (154 campos), esses passam pelas seguintes etapas: 1. Padronização dos valores, 2. Geração da Matriz de Covariância, 3. Geração dos Autovalores e 4. Seleção dos \textit{K} campos com maiores autovalores.
+
 \subsection{Transformação}
+
+Para um melhor entendimento dos recortes SE das escolas foi escolhido o algoritmo \textit{K-Means++}\cite{article:kmeanspp}, nele as escolas são agrupadas de forma não supervisionada e diferente do clássico \textit{K-Means} as sementes são selecionadas de forma mais estratégica baseado em estatística. Assim será possível visualizar as características comuns e distintas das instituições e compara-las com seu desempenho no exame nacional.
 
 \subsection{Mineração}
 

@@ -121,3 +121,21 @@ Computação},
   - Homens tiram notas maiores que mulheres em Matemática
 - Escolas privadas tem maiores notas
 - Impacto das escolas nas notas
+
+```tex
+\begin{figure}[htbp]
+\centering
+\begin{equation}
+z_i=\frac{x_i-\mu}{\sigma}
+\end{equation}
+\begin{equation}
+\sigma=\sqrt{\frac{\sum_{i=1}^{n}(x_i-\mu)^2}{n}}
+\end{equation}
+\begin{equation}
+\mu=\frac{\sum_{i=1}^{n}x_i}{n}
+\end{equation}
+\(z_i=\) padronização do elemento \(x_i\) de um conjunto de tamanho \(n\)
+\caption{Equação de padronização utilizada no processo de \textit{PCA}}
+\label{fig:standardization}
+\end{figure}
+```

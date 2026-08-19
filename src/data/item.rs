@@ -26,9 +26,17 @@ impl<'a> DataItem<'a> {
             if let Some(v) = h.get(name) {
                 pos = *v;
             } else {
-                pos = h.iter()
-                    .fold(0, |acc, (_, v)| if *v < acc { acc } else { *v }) + 1;
+                pos = if h.is_empty() {
+                    0
+                } else {
+                    h.iter()
+                        .fold(0, |acc, (_, v)| if *v < acc { acc } else { *v })
+                        + 1
+                };
                 h.insert(name.to_string(), pos);
+            }
+            if self._value.is_empty() {
+                self._value.push(String::new());
             }
             while self._value.len() - 1 < pos {
                 self._value.push(String::new());
