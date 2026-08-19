@@ -91,8 +91,8 @@ Para cada novo inicio de _sprint_ é avaliado o que foi desenvolvido na etapa an
 ```mermaid
 kanban
     Fazer
-        [Iniciar interface]
-        [Agrupar escolas]
+        [Iniciar desenvolvimento da interface]
+        [Agrupar escolas com K-means++]
     Fazendo
         [Finalizar PCA]
     Feito

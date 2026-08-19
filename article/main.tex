@@ -151,17 +151,17 @@ flowchart LR
 
 As bases dos resultados do ENEM quanto do Censo Escolar são obtidas a partir de um \textit{link} na \textit{internet} que permite o acesso livre à um arquivo \textit{.zip} no qual se encontra um conjunto de elementos e, como foco para o projeto, um documento \textit{.csv} contendo os dados. Seguindo o princípio de subsunção de Liskov (SOLID) foi projetado um elemento pai chamado \textit{DataSource} que permite herança de suas funcionalidades para diferentes fontes e dois filhos representando cada uma das bases alvo.
 
-Dentre as funcionalidades implementadas foi criado um fluxo de extração dos dados em três etapas, a saber: 1. Busca-se em um cliente \textit{HTTP} o arquivo compactado das fontes, 2. Descompacta-se e salvo-se o arquivo em um diretório local e 3. O documento \textit{.csv} é acessado utilizando de um caminho pré-definido pelo usuário. Após o acesso a planilha, lê-se linha à linha e as colunas e seus respectivos valores são identificados e finalmente entram na parte de filtragem.
+Dentre as funcionalidades implementadas foi criado um fluxo de extração dos dados em três etapas, a saber: 1. Busca-se em um cliente \textit{HTTP} o arquivo compactado das fontes, 2. Descompacta-se e salva-se o arquivo em um diretório local e 3. O documento \textit{.csv} é acessado utilizando de um caminho pré-definido pelo usuário. Após o acesso a planilha, lê-se linha à linha e as colunas e seus respectivos valores são identificados e finalmente entram na parte de filtragem.
 
 \subsection{Pre-processamento}
 
-Seguindo a proposta de trabalho para os resultados do EMEM é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
+Seguindo a proposta de trabalho para os resultados do EMEM; é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
 
 Ao analisar os dados do Censo Escolar\cite{misc:micro_escolas} encontramos uma base com 426 campos, onde muitos desses podem causar ruídos durante o processo de classificação, então para diminuir a dimensionalidade do conjunto aplicamos a técnica de redação \textit{PCA}\cite{book:pca}. Foram incluídos somente os elementos quantitativos descritos pelo prefixo "QT" (154 campos), esses passam pelas seguintes etapas: 1. Padronização dos valores, 2. Geração da Matriz de Covariância, 3. Geração dos Autovalores e 4. Seleção dos \textit{K} campos com maiores autovalores.
 
 \subsection{Transformação}
 
-Para um melhor entendimento dos recortes SE das escolas foi escolhido o algoritmo \textit{K-Means++}\cite{article:kmeanspp}, nele as escolas são agrupadas de forma não supervisionada e diferente do clássico \textit{K-Means} as sementes são selecionadas de forma mais estratégica baseado em estatística. Assim será possível visualizar as características comuns e distintas das instituições e compara-las com seu desempenho no exame nacional.
+Para um melhor entendimento dos recortes SE das escolas foi escolhido o algoritmo \textit{K-Means++}\cite{article:kmeanspp}, nele as escolas são agrupadas de forma não supervisionada e diferente do clássico \textit{K-Means} as sementes são selecionadas de forma mais estratégica baseado em estatística. Assim será possível visualizar as características comuns e distintas das instituições e compará-las com seu desempenho no exame nacional.
 
 \subsection{Mineração}
 
@@ -186,25 +186,26 @@ timeline
     Agosto/2026 : Sprint de Mineração
     Setembro/2026 : Sprint de Interpretação
 \end{mermaid}
-\caption{Cronograma de \textit{Sprints} baseado na metodologia \textit{Scrum} (10/06/2026, sujeito a alterações)}
+\caption{Cronograma de \textit{Sprints} baseado na metodologia \textit{Scrum} (19/08/2026, sujeito a alterações)}
 \label{fig:sprints}
 \end{figure}
 
-Para cada novo início de \textit{sprint} é avaliado o que foi desenvolvido na etapa anterior e criado um novo \textit{backlog} (lista de tarefas) a ser executado durante o período estimado. Atualmente (10/06/2026) o projeto se encontra na **Sprint de Pre-processamento** com as seguintes tarefas sendo desenvolvidas:
+Para cada novo início de \textit{sprint} é avaliado o que foi desenvolvido na etapa anterior e criado um novo \textit{backlog} (lista de tarefas) a ser executado durante o período estimado. Atualmente (18/08/2026) o projeto se encontra na **Sprint de Pre-processamento** com as seguintes tarefas sendo desenvolvidas:
 
 \begin{figure}[htbp]
 \centering
 \begin{mermaid}
 kanban
     Fazer
-        [Normalizar/Formatar dados das escolas]
+        [Iniciar desenvolvimento da interface]
+        [Agrupar escolas com K-means++]
     Fazendo
-        [Avaliar filtragem de escolas: incluir somente município de BH?]
+        [Finalizar PCA]
     Feito
-        [Criar tabelas temporárias para armazenar dados entre etapas de processamento]
-        [Filtrar estudantes por participação nas provas MT e LC e por escola]
+        [Normalizar/Formatar dados das escolas]
+        [Avaliar filtragem de escolas: incluir somente município de BH?]
 \end{mermaid}
-\caption{Tabela baseada na metodologia \textit{Kanban} (10/06/2026, sujeito a alterações)}
+\caption{Tabela baseada na metodologia \textit{Kanban} (18/08/2026, sujeito a alterações)}
 \label{fig:kanban}
 \end{figure}
 
