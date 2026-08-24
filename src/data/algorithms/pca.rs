@@ -19,67 +19,74 @@ impl DataSource {
         if !pca.exists() {
             let mut standardized = self.standardize(None, include).await?;
             println!("PCA: Standardize Step - {:.2}s", dt.lap().as_secs_f32());
-
-            let mut means: Vec<(&str, f64)> = include.clone().iter().map(|x| (*x, 0.0)).collect();
-            let mut cov_matrix: HashMap<SymmetricKey<&str>, f64> = HashMap::new();
+            standardized.read(true, None)?;
+            let mut means = standardized
+                .get_header()?
+                .iter()
+                .map(|(k, v)| (k.to_owned(), v.to_owned(), 0.0))
+                .collect::<Vec<_>>();
             let mut n: u32 = 0;
             standardized
                 .foreach(|di| {
                     n += 1;
-                    for (header, value) in &mut means {
+                    for (header, _, value) in &mut means {
                         *value += di.get::<f64>(header).unwrap_or(0.0)
                     }
                     Ok(())
                 })
                 .await?;
-            for (_, value) in &mut means {
+            for (_, _, value) in &mut means {
                 *value /= n as f64
             }
             println!("PCA: Mean Step - {:.2}s", dt.lap().as_secs_f32());
 
+            let mut cm = vec![0.0; include.len().pow(2)];
             let mut threads = vec![];
             standardized
                 .foreach(|di| {
-                    let data = di.to_vec().unwrap().into_iter().collect::<HashMap<_, _>>();
+                    let data = di.to_vec().unwrap();
                     let m_clone = means.clone();
                     threads.push(tokio::spawn(async move {
-                        let mut res = Vec::with_capacity(m_clone.len().pow(2));
+                        let mut res = vec![0.0; m_clone.len().pow(2)];
                         for i in 0..m_clone.len() {
-                            let head = m_clone[i];
+                            let head_m = &m_clone[i];
                             let tail = &m_clone[i..];
                             let head_v = data
-                                .get(head.0)
-                                .map(|d| d.parse::<f64>().unwrap_or(0.0))
+                                .get(head_m.1)
+                                .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
                                 .unwrap_or(0.0);
-                            for pair in tail {
+                            for j in 0..tail.len() {
+                                let pair_m = &tail[j];
                                 let pair_v = data
-                                    .get(pair.0)
-                                    .map(|d| d.parse::<f64>().unwrap_or(0.0))
+                                    .get(pair_m.1)
+                                    .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
                                     .unwrap_or(0.0);
-                                let value = ((head_v - head.1) * (pair_v - pair.1)) / ((n - 1) as f64);
-                                // TODO: Finish the Cov. Matrix parallel build
+                                let value =
+                                    ((head_v - head_m.2) * (pair_v - pair_m.2)) / ((n - 1) as f64);
+                                res[(i + j) * m_clone.len() + i] = value;
+                                res[i * m_clone.len() + i + j] = value;
                             }
                         }
                         res
                     }));
                     println!(
-                        "PCA: Cov. Matrix Step (One element) - {:.2}s",
+                        "PCA: Cov. Matrix Step - One Element - {:.3}s",
                         dt.lap().as_secs_f32()
                     );
                     Ok(())
                 })
                 .await?;
             standardized.delete()?;
-            println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());
-
-            let mut raw_cm = Vec::with_capacity(include.len().pow(2));
-            for x in include {
-                for y in include {
-                    raw_cm.push(*cov_matrix.get(&SymmetricKey(x, y)).unwrap());
+            for thread in threads {
+                let res = thread.await?;
+                for i in 0..cm.len() {
+                    cm[i] += res[i];
                 }
             }
+            println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());
+
             let eigenvalues =
-                SymmetricEigen::new(DMatrix::from_vec(include.len(), include.len(), raw_cm))
+                SymmetricEigen::new(DMatrix::from_vec(include.len(), include.len(), cm))
                     .eigenvalues;
             println!("PCA: Eigenvalues Step - {:.2}s", dt.lap().as_secs_f32());
 

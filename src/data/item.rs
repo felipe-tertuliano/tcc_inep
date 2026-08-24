@@ -59,11 +59,15 @@ impl<'a> DataItem<'a> {
     }
 
     pub fn to_vec(&self) -> Option<Vec<(String, String)>> {
-        self.get_header().map(|h| {
-            h.iter().map(|(k, v)| (v, k)).collect::<HashMap<_, _>>()
-        }).map(|header| self._value.iter().enumerate().map(|(i, v)| {
-                (header.get(&i).unwrap().clone().to_owned(), v.to_owned())
-            }).collect::<Vec<_>>())
+        self.get_header()
+            .map(|h| h.iter().map(|(k, v)| (v, k)).collect::<HashMap<_, _>>())
+            .map(|header| {
+                self._value
+                    .iter()
+                    .enumerate()
+                    .map(|(i, v)| (header.get(&i).unwrap().to_owned().clone(), v.to_owned()))
+                    .collect::<Vec<_>>()
+            })
     }
 }
 
