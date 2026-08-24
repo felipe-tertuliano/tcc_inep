@@ -1,6 +1,6 @@
 use super::DataHeader;
 use crate::types::UniRef;
-use std::{fmt::Display, str::FromStr};
+use std::{collections::HashMap, fmt::Display, str::FromStr};
 
 pub struct DataItem<'a> {
     _header: UniRef<'a, DataHeader>,
@@ -56,6 +56,14 @@ impl<'a> DataItem<'a> {
 
     pub fn get_header(&self) -> Option<&DataHeader> {
         self._header.get_ref()
+    }
+
+    pub fn to_vec(&self) -> Option<Vec<(String, String)>> {
+        self.get_header().map(|h| {
+            h.iter().map(|(k, v)| (v, k)).collect::<HashMap<_, _>>()
+        }).map(|header| self._value.iter().enumerate().map(|(i, v)| {
+                (header.get(&i).unwrap().clone().to_owned(), v.to_owned())
+            }).collect::<Vec<_>>())
     }
 }
 

@@ -1,8 +1,9 @@
 use super::super::DataSource;
-use crate::{data::DataItem, types::{GlobalRes, UniRef}};
+use crate::{data::DataItem, types::{GlobalRes, UniRef}, utils::DebugTimer};
 
 impl DataSource {
     pub async fn standardize(&mut self, to: Option<&str>, include: &Vec<&str>) -> GlobalRes<Self> {
+        let mut dt = DebugTimer::new();
         let mut standardized = self.child(to)?;
         if !standardized.exists() {
             let mut variances: Vec<(&str, f64)> = include.iter().map(|x| (*x, 0.0)).collect();
@@ -19,6 +20,7 @@ impl DataSource {
             for (_, value) in &mut means {
                 *value /= n as f64
             }
+            println!("Standardize: Mean Step - {:.2}s", dt.lap().as_secs_f32());
             self.foreach(|di| {
                 for i in 0..include.len() {
                     let (header, mean) = &means[i];
@@ -31,10 +33,10 @@ impl DataSource {
             for (_, value) in &mut variances {
                 *value = (*value / (n as f64)).sqrt();
             }
+            println!("Standardize: Variance Step - {:.2}s", dt.lap().as_secs_f32());
             standardized.init().await?;
             standardized.write(true)?;
-            // TODO: Incluir todos os campos na normalização
-            self.foreach(|mut di| {
+            self.foreach(|di| {
                 let mut new_di = DataItem::new(UniRef::Int, vec![]); 
                 for i in 0..include.len() {
                     let (header, variance) = &variances[i];
@@ -49,6 +51,7 @@ impl DataSource {
             })
             .await?;
             standardized.write(false)?;
+            println!("Standardize: Standardize Step - {:.2}s", dt.lap().as_secs_f32());
         } else {
             standardized.init().await?;
         }

@@ -1,5 +1,9 @@
 use super::super::DataSource;
-use crate::{data::DataItem, types::{GlobalRes, SymmetricKey, UniRef}};
+use crate::{
+    data::DataItem,
+    types::{GlobalRes, SymmetricKey, UniRef},
+    utils::DebugTimer,
+};
 use nalgebra::{DMatrix, SymmetricEigen};
 use std::collections::HashMap;
 
@@ -10,9 +14,11 @@ impl DataSource {
         k: usize,
         include: &Vec<&str>,
     ) -> GlobalRes<Self> {
+        let mut dt = DebugTimer::new();
         let mut pca = self.child(to)?;
         if !pca.exists() {
             let mut standardized = self.standardize(None, include).await?;
+            println!("PCA: Standardize Step - {:.2}s", dt.lap().as_secs_f32());
 
             let mut means: Vec<(&str, f64)> = include.clone().iter().map(|x| (*x, 0.0)).collect();
             let mut cov_matrix: HashMap<SymmetricKey<&str>, f64> = HashMap::new();
@@ -29,27 +35,42 @@ impl DataSource {
             for (_, value) in &mut means {
                 *value /= n as f64
             }
+            println!("PCA: Mean Step - {:.2}s", dt.lap().as_secs_f32());
+
+            let mut threads = vec![];
             standardized
                 .foreach(|di| {
-                    for i in 0..means.len() {
-                        let head = means[i];
-                        let tail = &means[i..];
-                        let head_v = di.get::<f64>(head.0).unwrap_or(0.0);
-                        for pair in tail {
-                            let pair_v = di.get::<f64>(pair.0).unwrap_or(0.0);
-                            let key = SymmetricKey(head.0, pair.0);
-                            let value = cov_matrix.get(&key).unwrap_or(&0.0);
-                            cov_matrix.insert(
-                                key,
-                                value
-                                    + (((head_v - head.1) * (pair_v - pair.1)) / ((n - 1) as f64)),
-                            );
+                    let data = di.to_vec().unwrap().into_iter().collect::<HashMap<_, _>>();
+                    let m_clone = means.clone();
+                    threads.push(tokio::spawn(async move {
+                        let mut res = Vec::with_capacity(m_clone.len().pow(2));
+                        for i in 0..m_clone.len() {
+                            let head = m_clone[i];
+                            let tail = &m_clone[i..];
+                            let head_v = data
+                                .get(head.0)
+                                .map(|d| d.parse::<f64>().unwrap_or(0.0))
+                                .unwrap_or(0.0);
+                            for pair in tail {
+                                let pair_v = data
+                                    .get(pair.0)
+                                    .map(|d| d.parse::<f64>().unwrap_or(0.0))
+                                    .unwrap_or(0.0);
+                                let value = ((head_v - head.1) * (pair_v - pair.1)) / ((n - 1) as f64);
+                                // TODO: Finish the Cov. Matrix parallel build
+                            }
                         }
-                    }
+                        res
+                    }));
+                    println!(
+                        "PCA: Cov. Matrix Step (One element) - {:.2}s",
+                        dt.lap().as_secs_f32()
+                    );
                     Ok(())
                 })
                 .await?;
             standardized.delete()?;
+            println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());
 
             let mut raw_cm = Vec::with_capacity(include.len().pow(2));
             for x in include {
@@ -60,6 +81,7 @@ impl DataSource {
             let eigenvalues =
                 SymmetricEigen::new(DMatrix::from_vec(include.len(), include.len(), raw_cm))
                     .eigenvalues;
+            println!("PCA: Eigenvalues Step - {:.2}s", dt.lap().as_secs_f32());
 
             let mut remove = include
                 .iter()
@@ -85,8 +107,10 @@ impl DataSource {
                 }
                 pca.write_item(new_id)?;
                 Ok(())
-            }).await?;
+            })
+            .await?;
             pca.write(false)?;
+            println!("PCA: Build Step - {:.2}s", dt.lap().as_secs_f32());
         } else {
             pca.init().await?;
         }
