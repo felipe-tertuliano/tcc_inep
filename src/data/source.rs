@@ -291,6 +291,7 @@ impl DataSource {
         }
     }
 
+    // TODO: Change result to be a stream (tokio-stream) to reduce mem. consumption
     pub async fn parallel_foreach<T, F>(&mut self, chunk_size: u64, f: F) -> Result<Vec<Result<T>>>
     where
         T: Send + 'static,

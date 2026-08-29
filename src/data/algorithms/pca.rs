@@ -1,5 +1,9 @@
 use super::super::DataSource;
-use crate::{data::DataItem, types::UniRef, utils::DebugTimer};
+use crate::{
+    data::DataItem,
+    types::UniRef,
+    utils::DebugTimer,
+};
 use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
 
@@ -8,7 +12,12 @@ impl DataSource {
         let mut dt = DebugTimer::new();
         let mut pca = self.child(to)?;
         if !pca.exists() {
-            let mut standardized = self.standardize(None, include).await?;
+            let mut standardized = self
+                .standardize(
+                    to.map(|name| format!("pre1_{}", name)).as_deref(),
+                    include,
+                )
+                .await?;
             println!("PCA: Standardize Step - {:.2}s", dt.lap().as_secs_f32());
             standardized.read(true, None)?;
             let mut means = standardized
@@ -32,7 +41,8 @@ impl DataSource {
             println!("PCA: Mean Step - {:.2}s", dt.lap().as_secs_f32());
 
             let mut cm = vec![0.0; include.len().pow(2)];
-            let cm_responses = standardized.parallel_foreach(1_000_000, move |di| {
+            let cm_responses = standardized
+                .parallel_foreach(2_097_152, move |di| {
                     let data = di.to_vec().unwrap();
                     let mut res = vec![0.0; means.len().pow(2)];
                     for i in 0..means.len() {
@@ -64,10 +74,10 @@ impl DataSource {
                         for i in 0..cm.len() {
                             cm[i] += cm_value[i];
                         }
-                    },
+                    }
                     Err(cm_err) => {
                         println!("ERROR: {}", cm_err);
-                    },
+                    }
                 }
             }
             println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());

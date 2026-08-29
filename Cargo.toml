@@ -10,5 +10,6 @@ nalgebra = "0.35.0"
 regex = "1.12.3"
 reqwest = "0.13.2"
 tokio = { version = "1.52.1", features = ["full"] }
+tokio-stream = "0.1.19"
 uuid = { version = "1.23.3", features = ["v4", "fast-rng", "macro-diagnostics"] }
 zip = "7.2.0"
