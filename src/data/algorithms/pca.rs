@@ -1,19 +1,10 @@
 use super::super::DataSource;
-use crate::{
-    data::DataItem,
-    types::{GlobalRes, SymmetricKey, UniRef},
-    utils::DebugTimer,
-};
+use crate::{data::DataItem, types::UniRef, utils::DebugTimer};
+use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
-use std::collections::HashMap;
 
 impl DataSource {
-    pub async fn pca(
-        &mut self,
-        to: Option<&str>,
-        k: usize,
-        include: &Vec<&str>,
-    ) -> GlobalRes<Self> {
+    pub async fn pca(&mut self, to: Option<&str>, k: usize, include: &Vec<&str>) -> Result<Self> {
         let mut dt = DebugTimer::new();
         let mut pca = self.child(to)?;
         if !pca.exists() {
@@ -41,46 +32,42 @@ impl DataSource {
             println!("PCA: Mean Step - {:.2}s", dt.lap().as_secs_f32());
 
             let mut cm = vec![0.0; include.len().pow(2)];
-            let mut threads = vec![];
-            standardized
-                .foreach(|di| {
+            let cm_responses = standardized.parallel_foreach(1_000_000, move |di| {
                     let data = di.to_vec().unwrap();
-                    let m_clone = means.clone();
-                    threads.push(tokio::spawn(async move {
-                        let mut res = vec![0.0; m_clone.len().pow(2)];
-                        for i in 0..m_clone.len() {
-                            let head_m = &m_clone[i];
-                            let tail = &m_clone[i..];
-                            let head_v = data
-                                .get(head_m.1)
+                    let mut res = vec![0.0; means.len().pow(2)];
+                    for i in 0..means.len() {
+                        let head_m = &means[i];
+                        let tail = &means[i..];
+                        let head_v = data
+                            .get(head_m.1)
+                            .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
+                            .unwrap_or(0.0);
+                        for j in 0..tail.len() {
+                            let pair_m = &tail[j];
+                            let pair_v = data
+                                .get(pair_m.1)
                                 .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
                                 .unwrap_or(0.0);
-                            for j in 0..tail.len() {
-                                let pair_m = &tail[j];
-                                let pair_v = data
-                                    .get(pair_m.1)
-                                    .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
-                                    .unwrap_or(0.0);
-                                let value =
-                                    ((head_v - head_m.2) * (pair_v - pair_m.2)) / ((n - 1) as f64);
-                                res[(i + j) * m_clone.len() + i] = value;
-                                res[i * m_clone.len() + i + j] = value;
-                            }
+                            let value =
+                                ((head_v - head_m.2) * (pair_v - pair_m.2)) / ((n - 1) as f64);
+                            res[(i + j) * means.len() + i] = value;
+                            res[i * means.len() + i + j] = value;
                         }
-                        res
-                    }));
-                    println!(
-                        "PCA: Cov. Matrix Step - One Element - {:.3}s",
-                        dt.lap().as_secs_f32()
-                    );
-                    Ok(())
+                    }
+                    Ok(res)
                 })
                 .await?;
             standardized.delete()?;
-            for thread in threads {
-                let res = thread.await?;
-                for i in 0..cm.len() {
-                    cm[i] += res[i];
+            for cm_res in cm_responses {
+                match cm_res {
+                    Ok(cm_value) => {
+                        for i in 0..cm.len() {
+                            cm[i] += cm_value[i];
+                        }
+                    },
+                    Err(cm_err) => {
+                        println!("ERROR: {}", cm_err);
+                    },
                 }
             }
             println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());

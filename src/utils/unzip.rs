@@ -1,10 +1,10 @@
-use crate::types::GlobalRes;
+use anyhow::Result;
 use std::fs::File;
 use std::io::{self, BufReader};
 use std::path::Path;
 use zip::ZipArchive;
 
-pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> GlobalRes<()> {
+pub fn unzip<P: AsRef<Path>>(zip_path: P, extract_to: P) -> Result<()> {
     let file = File::open(zip_path)?;
     let reader = BufReader::new(file);
     let mut archive = ZipArchive::new(reader)?;

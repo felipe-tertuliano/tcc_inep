@@ -1,8 +1,9 @@
 use super::super::DataSource;
-use crate::{data::DataItem, types::{GlobalRes, UniRef}, utils::DebugTimer};
+use crate::{data::DataItem, types::UniRef, utils::DebugTimer};
+use anyhow::Result;
 
 impl DataSource {
-    pub async fn standardize(&mut self, to: Option<&str>, include: &Vec<&str>) -> GlobalRes<Self> {
+    pub async fn standardize(&mut self, to: Option<&str>, include: &Vec<&str>) -> Result<Self> {
         let mut dt = DebugTimer::new();
         let mut standardized = self.child(to)?;
         if !standardized.exists() {
@@ -33,11 +34,14 @@ impl DataSource {
             for (_, value) in &mut variances {
                 *value = (*value / (n as f64)).sqrt();
             }
-            println!("Standardize: Variance Step - {:.2}s", dt.lap().as_secs_f32());
+            println!(
+                "Standardize: Variance Step - {:.2}s",
+                dt.lap().as_secs_f32()
+            );
             standardized.init().await?;
             standardized.write(true)?;
             self.foreach(|di| {
-                let mut new_di = DataItem::new(UniRef::Int, vec![]); 
+                let mut new_di = DataItem::new(UniRef::Int, vec![]);
                 for i in 0..include.len() {
                     let (header, variance) = &variances[i];
                     let (_, mean) = &means[i];
@@ -51,7 +55,10 @@ impl DataSource {
             })
             .await?;
             standardized.write(false)?;
-            println!("Standardize: Standardize Step - {:.2}s", dt.lap().as_secs_f32());
+            println!(
+                "Standardize: Standardize Step - {:.2}s",
+                dt.lap().as_secs_f32()
+            );
         } else {
             standardized.init().await?;
         }

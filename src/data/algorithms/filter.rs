@@ -1,8 +1,8 @@
 use super::super::{DataItem, DataSource};
-use crate::types::GlobalRes;
+use anyhow::Result;
 
 impl DataSource {
-    pub async fn filter<F>(&mut self, to: Option<&str>, f: F) -> GlobalRes<Self>
+    pub async fn filter<F>(&mut self, to: Option<&str>, f: F) -> Result<Self>
     where
         F: Fn(DataItem) -> Option<DataItem>,
     {
