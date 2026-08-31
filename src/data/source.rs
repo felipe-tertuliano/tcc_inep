@@ -9,8 +9,8 @@ use std::fs::{self, File, OpenOptions};
 use std::io::{BufRead, BufReader, BufWriter, Seek, SeekFrom, Write};
 use std::panic::AssertUnwindSafe;
 use std::path::{Path, PathBuf};
-use tokio::sync::mpsc::unbounded_channel;
-use tokio_stream::{self, Stream, wrappers::UnboundedReceiverStream};
+use tokio::sync::mpsc;
+use tokio_stream::{self, Stream, wrappers::ReceiverStream};
 use uuid::Uuid;
 
 pub type DataHeader = HashMap<String, usize>;
@@ -306,51 +306,53 @@ impl DataSource {
         if BUFFER_SIZE > (chunk_size as usize) {
             msg_error!(format!("`chunk_size` min. value is {}", BUFFER_SIZE))
         } else if self._is_initialized {
-            let mut items = vec![];
             let mut eof = false;
             let mut pos = 0;
+            let (tx, rx) = mpsc::channel((chunk_size as usize) / BUFFER_SIZE);
             self.read(true, None)?;
             while !eof {
-                let (reader, b) = self._new_reader(Some(SeekFrom::Start(pos)), Some(1))?;
+                let (mut t_reader, b) = self._new_reader(Some(SeekFrom::Start(pos)), Some(1))?;
                 if b == 0 {
                     eof = true;
                 } else {
                     pos += chunk_size;
-                    let header = self.get_header()?.clone();
-                    items.push((reader, header));
+
+                    let t_header = self.get_header()?.clone();
+                    let t_tx = tx.clone();
+                    let mut t_func = func.clone();
+                    let mut t_buf = vec![0; BUFFER_SIZE];
+                    let mut t_eoc = false;
+                    let mut t_pos = 0;
+                    tokio::spawn(async move {
+                        while !t_eoc {
+                            match Self::_read_line(&mut t_reader, &mut t_buf, None, false) {
+                                Ok((Some(t_value), t_b)) => {
+                                    t_pos += t_b as u64;
+                                    if t_pos >= chunk_size || t_b == 0 {
+                                        t_eoc = true;
+                                    } else {
+                                        let _ = t_tx
+                                            .send(t_func(DataItem::new(
+                                                UniRef::Ref(&t_header),
+                                                t_value,
+                                            )))
+                                            .await;
+                                    }
+                                }
+                                Ok((None, _)) => {
+                                    t_eoc = true;
+                                }
+                                Err(_) => {
+                                    t_eoc = true;
+                                }
+                            }
+                        }
+                    });
                 }
             }
             self.read(false, None)?;
-            let (tx, rx) = unbounded_channel();
-            for (mut reader, header) in items {
-                let tx = tx.clone();
-                let mut func_c = func.clone();
-                tokio::spawn(async move {
-                    let mut buf = vec![0; BUFFER_SIZE];
-                    let mut eoc = false;
-                    let mut pos = 0;
-                    while !eoc {
-                        match Self::_read_line(&mut reader, &mut buf, None, false) {
-                            Ok((Some(value), b)) => {
-                                pos += b as u64;
-                                if pos >= chunk_size || b == 0 {
-                                    eoc = true;
-                                } else {
-                                    let _ = tx.send(func_c(DataItem::new(UniRef::Ref(&header), value)));
-                                }
-                            },
-                            Ok((None, _)) => {
-                                eoc = true;
-                            },
-                            Err(_) => {
-                                eoc = true;
-                            },
-                        }
-                    }
-                });
-            }
             drop(tx);
-            Ok(UnboundedReceiverStream::new(rx))
+            Ok(ReceiverStream::new(rx))
         } else {
             msg_error!("DataSource is not initialized")
         }

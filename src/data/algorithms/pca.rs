@@ -1,9 +1,5 @@
 use super::super::DataSource;
-use crate::{
-    data::DataItem,
-    types::UniRef,
-    utils::DebugTimer,
-};
+use crate::{data::DataItem, types::UniRef, utils::DebugTimer};
 use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
 use tokio_stream::StreamExt;
@@ -14,10 +10,7 @@ impl DataSource {
         let mut pca = self.child(to)?;
         if !pca.exists() {
             let mut standardized = self
-                .standardize(
-                    to.map(|name| format!("pre1_{}", name)).as_deref(),
-                    include,
-                )
+                .standardize(to.map(|name| format!("pre1_{}", name)).as_deref(), include)
                 .await?;
             println!("PCA: Standardize Step - {:.2}s", dt.lap().as_secs_f32());
             standardized.read(true, None)?;
@@ -65,13 +58,15 @@ impl DataSource {
                         }
                     }
                     res
-                })?.fold(vec![0.0; include.len().pow(2)], |mut acc, x| {
+                })?
+                .fold(vec![0.0; include.len().pow(2)], |mut acc, x| {
                     for i in 0..acc.len() {
                         acc[i] += x[i];
                     }
                     acc
-                }).await;
-            // standardized.delete()?;
+                })
+                .await;
+            standardized.delete()?;
             println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());
 
             let eigenvalues =
@@ -87,18 +82,16 @@ impl DataSource {
             remove.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
             remove = remove[k..remove.len()].to_vec();
 
-            println!("PCA: Build Step - pre 1 - {:.2}s", dt.lap().as_secs_f32());
-
-            pca.read(true, None)?;
+            pca.init().await?;
+            self.read(true, None)?;
             let mut new_headers = self.get_header()?.clone();
-            pca.read(false, None)?;
+            self.read(false, None)?;
             for (r, _) in remove {
                 new_headers.remove(r);
             }
 
-            println!("PCA: Build Step - pre 2 - {:.2}s", dt.lap().as_secs_f32());
+            println!("PCA: Build Step - pre 1 - {:.2}s", dt.lap().as_secs_f32());
 
-            pca.init().await?;
             pca.write(true)?;
             self.foreach(|di| {
                 let mut new_id = DataItem::new(UniRef::Int, vec![]);
