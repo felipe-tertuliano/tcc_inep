@@ -9,6 +9,8 @@ use std::fs::{self, File, OpenOptions};
 use std::io::{BufRead, BufReader, BufWriter, Seek, SeekFrom, Write};
 use std::panic::AssertUnwindSafe;
 use std::path::{Path, PathBuf};
+use tokio::sync::mpsc::unbounded_channel;
+use tokio_stream::{self, Stream, wrappers::UnboundedReceiverStream};
 use uuid::Uuid;
 
 pub type DataHeader = HashMap<String, usize>;
@@ -162,16 +164,17 @@ impl DataSource {
         buf: &mut Vec<u8>,
         seek: Option<SeekFrom>,
         rewind: bool,
-    ) -> Result<Option<Vec<String>>> {
-        let mut res = Ok(None);
+    ) -> Result<(Option<Vec<String>>, usize)> {
+        let mut res = Ok((None, 0));
         let old = reader.stream_position()?;
         buf.clear();
         if let Some(pos) = seek {
             reader.seek(pos)?;
         }
-        if reader.read_until(b'\n', buf)? > 0 {
+        let b = reader.read_until(b'\n', buf)?;
+        if b > 0 {
             let line = get_csv_cols(String::from_utf8_lossy(buf).trim(), ';')?;
-            res = Ok(Some(line));
+            res = Ok((Some(line), b));
         }
         if rewind {
             reader.seek(SeekFrom::Start(old))?;
@@ -186,7 +189,7 @@ impl DataSource {
         rewind: bool,
     ) -> Result<Option<Vec<String>>> {
         if let Some(reader) = self._reader.as_mut() {
-            Self::_read_line(reader, buf, seek, rewind)
+            Self::_read_line(reader, buf, seek, rewind).map(|x| x.0)
         } else {
             msg_error!("Read mode is not activated")
         }
@@ -291,46 +294,63 @@ impl DataSource {
         }
     }
 
-    // TODO: Change result to be a stream (tokio-stream) to reduce mem. consumption
-    pub async fn parallel_foreach<T, F>(&mut self, chunk_size: u64, f: F) -> Result<Vec<Result<T>>>
+    pub fn parallel_foreach<R, F>(
+        &mut self,
+        chunk_size: u64,
+        func: F,
+    ) -> Result<impl Stream<Item = R>>
     where
-        T: Send + 'static,
-        F: FnMut(DataItem) -> Result<T> + Clone + Send + 'static,
+        R: Send + 'static,
+        F: FnMut(DataItem) -> R + Clone + Send + 'static,
     {
         if BUFFER_SIZE > (chunk_size as usize) {
             msg_error!(format!("`chunk_size` min. value is {}", BUFFER_SIZE))
         } else if self._is_initialized {
-            let capacity = (chunk_size as usize) / BUFFER_SIZE;
-            let mut response = vec![];
-            let mut threads = vec![];
+            let mut items = vec![];
             let mut eof = false;
             let mut pos = 0;
             self.read(true, None)?;
             while !eof {
-                let (mut reader, b) = self._new_reader(Some(SeekFrom::Start(pos)), Some(1))?;
+                let (reader, b) = self._new_reader(Some(SeekFrom::Start(pos)), Some(1))?;
                 if b == 0 {
                     eof = true;
                 } else {
                     pos += chunk_size;
                     let header = self.get_header()?.clone();
-                    let mut f_clone = f.clone();
-                    threads.push(tokio::spawn(async move {
-                        let mut buf = vec![0; BUFFER_SIZE];
-                        let mut chunck_res = Vec::with_capacity(capacity);
-                        while let Ok(Some(value)) =
-                            Self::_read_line(&mut reader, &mut buf, None, false)
-                        {
-                            chunck_res.push(f_clone(DataItem::new(UniRef::Ref(&header), value)));
-                        }
-                        chunck_res
-                    }));
+                    items.push((reader, header));
                 }
             }
             self.read(false, None)?;
-            for thread in threads {
-                response.append(&mut thread.await?);
+            let (tx, rx) = unbounded_channel();
+            for (mut reader, header) in items {
+                let tx = tx.clone();
+                let mut func_c = func.clone();
+                tokio::spawn(async move {
+                    let mut buf = vec![0; BUFFER_SIZE];
+                    let mut eoc = false;
+                    let mut pos = 0;
+                    while !eoc {
+                        match Self::_read_line(&mut reader, &mut buf, None, false) {
+                            Ok((Some(value), b)) => {
+                                pos += b as u64;
+                                if pos >= chunk_size || b == 0 {
+                                    eoc = true;
+                                } else {
+                                    let _ = tx.send(func_c(DataItem::new(UniRef::Ref(&header), value)));
+                                }
+                            },
+                            Ok((None, _)) => {
+                                eoc = true;
+                            },
+                            Err(_) => {
+                                eoc = true;
+                            },
+                        }
+                    }
+                });
             }
-            Ok(response)
+            drop(tx);
+            Ok(UnboundedReceiverStream::new(rx))
         } else {
             msg_error!("DataSource is not initialized")
         }

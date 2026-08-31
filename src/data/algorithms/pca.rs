@@ -6,6 +6,7 @@ use crate::{
 };
 use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
+use tokio_stream::StreamExt;
 
 impl DataSource {
     pub async fn pca(&mut self, to: Option<&str>, k: usize, include: &Vec<&str>) -> Result<Self> {
@@ -40,8 +41,7 @@ impl DataSource {
             }
             println!("PCA: Mean Step - {:.2}s", dt.lap().as_secs_f32());
 
-            let mut cm = vec![0.0; include.len().pow(2)];
-            let cm_responses = standardized
+            let cm = standardized
                 .parallel_foreach(2_097_152, move |di| {
                     let data = di.to_vec().unwrap();
                     let mut res = vec![0.0; means.len().pow(2)];
@@ -64,22 +64,14 @@ impl DataSource {
                             res[i * means.len() + i + j] = value;
                         }
                     }
-                    Ok(res)
-                })
-                .await?;
-            standardized.delete()?;
-            for cm_res in cm_responses {
-                match cm_res {
-                    Ok(cm_value) => {
-                        for i in 0..cm.len() {
-                            cm[i] += cm_value[i];
-                        }
+                    res
+                })?.fold(vec![0.0; include.len().pow(2)], |mut acc, x| {
+                    for i in 0..acc.len() {
+                        acc[i] += x[i];
                     }
-                    Err(cm_err) => {
-                        println!("ERROR: {}", cm_err);
-                    }
-                }
-            }
+                    acc
+                }).await;
+            // standardized.delete()?;
             println!("PCA: Cov. Matrix Step - {:.2}s", dt.lap().as_secs_f32());
 
             let eigenvalues =
@@ -95,12 +87,16 @@ impl DataSource {
             remove.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
             remove = remove[k..remove.len()].to_vec();
 
+            println!("PCA: Build Step - pre 1 - {:.2}s", dt.lap().as_secs_f32());
+
             pca.read(true, None)?;
             let mut new_headers = self.get_header()?.clone();
             pca.read(false, None)?;
             for (r, _) in remove {
                 new_headers.remove(r);
             }
+
+            println!("PCA: Build Step - pre 2 - {:.2}s", dt.lap().as_secs_f32());
 
             pca.init().await?;
             pca.write(true)?;
