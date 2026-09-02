@@ -1,4 +1,4 @@
-use std::hash::Hash;
+/* use std::hash::Hash;
 
 #[derive(Debug, Clone, Copy)]
 pub struct SymmetricKey<T>(pub T, pub T);
@@ -22,3 +22,4 @@ impl<T: Hash + Ord> Hash for SymmetricKey<T> {
         max.hash(state);
     }
 }
+ */

@@ -1,4 +1,4 @@
-pub enum Number {
+/* pub enum Number {
     Int(i64),
     Unsigned(u64),
     Float(f64),
@@ -40,3 +40,4 @@ impl Clone for Number {
         }
     }
 }
+ */

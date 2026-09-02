@@ -294,6 +294,7 @@ impl DataSource {
         }
     }
 
+    // TODO: Validate chunk division (i may jump lines)
     pub fn parallel_foreach<R, F>(
         &mut self,
         chunk_size: u64,
