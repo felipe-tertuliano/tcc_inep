@@ -1,3 +1,4 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod types;
 #[macro_use]
 mod macros;
@@ -5,13 +6,31 @@ mod consts;
 mod data;
 mod utils;
 
+use anyhow::Result;
 use consts::ESCOLAS_QTS;
 use data::DataSource;
 use dotenv::dotenv;
 
 use crate::types::Source;
 
-#[tokio::main]
+slint::include_modules!();
+
+fn main() -> Result<()> {
+    let ui = AppWindow::new()?;
+
+    let ui_handle = ui.as_weak();
+    ui.on_request_increase_value(move || {
+        let ui = ui_handle.unwrap();
+        ui.set_counter(ui.get_counter() + 1);
+    });
+
+    ui.run()?;
+
+    Ok(())
+}
+
+// TODO: integrate pipeline in interface
+/* #[tokio::main]
 async fn main() {
     dotenv().ok();
 
@@ -64,4 +83,4 @@ async fn main() {
             }
         }
     }
-}
+} */
