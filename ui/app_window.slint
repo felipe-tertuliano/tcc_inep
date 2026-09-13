@@ -1,18 +1,30 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox, ProgressIndicator, HorizontalBox } from "std-widgets.slint";
 
 // TODO: Execute button, Progress bar and Display
 export component AppWindow inherits Window {
-    in-out property <int> counter: 42;
-    callback request_increase_value();
-    VerticalBox {
-        Text {
-            text: "Counter: \{root.counter}";
-        }
+    in-out property <float> progress;
+    callback exe_data_mining();
 
+    VerticalBox {
+        StyledText {
+            text: @markdown("**Dados Abertos, Microdados Enem 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem)");
+        }
+        StyledText {
+            text: @markdown("**Dados Abertos, Microdados Censo Escolar 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar)");
+        }
         Button {
-            text: "Increase value";
+            text: "Executar mineração";
             clicked => {
-                root.request_increase_value();
+                root.exe_data_mining();
+            }
+        }
+        HorizontalBox {
+            visible: progress > 0.0;
+            Text {
+                text: "\{root.progress * 100}%";
+            }
+            ProgressIndicator {
+                progress: progress;
             }
         }
     }

@@ -15,24 +15,7 @@ use crate::types::Source;
 
 slint::include_modules!();
 
-fn main() -> Result<()> {
-    let ui = AppWindow::new()?;
-
-    let ui_handle = ui.as_weak();
-    ui.on_request_increase_value(move || {
-        let ui = ui_handle.unwrap();
-        ui.set_counter(ui.get_counter() + 1);
-    });
-
-    ui.run()?;
-
-    Ok(())
-}
-
-// TODO: integrate pipeline in interface
-/* #[tokio::main]
-async fn main() {
-    dotenv().ok();
+async fn exe_data_mining() {
 
     let mut enem = DataSource::new(Source::Remote(
         "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
@@ -83,4 +66,19 @@ async fn main() {
             }
         }
     }
-} */
+}
+
+fn main() -> Result<()> {
+    dotenv().ok();
+    let ui = AppWindow::new()?;
+
+    let ui_handle = ui.as_weak();
+    ui.on_exe_data_mining(move || {
+        let ui = ui_handle.unwrap();
+        ui.set_progress(0.5);
+    });
+
+    ui.run()?;
+
+    Ok(())
+}
