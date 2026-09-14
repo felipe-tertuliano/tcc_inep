@@ -91,13 +91,13 @@ Para cada novo inicio de _sprint_ é avaliado o que foi desenvolvido na etapa an
 ```mermaid
 kanban
     Fazer
-        [Iniciar desenvolvimento da interface]
-        [Agrupar escolas com K-means++]
     Fazendo
-        [Finalizar PCA]
+		[Agrupar escolas com K-means++]
     Feito
-        [Normalizar/Formatar dados das escolas]
-        [Avaliar filtragem de escolas: incluir somente município de BH?]
+		[Iniciar desenvolvimento da interface]
+		[Normalizar/Formatar dados das escolas]
+		[Avaliar filtragem de escolas: incluir somente município de BH?]
+		[Finalizar PCA]
 ```
 > Tabela baseada na metodologia _Kanban_ (10/06/2026, sujeito a alterações)
 

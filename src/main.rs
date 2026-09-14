@@ -7,7 +7,7 @@ mod data;
 mod utils;
 
 use anyhow::Result;
-use consts::ESCOLAS_QTS;
+use consts::{ESCOLAS_PCA_K, ESCOLAS_QTS};
 use data::DataSource;
 use dotenv::dotenv;
 use tokio::sync::mpsc as tokio_mpsc;
@@ -17,7 +17,6 @@ use crate::types::Source;
 slint::include_modules!();
 
 async fn exe_data_mining(progress_tx: tokio_mpsc::Sender<f32>) {
-
     let mut enem = DataSource::new(Source::Remote(
         "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
         "https://download.inep.gov.br/microdados/microdados_enem_2024.zip".to_owned(),
@@ -29,16 +28,21 @@ async fn exe_data_mining(progress_tx: tokio_mpsc::Sender<f32>) {
         "https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_2024.zip".to_owned(),
 	)).expect("Error while creating Escolas's DataSource");
 
-    progress_tx.send(0.33).await.expect("Error trying to update the execution progress");
+    progress_tx
+        .send(0.33)
+        .await
+        .expect("Error trying to update the execution progress");
 
     match tokio::join!(enem.init(), escolas.init()) {
         (Ok(enem), Ok(escolas)) => {
-
-            progress_tx.send(0.66).await.expect("Error trying to update the execution progress");
+            progress_tx
+                .send(0.66)
+                .await
+                .expect("Error trying to update the execution progress");
 
             let inc_escolas = ESCOLAS_QTS.to_vec();
             match tokio::join!(
-                enem.filter(Some("enem_v1"), |di| {
+                enem.filter(Some("s1_enem_filter"), |di| {
                     if di.get::<String>("CO_ESCOLA").is_some_and(|v| !v.is_empty())
                         && di.get::<i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1)
                         && di.get::<i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1)
@@ -48,13 +52,37 @@ async fn exe_data_mining(progress_tx: tokio_mpsc::Sender<f32>) {
                         None
                     }
                 }),
-                escolas.pca(Some("escolas_v1"), 10, &inc_escolas)
+                async move {
+                    match escolas
+                        .standardize(Some("s1_escolas_standardized"), &inc_escolas)
+                        .await
+                    {
+                        Ok(mut escolas_std) => {
+                            match escolas_std.pca(ESCOLAS_PCA_K, &ESCOLAS_QTS.to_vec()).await {
+                                Ok(escolas_pca) => {
+                                    match escolas_std
+                                        .kmeanspp(
+                                            Some("s1_escolas_kmeanspp"),
+                                            &escolas_pca.iter().map(|s| s.as_str()).collect(),
+                                        )
+                                        .await
+                                    {
+                                        Ok(value) => Result::Ok(value),
+                                        Err(err) => Result::Err(err),
+                                    }
+                                }
+                                Err(err) => Result::Err(err),
+                            }
+                        }
+                        Err(err) => Result::Err(err),
+                    }
+                }
             ) {
-                (Ok(_enem), Ok(_escolas)) => {
-
-                    progress_tx.send(1.0).await.expect("Error trying to update the execution progress");
-
-                    // TODO: K-means++
+                (Ok(enem), Ok(escolas)) => {
+                    progress_tx
+                        .send(1.0)
+                        .await
+                        .expect("Error trying to update the execution progress");
                 }
                 (enem, escolas) => {
                     if let Err(err_enem) = enem {
@@ -92,13 +120,15 @@ fn main() -> Result<()> {
 
         ui.set_state(UIState::Running);
         slint::spawn_local(async move {
-            match rt.spawn(async move {
-                exe_data_mining(progress_tx).await
-            }).await {
+            match rt
+                .spawn(async move { exe_data_mining(progress_tx).await })
+                .await
+            {
                 Ok(_) => ui.set_state(UIState::Success),
                 Err(_) => ui.set_state(UIState::Error),
             }
-        }).unwrap();
+        })
+        .unwrap();
     });
 
     let ui_handle = ui.as_weak();
@@ -107,8 +137,10 @@ fn main() -> Result<()> {
         slint::TimerMode::Repeated,
         std::time::Duration::from_secs(1),
         move || {
-            if let Some(ui) = ui_handle.upgrade() && let Ok(v) = ui_progress_rx.try_recv() {
-                    ui.set_progress(v);
+            if let Some(ui) = ui_handle.upgrade()
+                && let Ok(v) = ui_progress_rx.try_recv()
+            {
+                ui.set_progress(v);
             }
         },
     );
