@@ -1,8 +1,22 @@
 import { Button, VerticalBox, ProgressIndicator, HorizontalBox } from "std-widgets.slint";
 
+export enum UIState {
+    Ready,
+    Running,
+    Success,
+    Error,
+}
+
 // TODO: Execute button, Progress bar and Display
 export component AppWindow inherits Window {
-    in-out property <float> progress;
+    in-out property <UIState> state: Ready;
+    in-out property <float> progress: 0.0;
+
+    out property <bool> show_execute: state == UIState.Ready || state == UIState.Success;
+    out property <bool> show_progress: state == UIState.Running;
+    out property <bool> show_response: state == UIState.Success;
+    out property <bool> show_error: state == UIState.Error;
+
     callback exe_data_mining();
 
     VerticalBox {
@@ -13,13 +27,14 @@ export component AppWindow inherits Window {
             text: @markdown("**Dados Abertos, Microdados Censo Escolar 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar)");
         }
         Button {
+            visible: show_execute;
             text: "Executar mineração";
             clicked => {
                 root.exe_data_mining();
             }
         }
         HorizontalBox {
-            visible: progress > 0.0;
+            visible: show_progress;
             Text {
                 text: "\{root.progress * 100}%";
             }
