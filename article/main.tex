@@ -104,7 +104,7 @@ O estudo apresentado \cite{mastersthesis:i_t_enem} investiga o impacto do acesso
 
 \section{Metodologia}
 
-Para o objetivo do projeto foram escolhidas duas bases de dados a serem tratadas: microdados do ENEM 2024 \cite{misc:micro_enem} e microdados do censo escolar 2024 \cite{misc:micro_escolas}. A partir dessas bases foi iniciada a produção de uma ferramenta na linguagem de programação \textit{Rust} \cite{misc:rust_lang} que seja capaz de ler os microdados, tratá-los e processá-los, gerando enfim indicadores relevantes para a proposta. Um repositório \cite{misc:proj_repo} no \textit{GitHub} \cite{misc:github_repo} foi criado para o versionamento e foi escolhida a \textit{IDE VSCode} \cite{misc:vscode_ide} para o desenvolvimento. Entendendo que o projeto desenvolvido está sujeito a mudanças e possíveis extensões à depender de futuras pesquisas, optou-se pelo uso da arquitetura em N camadas \cite{book:n_layers} seguindo os princípios \textit{SOLID} \cite{misc:solid} de desenvolvimento.
+Baseado no objetivo do projeto foram escolhidas duas bases de dados a serem tratadas: microdados do ENEM 2024 \cite{misc:micro_enem} e microdados do censo escolar 2024 \cite{misc:micro_escolas}. A partir dessas bases foi iniciada a produção de uma ferramenta na linguagem de programação \textit{Rust} \cite{misc:rust_lang} que seja capaz de ler os microdados, tratá-los e processá-los, gerando enfim indicadores relevantes para a proposta. Um repositório \cite{misc:proj_repo} no \textit{GitHub} \cite{misc:github_repo} foi criado para o versionamento e foi escolhida a \textit{IDE VSCode} \cite{misc:vscode_ide} para o desenvolvimento. Entendendo que o projeto desenvolvido está sujeito a mudanças e possíveis extensões à depender de futuras pesquisas, optou-se pelo uso da arquitetura em N camadas \cite{book:n_layers} seguindo os princípios \textit{SOLID} \cite{misc:solid} de desenvolvimento.
 
 Para guiar a metodologia foi utilizado o processo \textit{Knowledge Discovery in Databases} (KDD) \cite{article:kdd}, no qual se divide a mineração dos dados em etapas, cada uma com um objetivo a fim de melhorar a transformação de dados em informação, conhecimento e, enfim, em ação. Essa sessão será dividida em cinco subseções, cada uma representando e desenvolvendo uma parte do processo KDD, a saber: 1. Seleção, 2. Pre-processamento, 3. Transformação, 4. Mineração e 5. Interpretação.
 
@@ -146,7 +146,6 @@ flowchart LR
 \label{fig:kdd}
 \end{figure}
 
-
 \subsection{Seleção}
 
 As bases dos resultados do ENEM quanto do Censo Escolar são obtidas a partir de um \textit{link} na \textit{internet} que permite o acesso livre à um arquivo \textit{.zip} no qual se encontra um conjunto de elementos e, como foco para o projeto, um documento \textit{.csv} contendo os dados. Seguindo o princípio de subsunção de Liskov (SOLID) foi projetado um elemento pai chamado \textit{DataSource} que permite herança de suas funcionalidades para diferentes fontes e dois filhos representando cada uma das bases alvo.
@@ -155,17 +154,68 @@ Dentre as funcionalidades implementadas foi criado um fluxo de extração dos da
 
 \subsection{Pre-processamento}
 
-Seguindo a proposta de trabalho para os resultados do EMEM; é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
+Seguindo a proposta de trabalho para os resultados do ENEM; é necessário avaliar quais dos participantes não faltaram ou foram eliminados das provas de Linguagens e Códigos e Matemática (áreas correlacionadas com a capacitação em TIC).Para isso foram removidos todos os elementos em que os campos "TP\_PRESENCA\_LC" e "TP\_PRESENCA\_MT" eram diferentes de "1", o que na base indica presença.
 
 Ao analisar os dados do Censo Escolar\cite{misc:micro_escolas} encontramos uma base com 426 campos, onde muitos desses podem causar ruídos durante o processo de classificação, então para diminuir a dimensionalidade do conjunto aplicamos a técnica de redação \textit{PCA}\cite{book:pca}. Foram incluídos somente os elementos quantitativos descritos pelo prefixo "QT" (154 campos), esses passam pelas seguintes etapas: 1. Padronização dos valores, 2. Geração da Matriz de Covariância, 3. Geração dos Autovalores e 4. Seleção dos \textit{K} campos com maiores autovalores.
 
 \subsection{Transformação}
 
 Para um melhor entendimento dos recortes SE das escolas foi escolhido o algoritmo \textit{K-Means++}\cite{article:kmeanspp}, nele as escolas são agrupadas de forma não supervisionada e diferente do clássico \textit{K-Means} as sementes são selecionadas de forma mais estratégica baseado em estatística. Assim será possível visualizar as características comuns e distintas das instituições e compará-las com seu desempenho no exame nacional.
-
+\begin{comment}
 \subsection{Mineração}
-
+\end{comment}
 \subsection{Interpretação}
+
+Seguindo a proposta e metodologia deve ser desenvolvida uma interface gráfica de fácil utilização, capaz de ser executado de forma relativamente rápida em computadores de uso geral e exibir os dados obtidos pela mineração. Assim foi escolhido a biblioteca \textit{Slint} \cite{misc:slint_lib}, uma ferramenta pouco intrusiva para códigos \textit{Rust} que atende as demandas do projeto, com ela foram adicionados: comentários, um botão de execução do processo, uma barra de progresso para acompanhamento e uma tabela que exibe os resultados obtidos. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.3\textwidth]{images/ui_print1.png}
+\includegraphics[width=.3\textwidth]{images/ui_print2.png}
+\caption{Interface do projeto desenvolvida em \textit{Rust} \cite{misc:rust_lang} com \textit{Slint} \cite{misc:slint_lib}}
+\label{fig:project_ui}
+\end{figure}
+
+\section{Implementações e Testes}
+
+Um dos requisitos propostos pelo trabalho é a criação de uma ferramenta capaz de ser utiliza e modificada para uso pessoal e em futuras pesquisas, portanto as prioridades ao desenvolver o projeto foram performance e manutenibilidade. A escolha da linguagem \textit{Rust} \cite{misc:rust_lang} se provou capaz de atender esses requisitos e com códigos assíncronos e paralelos utilizando da biblioteca \textit{Tokio} \cite{misc:tokio_lib} houve melhoria nos resultados. Em testes feitos com um computadores de uso geral (processador \textit{Intel Core i3}, 16GB de memória RAM e GPU integrada) o fluxo completo de processamento das bases de dados do ENEM \cite{misc:micro_enem} e censo escolar \cite{misc:micro_escolas} próximos de 4 milhões e 200 mil linhas respectivamente tiveram duração inferior á 5min.
+
+\section{Resultados Preliminares}
+
+Com o algoritmo PCA \cite{book:pca} conseguimos obter do censo escolar \cite{misc:micro_escolas} os $K = 10$ campos quantitativos mais influentes da base de dados, a partir deles podemos traçar os indicadores socioeconômicos de mais fácil sem comprometer a acurácia, ao contrário do que ocorreria se utilizássemos todos os 154 campos.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Campo & Score \\
+        \hline
+        QT\_SALAS\_UTILIZADAS\_DENTRO & $28.2$ \\
+        \hline
+        QT\_SALAS\_UTILIZADAS\_FORA & $12.4$ \\
+        \hline
+        QT\_SALAS\_UTILIZADAS & $10.7$ \\
+        \hline
+        QT\_SALAS\_UTILIZA\_CLIMATIZADAS & $7.3$ \\
+        \hline
+        QT\_SALAS\_UTILIZADAS\_ACESSIVEIS & $6.9$ \\
+        \hline
+        QT\_EQUIP\_DVD & $5.1$ \\
+        \hline
+        QT\_EQUIP\_SOM & $4.6$ \\
+        \hline
+        QT\_EQUIP\_TV & $3.8$ \\
+        \hline
+        QT\_EQUIP\_LOUSA\_DIGITAL & $3.5$ \\
+        \hline
+        QT\_EQUIP\_MULTIMIDIA & $3.3$ \\
+        \hline
+    \end{tabular}
+    \caption{Resultado dos $K = 10$ campos quantitativos mais influentes do censo escolar \cite{misc:micro_escolas} utilizando PCA \cite{book:pca}}
+    \label{tab:resultado_pca}
+\end{table}
+
+\begin{comment}
 
 \section{Resultados Esperados}
 
@@ -197,19 +247,19 @@ Para cada novo início de \textit{sprint} é avaliado o que foi desenvolvido na 
 \begin{mermaid}
 kanban
     Fazer
+		  [Associar escolas com notas do ENEM]
+		  [Identificar escolas outliers]
     Fazendo
-		[Agrupar escolas com K-means++]
+		  [Agrupar escolas com K-means++]
     Feito
-		[Iniciar desenvolvimento da interface]
-		[Normalizar/Formatar dados das escolas]
-		[Avaliar filtragem de escolas: incluir somente município de BH?]
-		[Finalizar PCA]
+		  [Iniciar desenvolvimento da interface]
+		  [Normalizar/Formatar dados das escolas]
+		  [Avaliar filtragem de escolas: incluir somente município de BH?]
+		  [Finalizar PCA]
 \end{mermaid}
 \caption{Tabela baseada na metodologia \textit{Kanban} (18/08/2026, sujeito a alterações)}
 \label{fig:kanban}
 \end{figure}
-
-\begin{comment}
 
 \section{First Page}
 
