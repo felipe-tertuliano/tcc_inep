@@ -1,4 +1,4 @@
-import { Button, VerticalBox, ProgressIndicator, HorizontalBox } from "std-widgets.slint";
+import { Button, VerticalBox, ProgressIndicator, HorizontalBox, Palette, StyleMetrics } from "std-widgets.slint";
 
 export enum UIState {
     Ready,
@@ -7,10 +7,10 @@ export enum UIState {
     Error,
 }
 
-// TODO: Include PCA K value as a input in the UI
 export component AppWindow inherits Window {
     in-out property <UIState> state: Ready;
     in-out property <float> progress: 0.0;
+    in-out property <int> pca_k: 10;
 
     out property <bool> show_execute: state == UIState.Ready || state == UIState.Success;
     out property <bool> show_progress: state == UIState.Running;
@@ -25,6 +25,73 @@ export component AppWindow inherits Window {
         }
         StyledText {
             text: @markdown("**Dados Abertos, Microdados Censo Escolar 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar)");
+        }
+        HorizontalBox {
+            Text {
+                text: "N° de componentes desejados: ";
+                vertical-alignment: center;
+            }
+            Rectangle {
+                border-color: Palette.foreground;
+                border-width: 1px;
+                clip: true;
+                TextInput {
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                    input-type: number;
+
+                    function set-text() {
+                        self.text = root.pca_k.to-string-unlocalized()
+                    }
+
+                    in property <int> local_pca_k: root.pca_k;
+                    changed local_pca_k => {
+                        self.set-text();
+                    }
+                    init => {
+                        self.set-text();
+                    }
+
+                    function commit() {
+                        if self.text.is-float() {
+                            root.pca_k = max(1, round(self.text.to-float()));
+                        }
+                        self.text = root.pca_k.to-string-unlocalized();
+                    }
+                    accepted => {
+                        self.commit()
+                    }
+                    edited => {
+                        self.commit()
+                    }
+
+                    private property <length> margin: 1rem;
+                    cursor-position-changed(cursor-position) => {
+                        if cursor-position.x + self.x < margin {
+                            self.x = - cursor-position.x + margin;
+                        } else if cursor-position.x + self.x > parent.width - margin - self.text-cursor-width {
+                            self.x = parent.width - cursor-position.x - margin - self.text-cursor-width;
+                        }
+                    }
+                }
+                
+            }
+            Button {
+                height: self.min-height;
+                text: "-";
+                clicked => {
+                    if root.pca_k > 1 {
+                        root.pca_k -= 1;
+                    }
+                }
+            }
+            Button {
+                height: self.min-height;
+                text: "+";
+                clicked => {
+                    root.pca_k += 1;
+                }
+            }
         }
         Button {
             visible: show_execute;

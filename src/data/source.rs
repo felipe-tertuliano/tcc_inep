@@ -24,13 +24,15 @@ pub struct DataSource {
     _is_initialized: bool,
     _os_path: OsString,
     _source: Source,
-    _dsp: String,
+    env_dsp: String,
+    env_bs: usize,
 }
 
 impl DataSource {
     pub fn new(source: Source) -> Result<Self> {
-        let dsp = env::var("DATA_SOURCE_PATH")?;
-        let os_path = PathBuf::from(&dsp)
+        let env_bs = env::var("BUFFER_SIZE")?.parse()?;
+        let env_dsp = env::var("DATA_SOURCE_PATH")?;
+        let os_path = PathBuf::from(&env_dsp)
             .join(match &source {
                 Source::Local(p) => p,
                 Source::Remote(p, _) => p,
@@ -38,7 +40,8 @@ impl DataSource {
             .as_os_str()
             .to_owned();
         Ok(Self {
-            _dsp: dsp,
+            env_bs,
+            env_dsp,
             _header: None,
             _reader: None,
             _writer: None,
@@ -46,6 +49,14 @@ impl DataSource {
             _os_path: os_path,
             _is_initialized: false,
         })
+    }
+
+    pub fn get_env_dsp(&self) -> &String {
+        &self.env_dsp
+    }
+
+    pub fn get_env_bs(&self) -> &usize {
+        &self.env_bs
     }
 
     pub fn child(&self, name: Option<&str>) -> Result<Self> {
@@ -81,7 +92,7 @@ impl DataSource {
             "{}.zip",
             regex::Regex::new(r"[^a-z]")?.replace_all(&url.to_lowercase(), "")
         );
-        let zip_path = PathBuf::from(&self._dsp).join(&zip_file);
+        let zip_path = PathBuf::from(&self.env_dsp).join(&zip_file);
         let mut zip_file = File::create(&zip_path)?;
 
         let url_s = url.to_string();
@@ -105,7 +116,7 @@ impl DataSource {
 
         if res.is_ok() {
             let parent = path.split('/').next().unwrap().to_string();
-            let parent_path = PathBuf::from(&self._dsp).join(parent);
+            let parent_path = PathBuf::from(&self.env_dsp).join(parent);
             unzip(&zip_path, &parent_path)?;
         }
         fs::remove_file(&zip_path)?;

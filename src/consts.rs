@@ -1,5 +1,3 @@
-pub const ESCOLAS_PCA_K: usize = 10;
-
 // `(?<=^|;)(?!QT_)[^;]+;` to select and remove all non Qt. headers
 pub const ESCOLAS_QTS: &[&str] = &[
     "QT_SALAS_UTILIZADAS_DENTRO",
