@@ -52,14 +52,24 @@ async fn exe_data_mining(pca_k: usize, progress_tx: tokio_mpsc::Sender<f32>) {
                         None
                     }
                 }),
-                async move {
+                {
+                    let progress_tx_c = progress_tx.clone();
+                    async move {
                     match escolas
                         .standardize(Some("s1_escolas_standardized"), &inc_escolas)
                         .await
                     {
                         Ok(mut escolas_std) => {
+                            progress_tx_c
+                                .send(0.77)
+                                .await
+                                .expect("Error trying to update the execution progress");
                             match escolas_std.pca(pca_k, &ESCOLAS_QTS.to_vec()).await {
                                 Ok(escolas_pca) => {
+                                    progress_tx_c
+                                        .send(0.88)
+                                        .await
+                                        .expect("Error trying to update the execution progress");
                                     match escolas_std
                                         .kmeanspp(
                                             Some("s1_escolas_kmeanspp"),
@@ -76,7 +86,7 @@ async fn exe_data_mining(pca_k: usize, progress_tx: tokio_mpsc::Sender<f32>) {
                         }
                         Err(err) => Result::Err(err),
                     }
-                }
+                }}
             ) {
                 (Ok(enem), Ok(escolas)) => {
                     progress_tx
