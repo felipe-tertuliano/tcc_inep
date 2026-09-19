@@ -16,7 +16,7 @@ use crate::types::Source;
 
 slint::include_modules!();
 
-async fn exe_data_mining(pca_k: usize, progress_tx: tokio_mpsc::Sender<f32>) {
+async fn exe_data_mining(pca_k: usize, kmpp_k: usize, progress_tx: tokio_mpsc::Sender<f32>) {
     let mut enem = DataSource::new(Source::Remote(
         "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
         "https://download.inep.gov.br/microdados/microdados_enem_2024.zip".to_owned(),
@@ -73,6 +73,7 @@ async fn exe_data_mining(pca_k: usize, progress_tx: tokio_mpsc::Sender<f32>) {
                                     match escolas_std
                                         .kmeanspp(
                                             Some("s1_escolas_kmeanspp"),
+                                            kmpp_k,
                                             &escolas_pca.iter().map(|s| s.as_str()).collect(),
                                         )
                                         .await
@@ -131,8 +132,9 @@ fn main() -> Result<()> {
         ui.set_state(UIState::Running);
         slint::spawn_local(async move {
             let pca_k = ui.get_pca_k().try_into().unwrap();
+            let kmpp_k = ui.get_kmpp_k().try_into().unwrap();
             match rt
-                .spawn(async move { exe_data_mining(pca_k, progress_tx).await })
+                .spawn(async move { exe_data_mining(pca_k, kmpp_k, progress_tx).await })
                 .await
             {
                 Ok(_) => ui.set_state(UIState::Success),

@@ -6,7 +6,8 @@ use tokio_stream::StreamExt;
 impl DataSource {
     /// PCA algorithm. Works properly only on **standardized data** provided in `include`
     pub async fn pca(&mut self, k: usize, include: &Vec<&str>) -> Result<Vec<String>> {
-        self.read(true, None)?;
+        return Ok(vec![]);
+        self.read(true, None)?; //! REMOVE LATTER (for tests only)
         let mut means = self
             .get_header()?
             .iter()

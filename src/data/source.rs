@@ -24,13 +24,16 @@ pub struct DataSource {
     _is_initialized: bool,
     _os_path: OsString,
     _source: Source,
+
     env_dsp: String,
     env_bs: usize,
+    env_cs: usize,
 }
 
 impl DataSource {
     pub fn new(source: Source) -> Result<Self> {
         let env_bs = env::var("BUFFER_SIZE")?.parse()?;
+        let env_cs = env::var("CHUNK_SIZE")?.parse()?;
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
         let os_path = PathBuf::from(&env_dsp)
             .join(match &source {
@@ -40,6 +43,7 @@ impl DataSource {
             .as_os_str()
             .to_owned();
         Ok(Self {
+            env_cs,
             env_bs,
             env_dsp,
             _header: None,
@@ -57,6 +61,14 @@ impl DataSource {
 
     pub fn get_env_bs(&self) -> &usize {
         &self.env_bs
+    }
+
+    pub fn get_env_cs(&self) -> &usize {
+        &self.env_cs
+    }
+
+    pub fn metadata(&self) -> Result<fs::Metadata> {
+        Ok(fs::metadata(&self._os_path)?)
     }
 
     pub fn child(&self, name: Option<&str>) -> Result<Self> {
@@ -139,12 +151,11 @@ impl DataSource {
     /* #endregion */
 
     /* #region Readers */
-    fn _new_reader(
-        &self,
+    fn _move_reader(
+        reader: &mut BufReader<File>,
         seek: Option<SeekFrom>,
         line: Option<usize>,
-    ) -> Result<(BufReader<File>, usize)> {
-        let mut reader = BufReader::new(OpenOptions::new().read(true).open(&self._os_path)?);
+    ) -> Result<usize> {
         let mut b = 1;
         if let Some(s) = seek {
             reader.seek(s)?;
@@ -156,6 +167,28 @@ impl DataSource {
                 i += 1;
             }
         }
+        Ok(b)
+    }
+
+    pub fn move_reader(
+        &mut self,
+        seek: Option<SeekFrom>,
+        line: Option<usize>,
+    ) -> Result<usize> {
+        if let Some(reader) = self._reader.as_mut() {
+            Self::_move_reader(reader, seek, line)
+        } else {
+            msg_error!("Read mode is not activated")
+        }
+    }
+
+    fn _new_reader(
+        &self,
+        seek: Option<SeekFrom>,
+        line: Option<usize>,
+    ) -> Result<(BufReader<File>, usize)> {
+        let mut reader = BufReader::new(OpenOptions::new().read(true).open(&self._os_path)?);
+        let b = Self::_move_reader(&mut reader, seek, line).unwrap_or(1);
         Ok((reader, b))
     }
 
@@ -193,14 +226,16 @@ impl DataSource {
         res
     }
 
-    pub fn read_line(
-        &mut self,
-        buf: &mut Vec<u8>,
-        seek: Option<SeekFrom>,
-        rewind: bool,
-    ) -> Result<Option<Vec<String>>> {
-        if let Some(reader) = self._reader.as_mut() {
-            Self::_read_line(reader, buf, seek, rewind).map(|x| x.0)
+    pub fn read_item(&mut self) -> Result<Option<DataItem>> {
+        if self._reader.is_some() {
+            let mut buf = vec![0; BUFFER_SIZE];
+            let header = self.get_header()?.clone();
+            let reader = self._reader.as_mut().expect("Error while obtaining read permission");
+            Ok(if let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
+                Some(DataItem::new(UniRef::Loc(header), value))
+            } else {
+                None
+            })
         } else {
             msg_error!("Read mode is not activated")
         }
@@ -210,10 +245,10 @@ impl DataSource {
         if self._reader.is_none() {
             msg_error!("Read mode is not activated")
         } else {
-            if self._header.is_none() {
+            if self._header.is_none() && let Some(reader) = self._reader.as_mut() {
                 let mut buf = vec![0; BUFFER_SIZE];
                 self._header = Some(
-                    self.read_line(&mut buf, Some(SeekFrom::Start(0)), true)?
+                    Self::_read_line(reader, &mut buf, Some(SeekFrom::Start(0)), true)?.0
                         .expect("No header found for the DataSource")
                         .iter()
                         .enumerate()
@@ -295,7 +330,8 @@ impl DataSource {
             let mut buf = vec![0; BUFFER_SIZE];
             self.read(true, Some(1))?;
             let header = self.get_header()?.clone();
-            while let Some(value) = self.read_line(&mut buf, None, false)? {
+            let reader = self._reader.as_mut().expect("Error while obtaining read permission");
+            while let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
                 f(DataItem::new(UniRef::Ref(&header), value))?;
             }
             self.read(false, None)?;
