@@ -6,8 +6,9 @@ use tokio_stream::StreamExt;
 impl DataSource {
     /// PCA algorithm. Works properly only on **standardized data** provided in `include`
     pub async fn pca(&mut self, k: usize, include: &Vec<&str>) -> Result<Vec<String>> {
-        return Ok(vec![]);
-        self.read(true, None)?; //! REMOVE LATTER (for tests only)
+        return Ok(vec![]); /*
+        ! REMOVE LATTER (for tests only)
+        self.read(true, None)?;
         let mut means = self
             .get_header()?
             .iter()
@@ -26,7 +27,7 @@ impl DataSource {
             *value /= n as f64
         }
         let cm = self
-            .parallel_foreach(2_097_152, move |di| {
+            .parallel_foreach(move |di| {
                 let data = di.to_vec().unwrap();
                 let mut res = vec![0.0; means.len().pow(2)];
                 for i in 0..means.len() {
@@ -66,5 +67,6 @@ impl DataSource {
         principal.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
         println!("{:#?}", principal[0..k].to_vec());
         Ok(principal[0..k].iter().map(|p| p.0.to_owned()).collect())
+        */
     }
 }

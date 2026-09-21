@@ -15,8 +15,6 @@ use uuid::Uuid;
 
 pub type DataHeader = HashMap<String, usize>;
 
-const BUFFER_SIZE: usize = 1024;
-
 pub struct DataSource {
     _writer: Option<BufWriter<File>>,
     _reader: Option<BufReader<File>>,
@@ -32,7 +30,7 @@ pub struct DataSource {
 
 impl DataSource {
     pub fn new(source: Source) -> Result<Self> {
-        let env_bs = env::var("BUFFER_SIZE")?.parse()?;
+        let env_bs = env::var("self.get_env_bs()")?.parse()?;
         let env_cs = env::var("CHUNK_SIZE")?.parse()?;
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
         let os_path = PathBuf::from(&env_dsp)
@@ -170,11 +168,7 @@ impl DataSource {
         Ok(b)
     }
 
-    pub fn move_reader(
-        &mut self,
-        seek: Option<SeekFrom>,
-        line: Option<usize>,
-    ) -> Result<usize> {
+    pub fn move_reader(&mut self, seek: Option<SeekFrom>, line: Option<usize>) -> Result<usize> {
         if let Some(reader) = self._reader.as_mut() {
             Self::_move_reader(reader, seek, line)
         } else {
@@ -228,14 +222,19 @@ impl DataSource {
 
     pub fn read_item(&mut self) -> Result<Option<DataItem>> {
         if self._reader.is_some() {
-            let mut buf = vec![0; BUFFER_SIZE];
+            let mut buf = vec![0; *self.get_env_bs()];
             let header = self.get_header()?.clone();
-            let reader = self._reader.as_mut().expect("Error while obtaining read permission");
-            Ok(if let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
-                Some(DataItem::new(UniRef::Loc(header), value))
-            } else {
-                None
-            })
+            let reader = self
+                ._reader
+                .as_mut()
+                .expect("Error while obtaining read permission");
+            Ok(
+                if let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
+                    Some(DataItem::new(UniRef::Loc(header), value))
+                } else {
+                    None
+                },
+            )
         } else {
             msg_error!("Read mode is not activated")
         }
@@ -245,10 +244,13 @@ impl DataSource {
         if self._reader.is_none() {
             msg_error!("Read mode is not activated")
         } else {
-            if self._header.is_none() && let Some(reader) = self._reader.as_mut() {
-                let mut buf = vec![0; BUFFER_SIZE];
+            let mut buf = vec![0; *self.get_env_bs()];
+            if self._header.is_none()
+                && let Some(reader) = self._reader.as_mut()
+            {
                 self._header = Some(
-                    Self::_read_line(reader, &mut buf, Some(SeekFrom::Start(0)), true)?.0
+                    Self::_read_line(reader, &mut buf, Some(SeekFrom::Start(0)), true)?
+                        .0
                         .expect("No header found for the DataSource")
                         .iter()
                         .enumerate()
@@ -327,10 +329,13 @@ impl DataSource {
         F: FnMut(DataItem) -> Result<()>,
     {
         if self._is_initialized {
-            let mut buf = vec![0; BUFFER_SIZE];
+            let mut buf = vec![0; *self.get_env_bs()];
             self.read(true, Some(1))?;
             let header = self.get_header()?.clone();
-            let reader = self._reader.as_mut().expect("Error while obtaining read permission");
+            let reader = self
+                ._reader
+                .as_mut()
+                .expect("Error while obtaining read permission");
             while let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
                 f(DataItem::new(UniRef::Ref(&header), value))?;
             }
@@ -342,33 +347,30 @@ impl DataSource {
     }
 
     // TODO: Validate chunk division (i may jump lines)
-    pub fn parallel_foreach<R, F>(
-        &mut self,
-        chunk_size: u64,
-        func: F,
-    ) -> Result<impl Stream<Item = R>>
+    pub fn parallel_foreach<R, F>(&mut self, func: F) -> Result<impl Stream<Item = R>>
     where
         R: Send + 'static,
         F: FnMut(DataItem) -> R + Clone + Send + 'static,
     {
-        if BUFFER_SIZE > (chunk_size as usize) {
-            msg_error!(format!("`chunk_size` min. value is {}", BUFFER_SIZE))
+        if self.get_env_bs() > self.get_env_cs() {
+            msg_error!(format!("`chunk_size` min. value is {}", self.get_env_bs()))
         } else if self._is_initialized {
+            let env_cs_c = *self.get_env_cs() as u64;
             let mut eof = false;
             let mut pos = 0;
-            let (tx, rx) = mpsc::channel((chunk_size as usize) / BUFFER_SIZE);
+            let (tx, rx) = mpsc::channel(self.get_env_cs() / self.get_env_bs());
             self.read(true, None)?;
             while !eof {
                 let (mut t_reader, b) = self._new_reader(Some(SeekFrom::Start(pos)), Some(1))?;
                 if b == 0 {
                     eof = true;
                 } else {
-                    pos += chunk_size;
+                    pos += env_cs_c;
 
                     let t_header = self.get_header()?.clone();
                     let t_tx = tx.clone();
                     let mut t_func = func.clone();
-                    let mut t_buf = vec![0; BUFFER_SIZE];
+                    let mut t_buf = vec![0; *self.get_env_bs()];
                     let mut t_eoc = false;
                     let mut t_pos = 0;
                     tokio::spawn(async move {
@@ -376,7 +378,7 @@ impl DataSource {
                             match Self::_read_line(&mut t_reader, &mut t_buf, None, false) {
                                 Ok((Some(t_value), t_b)) => {
                                     t_pos += t_b as u64;
-                                    if t_pos >= chunk_size || t_b == 0 {
+                                    if t_pos >= env_cs_c || t_b == 0 {
                                         t_eoc = true;
                                     } else {
                                         let _ = t_tx
@@ -403,6 +405,22 @@ impl DataSource {
             Ok(ReceiverStream::new(rx))
         } else {
             msg_error!("DataSource is not initialized")
+        }
+    }
+}
+
+impl Clone for DataSource {
+    fn clone(&self) -> Self {
+        Self {
+            _writer: None,
+            _reader: None,
+            _header: self._header.clone(),
+            _is_initialized: self._is_initialized.clone(),
+            _os_path: self._os_path.clone(),
+            _source: self._source.clone(),
+            env_dsp: self.env_dsp.clone(),
+            env_bs: self.env_bs.clone(),
+            env_cs: self.env_cs.clone(),
         }
     }
 }
