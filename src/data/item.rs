@@ -2,6 +2,7 @@ use super::DataHeader;
 use crate::types::UniRef;
 use std::{collections::HashMap, fmt::Display, str::FromStr};
 
+#[derive(Clone, Debug)]
 pub struct DataItem<'a> {
     _header: UniRef<'a, DataHeader>,
     _value: Vec<String>,

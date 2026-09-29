@@ -1,8 +1,20 @@
+#[derive(Debug)]
 pub enum UniRef<'a, T> {
     Mut(&'a mut T),
     Ref(&'a T),
     Loc(T),
     Int,
+}
+
+impl<'a, T: Clone> Clone for UniRef<'a, T> {
+    fn clone(&self) -> Self {
+        match self {
+            Self::Mut(_) => panic!("cannot clone a UniRef::Mut"),
+            Self::Ref(r) => Self::Ref(r.clone()),
+            Self::Loc(r) => Self::Loc(r.clone()),
+            Self::Int => Self::Int,
+        }
+    }
 }
 
 impl<'a, T> UniRef<'a, T> {

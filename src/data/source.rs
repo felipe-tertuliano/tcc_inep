@@ -30,7 +30,7 @@ pub struct DataSource {
 
 impl DataSource {
     pub fn new(source: Source) -> Result<Self> {
-        let env_bs = env::var("self.get_env_bs()")?.parse()?;
+        let env_bs = env::var("BUFFER_SIZE")?.parse()?;
         let env_cs = env::var("CHUNK_SIZE")?.parse()?;
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
         let os_path = PathBuf::from(&env_dsp)
@@ -188,7 +188,9 @@ impl DataSource {
 
     pub fn read(&mut self, on: bool, line: Option<usize>) -> Result<()> {
         if on {
-            if self._reader.is_none() {
+            if let Some(reader) = self._reader.as_mut() {
+                Self::_move_reader(reader, None, line)?;
+            } else {
                 self._reader = Some(self._new_reader(None, line)?.0);
             }
         } else {
@@ -220,7 +222,7 @@ impl DataSource {
         res
     }
 
-    pub fn read_item(&mut self) -> Result<Option<DataItem>> {
+    pub fn read_item<'a>(&mut self) -> Result<Option<DataItem<'a>>> {
         if self._reader.is_some() {
             let mut buf = vec![0; *self.get_env_bs()];
             let header = self.get_header()?.clone();
@@ -228,13 +230,9 @@ impl DataSource {
                 ._reader
                 .as_mut()
                 .expect("Error while obtaining read permission");
-            Ok(
-                if let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
-                    Some(DataItem::new(UniRef::Loc(header), value))
-                } else {
-                    None
-                },
-            )
+            Ok(Self::_read_line(reader, &mut buf, None, false)?
+                .0
+                .map(|value| DataItem::new(UniRef::Loc(header), value)))
         } else {
             msg_error!("Read mode is not activated")
         }
@@ -415,12 +413,12 @@ impl Clone for DataSource {
             _writer: None,
             _reader: None,
             _header: self._header.clone(),
-            _is_initialized: self._is_initialized.clone(),
+            _is_initialized: self._is_initialized,
             _os_path: self._os_path.clone(),
             _source: self._source.clone(),
             env_dsp: self.env_dsp.clone(),
-            env_bs: self.env_bs.clone(),
-            env_cs: self.env_cs.clone(),
+            env_bs: self.env_bs,
+            env_cs: self.env_cs,
         }
     }
 }
