@@ -1,5 +1,7 @@
+use std::cell::RefCell;
+
 use super::super::DataSource;
-use crate::{data::DataItem, utils};
+use crate::{data::DataItem, types::UniRef, utils};
 use anyhow::Result;
 use tokio_stream::StreamExt;
 
@@ -26,35 +28,44 @@ impl DataSource {
         Ok(self.read_item()?.unwrap())
     }
 
-    async fn _get_centroids(&mut self, k: usize, include: &Vec<&str>) -> Result<Vec<DataItem>> {
+    async fn _get_centroids(&mut self, k: usize, include: &Vec<&str>) -> Result<Vec<DataItem<'_>>> {
         if k == 0 {
             msg_error!("k must be bigger than zero!")
         } else {
-            let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
-            let mut res = Vec::with_capacity(k);
             let mut ds = self.clone();
+            let mut res = Vec::with_capacity(k);
+            let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
+            
+            self.read(true, None)?;
+            let header = self.get_header()?;
+            
             let mut limit = None;
-
             res.push(ds._choose_rand(&mut limit)?);
-
-            let k = 2; // !REMOVE
             for i in 1..k {
-                let centroid = res[i - 1].clone();
-                // let pruning = 1.0 - (1.0 / (k - i) as f32);
+                let centroid = &res[i - 1];
 
                 let include_c = include.clone();
                 let centroid_c = centroid.clone();
-                let sum = ds
+                let sum = (ds
                     .parallel_foreach(move |p| Self::_sqr_dist(&include_c, &centroid_c, &p))?
                     .fold(0.0, |mut acc, x| {
                         acc += x;
                         acc
                     })
-                    .await;
-                println!("SUM: {:.2}", sum);
-                // TODO
+                    .await * 100.0).round() as u32;
+
+                res.push(ds.find(|p| {
+                    let dist = (Self::_sqr_dist(&include, centroid, &p) * 100.0).round() as u32;
+                    Ok(if utils::rand(sum) > dist {
+                        Some(p.get_value().clone())
+                    } else {
+                        None
+                    })
+                }).await?.map(|v| {
+                    DataItem::new(UniRef::Loc(header.clone()), v)
+                }).unwrap_or(ds._choose_rand(&mut limit)?));
             }
-            Ok(vec![])
+            Ok(res)
         }
     }
 
@@ -71,7 +82,8 @@ impl DataSource {
             if k == 0 {
                 return msg_error!("k must be bigger than zero!");
             }
-            let _ = self._get_centroids(k, include).await?;
+            let centroids = self._get_centroids(k, include).await?;
+            println!("CENTROIDS: {:?}", centroids);
             println!("K-means++: Build Step - {:.2}s", dt.lap().as_secs_f32());
         }
         Ok(kmeanspp)

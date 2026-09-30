@@ -14,7 +14,7 @@ impl DataSource {
                 if let Some(output) = f(di) {
                     filtered.write_item(output)?;
                 }
-                Ok(())
+                Ok(true)
             })
             .await?;
             filtered.write(false)?;

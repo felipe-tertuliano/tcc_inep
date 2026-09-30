@@ -5,13 +5,12 @@ use tokio_stream::StreamExt;
 
 impl DataSource {
     /// PCA algorithm. Works properly only on **standardized data** provided in `include`
-    pub async fn pca(&mut self, k: usize, include: &Vec<&str>) -> Result<Vec<String>> {
-        Ok(include[0..1].iter().map(|f| f.to_string()).collect())
-        /*
-        ! REMOVE LATTER (for tests only)
+    pub async fn pca(&mut self, k: usize) -> Result<Vec<String>> {
+        // Ok(include[0..1].iter().map(|f| f.to_string()).collect())
+        // ! REMOVE LATTER (for tests only)
         self.read(true, None)?;
-        let mut means = self
-            .get_header()?
+        let header = self.get_header()?.clone();
+        let mut means = header
             .iter()
             .map(|(k, v)| (k.to_owned(), v.to_owned(), 0.0))
             .collect::<Vec<_>>();
@@ -21,7 +20,7 @@ impl DataSource {
             for (header, _, value) in &mut means {
                 *value += di.get::<f64>(header).unwrap_or(0.0)
             }
-            Ok(())
+            Ok(true)
         })
         .await?;
         for (_, _, value) in &mut means {
@@ -51,7 +50,7 @@ impl DataSource {
                 }
                 res
             })?
-            .fold(vec![0.0; include.len().pow(2)], |mut acc, x| {
+            .fold(vec![0.0; header.len().pow(2)], |mut acc, x| {
                 for i in 0..acc.len() {
                     acc[i] += x[i];
                 }
@@ -59,14 +58,14 @@ impl DataSource {
             })
             .await;
         let eigenvalues =
-            SymmetricEigen::new(DMatrix::from_vec(include.len(), include.len(), cm)).eigenvalues;
-        let mut principal = include
+            SymmetricEigen::new(DMatrix::from_vec(header.len(), header.len(), cm)).eigenvalues;
+        let mut principal = header
             .iter()
             .enumerate()
-            .map(|(i, h)| (*h, eigenvalues[i]))
-            .collect::<Vec<(&str, f64)>>();
+            .map(|(i, (h, _))| (h.to_owned(), eigenvalues[i]))
+            .collect::<Vec<_>>();
         principal.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
         println!("{:#?}", principal[0..k].to_vec());
-        Ok(principal[0..k].iter().map(|p| p.0.to_owned()).collect()) */
+        Ok(principal[0..k].iter().map(|p| p.0.to_owned()).collect())
     }
 }

@@ -10,7 +10,7 @@ impl<'a, T: Clone> Clone for UniRef<'a, T> {
     fn clone(&self) -> Self {
         match self {
             Self::Mut(_) => panic!("cannot clone a UniRef::Mut"),
-            Self::Ref(r) => Self::Ref(r.clone()),
+            Self::Ref(r) => Self::Ref(r),
             Self::Loc(r) => Self::Loc(r.clone()),
             Self::Int => Self::Int,
         }

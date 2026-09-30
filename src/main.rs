@@ -64,7 +64,7 @@ async fn exe_data_mining(pca_k: usize, kmpp_k: usize, progress_tx: tokio_mpsc::S
                                 .send(0.77)
                                 .await
                                 .expect("Error trying to update the execution progress");
-                            match escolas_std.pca(pca_k, &ESCOLAS_QTS.to_vec()).await {
+                            match escolas_std.pca(pca_k).await {
                                 Ok(escolas_pca) => {
                                     progress_tx_c
                                         .send(0.88)

@@ -15,7 +15,7 @@ impl DataSource {
                 for (header, value) in &mut means {
                     *value += di.get::<f64>(header).unwrap_or(0.0);
                 }
-                Ok(())
+                Ok(true)
             })
             .await?;
             for (_, value) in &mut means {
@@ -28,7 +28,7 @@ impl DataSource {
                     let (_, variance) = &mut variances[i];
                     *variance += (di.get::<f64>(header).unwrap_or(0.0) - *mean).powi(2);
                 }
-                Ok(())
+                Ok(true)
             })
             .await?;
             for (_, value) in &mut variances {
@@ -51,7 +51,7 @@ impl DataSource {
                     );
                 }
                 standardized.write_item(new_di)?;
-                Ok(())
+                Ok(true)
             })
             .await?;
             standardized.write(false)?;

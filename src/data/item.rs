@@ -59,6 +59,10 @@ impl<'a> DataItem<'a> {
         self._header.get_ref()
     }
 
+    pub fn get_value(&self) -> &Vec<String> {
+        &self._value
+    }
+
     pub fn to_vec(&self) -> Option<Vec<(String, String)>> {
         self.get_header()
             .map(|h| h.iter().map(|(k, v)| (v, k)).collect::<HashMap<_, _>>())

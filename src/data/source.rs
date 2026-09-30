@@ -324,9 +324,10 @@ impl DataSource {
 
     pub async fn foreach<F>(&mut self, mut f: F) -> Result<()>
     where
-        F: FnMut(DataItem) -> Result<()>,
+        F: FnMut(DataItem) -> Result<bool>,
     {
         if self._is_initialized {
+            let mut flag = true;
             let mut buf = vec![0; *self.get_env_bs()];
             self.read(true, Some(1))?;
             let header = self.get_header()?.clone();
@@ -334,11 +335,34 @@ impl DataSource {
                 ._reader
                 .as_mut()
                 .expect("Error while obtaining read permission");
-            while let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
-                f(DataItem::new(UniRef::Ref(&header), value))?;
+            while flag && let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
+                flag = f(DataItem::new(UniRef::Ref(&header), value))?;
             }
             self.read(false, None)?;
             Ok(())
+        } else {
+            msg_error!("DataSource is not initialized")
+        }
+    }
+
+    pub async fn find<T, F>(&mut self, f: F) -> Result<Option<T>>
+    where
+        F: Fn(DataItem) -> Result<Option<T>>,
+    {
+        if self._is_initialized {
+            let mut res = None;
+            let mut buf = vec![0; *self.get_env_bs()];
+            self.read(true, Some(1))?;
+            let header = self.get_header()?.clone();
+            let reader = self
+                ._reader
+                .as_mut()
+                .expect("Error while obtaining read permission");
+            while res.is_none() && let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
+                res = f(DataItem::new(UniRef::Ref(&header), value))?;
+            }
+            self.read(false, None)?;
+            Ok(res)
         } else {
             msg_error!("DataSource is not initialized")
         }
