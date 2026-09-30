@@ -5,15 +5,20 @@ use tokio_stream::StreamExt;
 
 impl DataSource {
     /// PCA algorithm. Works properly only on **standardized data** provided in `include`
-    pub async fn pca(&mut self, k: usize) -> Result<Vec<String>> {
+    pub async fn pca(&mut self, k: usize, exclude: &Vec<&str>) -> Result<Vec<String>> {
         // Ok(include[0..1].iter().map(|f| f.to_string()).collect())
         // ! REMOVE LATTER (for tests only)
         self.read(true, None)?;
-        let header = self.get_header()?.clone();
+        let mut header = self.get_header()?.clone();
+        for e in exclude {
+            header.remove(*e);
+        }
+
         let mut means = header
             .iter()
             .map(|(k, v)| (k.to_owned(), v.to_owned(), 0.0))
             .collect::<Vec<_>>();
+
         let mut n: u32 = 0;
         self.foreach(|di| {
             n += 1;
@@ -26,6 +31,7 @@ impl DataSource {
         for (_, _, value) in &mut means {
             *value /= n as f64
         }
+
         let cm = self
             .parallel_foreach(move |di| {
                 let data = di.to_vec().unwrap();

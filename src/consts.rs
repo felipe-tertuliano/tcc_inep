@@ -1,3 +1,5 @@
+pub const ESCOLAS_ID: &str = "CO_ENTIDADE";
+
 // `(?<=^|;)(?!QT_)[^;]+;` to select and remove all non Qt. headers
 pub const ESCOLAS_QTS: &[&str] = &[
     "QT_SALAS_UTILIZADAS_DENTRO",

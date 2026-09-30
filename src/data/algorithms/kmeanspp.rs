@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-
 use super::super::DataSource;
 use crate::{data::DataItem, types::UniRef, utils};
 use anyhow::Result;
@@ -62,6 +60,7 @@ impl DataSource {
                         None
                     })
                 }).await?.map(|v| {
+                    println!("Ci: {:?}", v);
                     DataItem::new(UniRef::Loc(header.clone()), v)
                 }).unwrap_or(ds._choose_rand(&mut limit)?));
             }

@@ -3,7 +3,12 @@ use crate::{data::DataItem, types::UniRef, utils::DebugTimer};
 use anyhow::Result;
 
 impl DataSource {
-    pub async fn standardize(&mut self, to: Option<&str>, include: &Vec<&str>) -> Result<Self> {
+    pub async fn standardize(
+        &mut self,
+        to: Option<&str>,
+        include: &Vec<&str>,
+        id: &str,
+    ) -> Result<Self> {
         let mut dt = DebugTimer::new();
         let mut standardized = self.child(to)?;
         if !standardized.exists() {
@@ -45,6 +50,7 @@ impl DataSource {
                 for i in 0..include.len() {
                     let (header, variance) = &variances[i];
                     let (_, mean) = &means[i];
+                    new_di.set(id, di.get::<String>(id).unwrap_or("".to_owned()));
                     new_di.set(
                         header,
                         (di.get::<f64>(header).unwrap_or(0.0) - mean) / variance,

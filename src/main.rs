@@ -12,7 +12,7 @@ use data::DataSource;
 use dotenv::dotenv;
 use tokio::sync::mpsc as tokio_mpsc;
 
-use crate::types::Source;
+use crate::{consts::ESCOLAS_ID, types::Source};
 
 slint::include_modules!();
 
@@ -41,6 +41,7 @@ async fn exe_data_mining(pca_k: usize, kmpp_k: usize, progress_tx: tokio_mpsc::S
                 .expect("Error trying to update the execution progress");
 
             let inc_escolas = ESCOLAS_QTS.to_vec();
+            let id_escolas = ESCOLAS_ID.to_owned();
             match tokio::join!(
                 enem.filter(Some("s1_enem_filter"), |di| {
                     if di.get::<String>("CO_ESCOLA").is_some_and(|v| !v.is_empty())
@@ -56,7 +57,7 @@ async fn exe_data_mining(pca_k: usize, kmpp_k: usize, progress_tx: tokio_mpsc::S
                     let progress_tx_c = progress_tx.clone();
                     async move {
                     match escolas
-                        .standardize(Some("s1_escolas_standardized"), &inc_escolas)
+                        .standardize(Some("s1_escolas_standardized"), &inc_escolas, &id_escolas)
                         .await
                     {
                         Ok(mut escolas_std) => {
@@ -64,7 +65,7 @@ async fn exe_data_mining(pca_k: usize, kmpp_k: usize, progress_tx: tokio_mpsc::S
                                 .send(0.77)
                                 .await
                                 .expect("Error trying to update the execution progress");
-                            match escolas_std.pca(pca_k).await {
+                            match escolas_std.pca(pca_k, &vec![&id_escolas]).await {
                                 Ok(escolas_pca) => {
                                     progress_tx_c
                                         .send(0.88)
