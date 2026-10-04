@@ -1,77 +1,146 @@
+use std::{borrow::Borrow, hash::Hash};
+
 use super::super::DataSource;
 use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
 use tokio_stream::StreamExt;
 
 impl DataSource {
-    /// PCA algorithm. Works properly only on **standardized data** provided in `include`
-    pub async fn pca(&mut self, k: usize, exclude: &Vec<&str>) -> Result<Vec<String>> {
+    /// PCA-based feature selection.
+    ///
+    /// Assumes the input data is already standardized.
+    ///
+    /// Returns the `k` fields that contribute most to the variance
+    /// captured by the principal components.
+    pub async fn pca<S>(&mut self, k: usize, exclude: &[S]) -> Result<Vec<String>>
+    where 
+        S: AsRef<str> + ToString + Hash + Eq,
+    {
         // Ok(include[0..1].iter().map(|f| f.to_string()).collect())
         // ! REMOVE LATTER (for tests only)
         self.read(true, None)?;
-        let mut header = self.get_header()?.clone();
+
+        let mut include = self.get_header()?.clone();
         for e in exclude {
-            header.remove(*e);
+            include.remove(&e.to_string());
         }
+        let include = include.keys().map(|k| k.to_owned()).collect::<Vec<_>>();
 
-        let mut means = header
-            .iter()
-            .map(|(k, v)| (k.to_owned(), v.to_owned(), 0.0))
-            .collect::<Vec<_>>();
+        // ---------------------------------------------------------
+        // 1. Calculate avg
+        // ---------------------------------------------------------
 
-        let mut n: u32 = 0;
-        self.foreach(|di| {
-            n += 1;
-            for (header, _, value) in &mut means {
-                *value += di.get::<f64>(header).unwrap_or(0.0)
-            }
-            Ok(true)
-        })
-        .await?;
-        for (_, _, value) in &mut means {
-            *value /= n as f64
-        }
+        let (avg, n) = self.avg::<_, f64>(&include).await?;
+        let n = n as u32;
 
-        let cm = self
+        // ---------------------------------------------------------
+        // 2. Calculate covariance matrix
+        // ---------------------------------------------------------
+
+        let feature_count = avg.len();
+        let covariance = self
             .parallel_foreach(move |di| {
-                let data = di.to_vec().unwrap();
-                let mut res = vec![0.0; means.len().pow(2)];
-                for i in 0..means.len() {
-                    let head_m = &means[i];
-                    let tail = &means[i..];
-                    let head_v = data
-                        .get(head_m.1)
-                        .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
-                        .unwrap_or(0.0);
-                    for j in 0..tail.len() {
-                        let pair_m = &tail[j];
-                        let pair_v = data
-                            .get(pair_m.1)
-                            .map(|(_, d)| d.parse::<f64>().unwrap_or(0.0))
-                            .unwrap_or(0.0);
-                        let value = ((head_v - head_m.2) * (pair_v - pair_m.2)) / ((n - 1) as f64);
-                        res[(i + j) * means.len() + i] = value;
-                        res[i * means.len() + i + j] = value;
+                let mut res = vec![0.0; feature_count * feature_count];
+                for i in 0..feature_count {
+                    let (ref feature_i, mean_i) = avg[i];
+                    let value_i = di.get::<_, f64>(feature_i).unwrap_or(0.0);
+                    let centered_i = value_i - mean_i;
+
+                    for j in i..feature_count {
+                        let (ref feature_j, mean_j) = avg[j];
+                        let value_j = di.get::<_, f64>(feature_j).unwrap_or(0.0);
+                        let centered_j = value_j - mean_j;
+
+                        let value = (centered_i * centered_j) / ((n - 1) as f64);
+                        res[i * feature_count + j] = value;
+                        res[j * feature_count + i] = value;
                     }
                 }
                 res
             })?
-            .fold(vec![0.0; header.len().pow(2)], |mut acc, x| {
+            .fold(vec![0.0; feature_count * feature_count], |mut acc, x| {
                 for i in 0..acc.len() {
                     acc[i] += x[i];
                 }
                 acc
             })
             .await;
-        let eigenvalues =
-            SymmetricEigen::new(DMatrix::from_vec(header.len(), header.len(), cm)).eigenvalues;
-        let mut principal = header
+
+        let covariance = DMatrix::from_vec(feature_count, feature_count, covariance);
+
+        // ---------------------------------------------------------
+        // 3. Eigen decomposition
+        // ---------------------------------------------------------
+
+        let decomposition = SymmetricEigen::new(covariance);
+
+        let eigenvalues = decomposition.eigenvalues;
+        let eigenvectors = decomposition.eigenvectors;
+
+        // ---------------------------------------------------------
+        // 4. Sort components by eigenvalue
+        // ---------------------------------------------------------
+
+        let mut components = (0..feature_count)
+            .map(|component| {
+                let eigenvalue = eigenvalues[component];
+
+                let eigenvector = eigenvectors.column(component).clone_owned();
+
+                (eigenvalue, eigenvector)
+            })
+            .collect::<Vec<_>>();
+
+        components.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
+
+        // ---------------------------------------------------------
+        // 5. Total variance
+        // ---------------------------------------------------------
+
+        let total_variance: f64 = components.iter().map(|(eigenvalue, _)| *eigenvalue).sum();
+
+        // ---------------------------------------------------------
+        // 6. Calculate feature influence
+        // ---------------------------------------------------------
+
+        let mut scores = vec![0.0; feature_count];
+
+        for component in 0..k {
+            let (eigenvalue, eigenvector) = &components[component];
+
+            let explained_variance = *eigenvalue / total_variance;
+
+            for feature in 0..feature_count {
+                let loading = eigenvector[feature];
+
+                scores[feature] += explained_variance * loading * loading;
+            }
+        }
+
+        // ---------------------------------------------------------
+        // 7. Associate scores with field names
+        // ---------------------------------------------------------
+
+        let mut principal = include
             .iter()
             .enumerate()
-            .map(|(i, (h, _))| (h.to_owned(), eigenvalues[i]))
+            .map(|(i, h)| (h.to_owned(), scores[i]))
             .collect::<Vec<_>>();
-        principal.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
-        println!("{:#?}", principal[0..k].to_vec());
-        Ok(principal[0..k].iter().map(|p| p.0.to_owned()).collect())
+
+        // ---------------------------------------------------------
+        // 8. Sort fields by influence
+        // ---------------------------------------------------------
+
+        principal.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+
+        // ---------------------------------------------------------
+        // 9. Return the N most influential fields
+        // ---------------------------------------------------------
+
+        Ok(principal
+            .into_iter()
+            .take(k)
+            .map(|(field, _)| field)
+            .collect())
     }
 }

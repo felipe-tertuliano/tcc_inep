@@ -1,12 +1,12 @@
 use super::super::DataSource;
 use crate::{data::DataItem, types::UniRef, utils};
-use anyhow::Result;
+use anyhow::{Ok, Result};
 use tokio_stream::StreamExt;
 
 impl DataSource {
-    fn _sqr_dist(include: &Vec<String>, c: &DataItem, p: &DataItem) -> f64 {
+    fn _sqr_dist(include: &[String], c: &DataItem, p: &DataItem) -> f64 {
         include.iter().fold(0.0, |mut acc, field| {
-            acc += (p.get::<f64>(field).unwrap() - c.get::<f64>(field).unwrap()).powi(2);
+            acc += (p.get::<_, f64>(field).unwrap() - c.get::<_, f64>(field).unwrap()).powi(2);
             acc
         })
     }
@@ -26,13 +26,12 @@ impl DataSource {
         Ok(self.read_item()?.unwrap())
     }
 
-    async fn _get_centroids(&mut self, k: usize, include: &Vec<&str>) -> Result<Vec<DataItem<'_>>> {
+    async fn _get_centroids(&mut self, k: usize, include: &[String]) -> Result<Vec<DataItem<'_>>> {
         if k == 0 {
             msg_error!("k must be bigger than zero!")
         } else {
             let mut ds = self.clone();
             let mut res = Vec::with_capacity(k);
-            let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
             
             self.read(true, None)?;
             let header = self.get_header()?;
@@ -42,7 +41,7 @@ impl DataSource {
             for i in 1..k {
                 let centroid = &res[i - 1];
 
-                let include_c = include.clone();
+                let include_c = include.to_owned();
                 let centroid_c = centroid.clone();
                 let sum = (ds
                     .parallel_foreach(move |p| Self::_sqr_dist(&include_c, &centroid_c, &p))?
@@ -54,13 +53,12 @@ impl DataSource {
 
                 res.push(ds.find(|p| {
                     let dist = (Self::_sqr_dist(&include, centroid, &p) * 100.0).round() as u32;
-                    Ok(if utils::rand(sum) > dist {
+                    Ok(if utils::rand(sum) < dist {
                         Some(p.get_value().clone())
                     } else {
                         None
                     })
                 }).await?.map(|v| {
-                    println!("Ci: {:?}", v);
                     DataItem::new(UniRef::Loc(header.clone()), v)
                 }).unwrap_or(ds._choose_rand(&mut limit)?));
             }
@@ -81,9 +79,16 @@ impl DataSource {
             if k == 0 {
                 return msg_error!("k must be bigger than zero!");
             }
-            let centroids = self._get_centroids(k, include).await?;
-            println!("CENTROIDS: {:?}", centroids);
-            println!("K-means++: Build Step - {:.2}s", dt.lap().as_secs_f32());
+            let mut ds = self.clone();
+            let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
+            let centroids = self._get_centroids(k, &include).await?;
+            ds.foreach(|di| {
+                let cluster = (0..k).map(|i| {
+                    (i, Self::_sqr_dist(&include, &centroids[i], &di))
+                }).min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap()).unwrap();
+
+                Ok(true)
+            });
         }
         Ok(kmeanspp)
     }

@@ -1,6 +1,7 @@
 use super::DataHeader;
 use crate::types::UniRef;
 use std::{collections::HashMap, fmt::Display, str::FromStr};
+use std::hash::Hash;
 
 #[derive(Clone, Debug)]
 pub struct DataItem<'a> {
@@ -21,10 +22,14 @@ impl<'a> DataItem<'a> {
         }
     }
 
-    pub fn set<T: Display>(&mut self, name: &str, value: T) -> Option<T> {
+    pub fn set<S, T>(&mut self, name: S, value: T) -> Option<T>
+    where 
+        T: Display,
+        S: AsRef<str> + ToString
+    {
         if let Some(h) = self._header.get_mut() {
             let pos;
-            if let Some(v) = h.get(name) {
+            if let Some(v) = h.get(&name.to_string()) {
                 pos = *v;
             } else {
                 pos = if h.is_empty() {
@@ -49,10 +54,14 @@ impl<'a> DataItem<'a> {
         }
     }
 
-    pub fn get<T: FromStr>(&self, name: &str) -> Option<T> {
+    pub fn get<S, T>(&self, name: S) -> Option<T>
+    where 
+        T: FromStr,
+        S: AsRef<str> + ToString
+    {
         self._header
             .get_ref()
-            .and_then(|h| h.get(name).and_then(|i| self._value[*i].parse::<T>().ok()))
+            .and_then(|h| h.get(&name.to_string()).and_then(|i| self._value[*i].parse::<T>().ok()))
     }
 
     pub fn get_header(&self) -> Option<&DataHeader> {
