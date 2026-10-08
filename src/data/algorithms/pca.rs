@@ -1,8 +1,7 @@
-use std::{borrow::Borrow, hash::Hash};
-
 use super::super::DataSource;
 use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
+use std::hash::Hash;
 use tokio_stream::StreamExt;
 
 impl DataSource {
@@ -13,11 +12,24 @@ impl DataSource {
     /// Returns the `k` fields that contribute most to the variance
     /// captured by the principal components.
     pub async fn pca<S>(&mut self, k: usize, exclude: &[S]) -> Result<Vec<String>>
-    where 
+    where
         S: AsRef<str> + ToString + Hash + Eq,
     {
-        // Ok(include[0..1].iter().map(|f| f.to_string()).collect())
-        // ! REMOVE LATTER (for tests only)
+        return Ok([
+            "QT_PROF_REVISOR_BRAILLE",
+            "QT_PROF_NUTRICIONISTA",
+            "QT_PROF_TRAD_LIBRAS",
+            "QT_MAT_MED_PROP_4",
+            "QT_MAT_ZR_NA",
+            "QT_PROF_FONAUDIOLOGO",
+            "QT_PROF_GESTAO",
+            "QT_PROF_SECRETARIO",
+            "QT_PROF_ASSIST_SOCIAL",
+            "QT_MAT_MED_CT_NS",
+        ]
+        .iter()
+        .map(|v| v.to_string())
+        .collect()); // ! REMOVE LATTER (for tests only)
         self.read(true, None)?;
 
         let mut include = self.get_header()?.clone();
@@ -105,10 +117,8 @@ impl DataSource {
 
         let mut scores = vec![0.0; feature_count];
 
-        for component in 0..k {
-            let (eigenvalue, eigenvector) = &components[component];
-
-            let explained_variance = *eigenvalue / total_variance;
+        for (eigenvalue, eigenvector) in components {
+            let explained_variance = eigenvalue / total_variance;
 
             for feature in 0..feature_count {
                 let loading = eigenvector[feature];

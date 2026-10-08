@@ -1,7 +1,6 @@
 use super::DataHeader;
 use crate::types::UniRef;
 use std::{collections::HashMap, fmt::Display, str::FromStr};
-use std::hash::Hash;
 
 #[derive(Clone, Debug)]
 pub struct DataItem<'a> {

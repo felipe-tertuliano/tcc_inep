@@ -73,6 +73,7 @@ async fn exe_data_mining(pca_k: usize, kmpp_k: usize, progress_tx: tokio_mpsc::S
                                             .kmeanspp(
                                                 Some("s1_escolas_kmeanspp"),
                                                 kmpp_k,
+                                                3,
                                                 &escolas_pca.iter().map(|s| s.as_str()).collect(),
                                             )
                                             .await
