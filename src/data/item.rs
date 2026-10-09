@@ -22,9 +22,9 @@ impl<'a> DataItem<'a> {
     }
 
     pub fn set<S, T>(&mut self, name: S, value: T) -> Option<T>
-    where 
+    where
         T: Display,
-        S: AsRef<str> + ToString
+        S: AsRef<str> + ToString,
     {
         if let Some(h) = self._header.get_mut() {
             let pos;
@@ -48,19 +48,33 @@ impl<'a> DataItem<'a> {
             }
             self._value[pos] = value.to_string();
             Some(value)
+        } else if let Some(h) = self._header.get_ref() {
+            if let Some(pos) = h.get(&name.to_string()).copied() {
+                if self._value.is_empty() {
+                    self._value.push(String::new());
+                }
+                while self._value.len() - 1 < pos {
+                    self._value.push(String::new());
+                }
+                self._value[pos] = value.to_string();
+                Some(value)
+            } else {
+                None
+            }
         } else {
             None
         }
     }
 
     pub fn get<S, T>(&self, name: S) -> Option<T>
-    where 
+    where
         T: FromStr,
-        S: AsRef<str> + ToString
+        S: AsRef<str> + ToString,
     {
-        self._header
-            .get_ref()
-            .and_then(|h| h.get(&name.to_string()).and_then(|i| self._value[*i].parse::<T>().ok()))
+        self._header.get_ref().and_then(|h| {
+            h.get(&name.to_string())
+                .and_then(|i| self._value[*i].parse::<T>().ok())
+        })
     }
 
     pub fn get_header(&self) -> Option<&DataHeader> {

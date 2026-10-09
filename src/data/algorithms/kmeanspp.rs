@@ -87,35 +87,34 @@ impl DataSource {
     pub async fn kmeanspp(
         &mut self,
         to: Option<&str>,
-        k: usize,
-        i: usize,
+        n_clusters: usize,
+        n_iter: usize,
         include: &Vec<&str>,
     ) -> Result<Self> {
         let mut dt = utils::DebugTimer::new();
         let mut kmeanspp = self.child(to)?;
         if !kmeanspp.exists() {
-            if k == 0 {
+            if n_clusters == 0 {
                 return msg_error!("k must be bigger than zero!");
             }
             let mut ds = self.clone();
             let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
-            let mut centroids = self._get_centroids(k, &include).await?;
+            let mut centroids = self._get_centroids(n_clusters, &include).await?;
             
             ds.read(true, None)?;
             let header = ds.get_header()?.clone();
             let mut buffer;
-            for _ in 1..i {
-                buffer = vec![(0.0, DataItem::new(UniRef::Ref(&header), vec!["0".to_string(); header.len()])); k];
+            for _ in 1..n_iter {
+                buffer = vec![(0.0, DataItem::new(UniRef::Ref(&header), vec!["0".to_string(); header.len()])); n_clusters];
                 ds.foreach(|di| {
-                    let pos = (0..k)
+                    let pos = (0..n_clusters)
                         .map(|i| (i, Self::_sqr_dist(&include, &centroids[i], &di)))
                         .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
                         .map(|(i, _)| i).unwrap();
+                    
                     if let Some(cluster) = buffer.get_mut(pos) {
                         cluster.0 += 1.0;
-                        // TODO: cluster.1 not updating
                         Self::_sum(&include, &mut cluster.1, &di);
-                        println!("\nCLUSTER: {:?}\n", cluster);
                     }
                     Ok(true)
                 })

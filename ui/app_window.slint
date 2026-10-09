@@ -1,4 +1,5 @@
 import { Button, VerticalBox, ProgressIndicator, HorizontalBox, Palette, StyleMetrics } from "std-widgets.slint";
+import { CompIntInput } from "comp_int_input.slint";
 
 export enum UIState {
     Ready,
@@ -12,6 +13,7 @@ export component AppWindow inherits Window {
     in-out property <float> progress: 0.0;
     in-out property <int> pca_k: 10;
     in-out property <int> kmpp_k: 3;
+    in-out property <int> kmpp_i: 3;
 
     out property <bool> show_default: state == UIState.Ready || state == UIState.Success;
     out property <bool> show_progress: state == UIState.Running;
@@ -27,145 +29,20 @@ export component AppWindow inherits Window {
         StyledText {
             text: @markdown("**Dados Abertos, Microdados Censo Escolar 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar)");
         }
-        HorizontalBox {
-            StyledText {
-                text: @markdown("**PCA:** N° de componentes: ");
-                vertical-alignment: center;
-            }
-            Rectangle {
-                border-color: Palette.foreground;
-                border-width: 1px;
-                clip: true;
-                TextInput {
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                    enabled: show_default;
-                    input-type: number;
-
-                    function set-text() {
-                        self.text = root.pca_k.to-string-unlocalized()
-                    }
-
-                    in property <int> local_pca_k: root.pca_k;
-                    changed local_pca_k => {
-                        self.set-text();
-                    }
-                    init => {
-                        self.set-text();
-                    }
-
-                    function commit() {
-                        if self.text.is-float() {
-                            root.pca_k = max(1, round(self.text.to-float()));
-                        }
-                        self.text = root.pca_k.to-string-unlocalized();
-                    }
-                    accepted => {
-                        self.commit()
-                    }
-                    edited => {
-                        self.commit()
-                    }
-
-                    private property <length> margin: 1rem;
-                    cursor-position-changed(cursor-position) => {
-                        if cursor-position.x + self.x < margin {
-                            self.x = - cursor-position.x + margin;
-                        } else if cursor-position.x + self.x > parent.width - margin - self.text-cursor-width {
-                            self.x = parent.width - cursor-position.x - margin - self.text-cursor-width;
-                        }
-                    }
-                }
-                
-            }
-            Button {
-                height: self.min-height;
-                enabled: show_default;
-                text: "-";
-                clicked => {
-                    if root.pca_k > 1 {
-                        root.pca_k -= 1;
-                    }
-                }
-            }
-            Button {
-                height: self.min-height;
-                enabled: show_default;
-                text: "+";
-                clicked => {
-                    root.pca_k += 1;
-                }
-            }
+        CompIntInput {
+            text: @markdown("**PCA:** N° de componentes: ");
+            enabled: show_default;
+            value: root.pca_k;
         }
-        HorizontalBox {
-            StyledText {
-                text: @markdown("**K-Means++:** N° de conjuntos: ");
-                vertical-alignment: center;
-            }
-            Rectangle {
-                border-color: Palette.foreground;
-                border-width: 1px;
-                clip: true;
-                TextInput {
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                    enabled: show_default;
-                    input-type: number;
-
-                    function set-text() {
-                        self.text = root.kmpp_k.to-string-unlocalized()
-                    }
-
-                    in property <int> local_kmpp_k: root.kmpp_k;
-                    changed local_kmpp_k => {
-                        self.set-text();
-                    }
-                    init => {
-                        self.set-text();
-                    }
-
-                    function commit() {
-                        if self.text.is-float() {
-                            root.kmpp_k = max(1, round(self.text.to-float()));
-                        }
-                        self.text = root.kmpp_k.to-string-unlocalized();
-                    }
-                    accepted => {
-                        self.commit()
-                    }
-                    edited => {
-                        self.commit()
-                    }
-
-                    private property <length> margin: 1rem;
-                    cursor-position-changed(cursor-position) => {
-                        if cursor-position.x + self.x < margin {
-                            self.x = - cursor-position.x + margin;
-                        } else if cursor-position.x + self.x > parent.width - margin - self.text-cursor-width {
-                            self.x = parent.width - cursor-position.x - margin - self.text-cursor-width;
-                        }
-                    }
-                }
-                
-            }
-            Button {
-                height: self.min-height;
-                enabled: show_default;
-                text: "-";
-                clicked => {
-                    if root.kmpp_k > 1 {
-                        root.kmpp_k -= 1;
-                    }
-                }
-            }
-            Button {
-                height: self.min-height;
-                enabled: show_default;
-                text: "+";
-                clicked => {
-                    root.kmpp_k += 1;
-                }
-            }
+        CompIntInput {
+            text: @markdown("**K-Means++:** N° de conjuntos: ");
+            enabled: show_default;
+            value: root.kmpp_k;
+        }
+        CompIntInput {
+            text: @markdown("**K-Means++:** N° de iterações: ");
+            enabled: show_default;
+            value: root.kmpp_i;
         }
         Button {
             visible: show_default;

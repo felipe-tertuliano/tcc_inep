@@ -1,0 +1,76 @@
+import { Button, VerticalBox, ProgressIndicator, HorizontalBox, Palette, StyleMetrics } from "std-widgets.slint";
+
+export component CompIntInput inherits HorizontalBox {
+    in property <styled-text> text;
+    in property <bool> enabled: true;
+    in-out property <int> value;
+
+    StyledText {
+        text: root.text;
+        vertical-alignment: center;
+    }
+    Rectangle {
+        border-color: Palette.foreground;
+        border-width: 1px;
+        clip: true;
+        TextInput {
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            enabled: enabled;
+            input-type: number;
+
+            function set-text() {
+                self.text = root.value.to-string-unlocalized()
+            }
+
+            in property <int> local_value: root.value;
+            changed local_value => {
+                self.set-text();
+            }
+            init => {
+                self.set-text();
+            }
+
+            function commit() {
+                if self.text.is-float() {
+                    root.value = max(1, round(self.text.to-float()));
+                }
+                self.text = root.value.to-string-unlocalized();
+            }
+            accepted => {
+                self.commit()
+            }
+            edited => {
+                self.commit()
+            }
+
+            private property <length> margin: 1rem;
+            cursor-position-changed(cursor-position) => {
+                if cursor-position.x + self.x < margin {
+                    self.x = - cursor-position.x + margin;
+                } else if cursor-position.x + self.x > parent.width - margin - self.text-cursor-width {
+                    self.x = parent.width - cursor-position.x - margin - self.text-cursor-width;
+                }
+            }
+        }
+        
+    }
+    Button {
+        height: self.min-height;
+        enabled: enabled;
+        text: "-";
+        clicked => {
+            if root.value > 1 {
+                root.value -= 1;
+            }
+        }
+    }
+    Button {
+        height: self.min-height;
+        enabled: enabled;
+        text: "+";
+        clicked => {
+            root.value += 1;
+        }
+    }
+}
