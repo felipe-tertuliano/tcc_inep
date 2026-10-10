@@ -41,7 +41,7 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
                 .expect("Error trying to update the execution progress");
 
             match tokio::join!(
-                enem.filter(Some("s1_enem_filter"), |di| {
+                enem.filter(Some("s1_enem_filter".to_string()), |di| {
                     if di.get::<_, String>("CO_ESCOLA").is_some_and(|v| !v.is_empty())
                         && di.get::<_, i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1)
                         && di.get::<_, i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1)
@@ -55,7 +55,7 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
                     let progress_tx_c = progress_tx.clone();
                     async move {
                         match escolas
-                            .standardize(Some("s1_escolas_standardized"), ESCOLAS_QTS, ESCOLAS_ID)
+                            .standardize(Some("s1_escolas_standardized".to_string()), ESCOLAS_QTS, ESCOLAS_ID)
                             .await
                         {
                             Ok(mut escolas_std) => {
@@ -71,7 +71,7 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
                                         );
                                         match escolas_std
                                             .kmeanspp(
-                                                Some("s1_escolas_kmeanspp"),
+                                                Some("s1_escolas_kmeanspp".to_string()),
                                                 kmpp.0,
                                                 kmpp.1,
                                                 &escolas_pca.iter().map(|s| s.as_str()).collect(),

@@ -2,7 +2,7 @@ use super::super::{DataItem, DataSource};
 use anyhow::Result;
 
 impl DataSource {
-    pub async fn filter<F>(&mut self, to: Option<&str>, f: F) -> Result<Self>
+    pub async fn filter<F>(&mut self, to: Option<String>, f: F) -> Result<Self>
     where
         F: Fn(DataItem) -> Option<DataItem>,
     {

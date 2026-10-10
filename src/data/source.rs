@@ -69,7 +69,7 @@ impl DataSource {
         Ok(fs::metadata(&self._os_path)?)
     }
 
-    pub fn child(&self, name: Option<&str>) -> Result<Self> {
+    pub fn child(&self, name: Option<String>) -> Result<Self> {
         if self._is_initialized {
             Self::new(Source::Local(format!(
                 "{}.csv",

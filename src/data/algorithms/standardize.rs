@@ -6,7 +6,7 @@ use anyhow::Result;
 impl DataSource {
     pub async fn standardize<S>(
         &mut self,
-        to: Option<&str>,
+        to: Option<String>,
         include: &[S],
         id: S,
     ) -> Result<Self> 

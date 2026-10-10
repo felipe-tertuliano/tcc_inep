@@ -83,53 +83,86 @@ impl DataSource {
         }
     }
 
-    // TODO
+    fn get_name(to: &Option<String>, n_clusters: usize, i: usize) -> Option<String> {
+        to.clone().map(|v| format!("{}_{}_{}", v, n_clusters, i))
+    }
+
     pub async fn kmeanspp(
         &mut self,
-        to: Option<&str>,
+        to: Option<String>,
         n_clusters: usize,
         n_iter: usize,
         include: &Vec<&str>,
-    ) -> Result<Self> {
+    ) -> Result<Vec<Self>> {
         let mut dt = utils::DebugTimer::new();
-        let mut kmeanspp = self.child(to)?;
-        if !kmeanspp.exists() {
-            if n_clusters == 0 {
-                return msg_error!("k must be bigger than zero!");
-            }
-            let mut ds = self.clone();
-            let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
-            let mut centroids = self._get_centroids(n_clusters, &include).await?;
-            
-            ds.read(true, None)?;
-            let header = ds.get_header()?.clone();
-            let mut buffer;
-            for _ in 1..n_iter {
-                buffer = vec![(0.0, DataItem::new(UniRef::Ref(&header), vec!["0".to_string(); header.len()])); n_clusters];
-                ds.foreach(|di| {
-                    let pos = (0..n_clusters)
-                        .map(|i| (i, Self::_sqr_dist(&include, &centroids[i], &di)))
-                        .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
-                        .map(|(i, _)| i).unwrap();
-                    
-                    if let Some(cluster) = buffer.get_mut(pos) {
-                        cluster.0 += 1.0;
-                        Self::_sum(&include, &mut cluster.1, &di);
-                    }
-                    Ok(true)
-                })
-                .await?;
-                for (i, (n, mut val)) in buffer.into_iter().enumerate() {
-                    Self::_div(&include, &mut val, n);
-                    centroids[i] = val;
-                }
-            }
-            for (i, c) in centroids.iter().enumerate() {
-                println!("\nCENTROID {}: {:?}\n", i, c);
-            }
-            ds.read(false, None)?;
-            println!("K-means++ - {:.2}s", dt.lap().as_secs_f32());
+
+        if n_clusters == 0 {
+            return msg_error!("k must be bigger than zero!");
         }
+    
+        let mut ds = self.clone();
+        let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
+        let mut centroids = self._get_centroids(n_clusters, &include).await?;
+
+        ds.read(true, None)?;
+        let header = ds.get_header()?.clone();
+        let mut buffer;
+        for _ in 1..n_iter {
+            buffer = vec![
+                (
+                    0.0,
+                    DataItem::new(UniRef::Ref(&header), vec!["0".to_string(); header.len()])
+                );
+                n_clusters
+            ];
+            ds.foreach(|di| {
+                let pos = (0..n_clusters)
+                    .map(|i| (i, Self::_sqr_dist(&include, &centroids[i], &di)))
+                    .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+                    .map(|(i, _)| i)
+                    .unwrap();
+
+                if let Some(cluster) = buffer.get_mut(pos) {
+                    cluster.0 += 1.0;
+                    Self::_sum(&include, &mut cluster.1, &di);
+                }
+                Ok(true)
+            })
+            .await?;
+            for (i, (n, mut val)) in buffer.into_iter().enumerate() {
+                Self::_div(&include, &mut val, n);
+                centroids[i] = val;
+            }
+        }
+
+        let mut kmeanspp = Vec::with_capacity(n_clusters);
+        for i in 0..n_clusters {
+            let mut cluster = ds.child(Self::get_name(&to, n_clusters, i))?;
+            cluster.init().await?;
+            cluster.write(true)?;
+            kmeanspp.push(cluster);
+        }
+
+        ds.foreach(|di| {
+            let pos = (0..n_clusters)
+                .map(|i| (i, Self::_sqr_dist(&include, &centroids[i], &di)))
+                .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+                .map(|(i, _)| i)
+                .unwrap();
+
+            if let Some(cluster) = kmeanspp.get_mut(pos) {
+                cluster.write_item(di);
+            }
+            Ok(true)
+        })
+        .await?;
+
+        for cluster in kmeanspp.iter_mut() {
+            cluster.write(false)?;
+        }
+
+        ds.read(false, None)?;
+        println!("K-means++ - {:.2}s", dt.lap().as_secs_f32());
         Ok(kmeanspp)
     }
 }
