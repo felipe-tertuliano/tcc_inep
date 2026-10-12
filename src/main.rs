@@ -12,7 +12,7 @@ use data::DataSource;
 use dotenv::dotenv;
 use tokio::sync::mpsc as tokio_mpsc;
 
-use crate::types::Source;
+use crate::{consts::ENEM_ESCOLA, data::DataItem, types::Source};
 
 slint::include_modules!();
 
@@ -29,20 +29,22 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
 	)).expect("Error while creating Escolas's DataSource");
 
     progress_tx
-        .send(0.33)
+        .send(0.16)
         .await
         .expect("Error trying to update the execution progress");
 
     match tokio::join!(enem.init(), escolas.init()) {
         (Ok(enem), Ok(escolas)) => {
             progress_tx
-                .send(0.66)
+                .send(0.32)
                 .await
                 .expect("Error trying to update the execution progress");
 
             match tokio::join!(
                 enem.filter(Some("s1_enem_filter".to_string()), |di| {
-                    if di.get::<_, String>("CO_ESCOLA").is_some_and(|v| !v.is_empty())
+                    if di
+                        .get::<_, String>("CO_ESCOLA")
+                        .is_some_and(|v| !v.is_empty())
                         && di.get::<_, i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1)
                         && di.get::<_, i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1)
                     {
@@ -55,18 +57,21 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
                     let progress_tx_c = progress_tx.clone();
                     async move {
                         match escolas
-                            .standardize(Some("s1_escolas_standardized".to_string()), ESCOLAS_QTS, ESCOLAS_ID)
+                            .standardize(
+                                Some("s1_escolas_standardized".to_string()),
+                                ESCOLAS_QTS,
+                                ESCOLAS_ID,
+                            )
                             .await
                         {
                             Ok(mut escolas_std) => {
                                 progress_tx_c
-                                    .send(0.77)
+                                    .send(0.48)
                                     .await
                                     .expect("Error trying to update the execution progress");
                                 match escolas_std.pca(pca_k, &[ESCOLAS_ID]).await {
                                     Ok(escolas_pca) => {
-                                        println!("PCA: {:?}", escolas_pca);
-                                        progress_tx_c.send(0.88).await.expect(
+                                        progress_tx_c.send(0.8).await.expect(
                                             "Error trying to update the execution progress",
                                         );
                                         match escolas_std
@@ -78,7 +83,16 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
                                             )
                                             .await
                                         {
-                                            Ok(value) => Result::Ok(value),
+                                            Ok(mut escolas_kmpp) => {
+                                                progress_tx_c.send(0.96).await.expect(
+                                                    "Error trying to update the execution progress",
+                                                );
+                                                let mut hash = vec![];
+                                                for e in escolas_kmpp.iter_mut() {
+                                                    hash.push(e.hash(ESCOLAS_ID).await?);
+                                                }
+                                                Result::Ok(hash)
+                                            }
                                             Err(err) => Result::Err(err),
                                         }
                                     }
@@ -90,11 +104,23 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), progress_tx: tokio_
                     }
                 }
             ) {
-                (Ok(enem), Ok(escolas)) => {
+                (Ok(mut enem), Ok(escolas)) => {
                     progress_tx
                         .send(1.0)
                         .await
                         .expect("Error trying to update the execution progress");
+                    let v = enem.switch(
+                        Some("s2_enem_cluster".to_string()),
+                        &escolas
+                            .iter()
+                            .map(|h| {
+                                Box::new(|di: &DataItem| {
+                                    h.contains(&di.get::<_, String>(ENEM_ESCOLA).unwrap())
+                                })
+                            })
+                            .collect::<Vec<_>>(),
+                    )
+                    .await;
                 }
                 (enem, escolas) => {
                     if let Err(err_enem) = enem {

@@ -1,6 +1,6 @@
 use super::super::DataSource;
 use crate::{data::DataItem, types::UniRef, utils};
-use anyhow::{Ok, Result};
+use anyhow::Result;
 use tokio_stream::StreamExt;
 
 impl DataSource {
@@ -83,10 +83,6 @@ impl DataSource {
         }
     }
 
-    fn get_name(to: &Option<String>, n_clusters: usize, i: usize) -> Option<String> {
-        to.clone().map(|v| format!("{}_{}_{}", v, n_clusters, i))
-    }
-
     pub async fn kmeanspp(
         &mut self,
         to: Option<String>,
@@ -99,7 +95,7 @@ impl DataSource {
         if n_clusters == 0 {
             return msg_error!("k must be bigger than zero!");
         }
-    
+
         let mut ds = self.clone();
         let include = include.iter().map(|f| f.to_string()).collect::<Vec<_>>();
         let mut centroids = self._get_centroids(n_clusters, &include).await?;
@@ -137,7 +133,7 @@ impl DataSource {
 
         let mut kmeanspp = Vec::with_capacity(n_clusters);
         for i in 0..n_clusters {
-            let mut cluster = ds.child(Self::get_name(&to, n_clusters, i))?;
+            let mut cluster = ds.child(to.clone().map(|v| format!("{}_{}_{}", v, n_clusters, i)))?;
             cluster.init().await?;
             cluster.write(true)?;
             kmeanspp.push(cluster);
@@ -151,7 +147,7 @@ impl DataSource {
                 .unwrap();
 
             if let Some(cluster) = kmeanspp.get_mut(pos) {
-                cluster.write_item(di);
+                cluster.write_item(di)?;
             }
             Ok(true)
         })

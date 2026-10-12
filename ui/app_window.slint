@@ -11,9 +11,9 @@ export enum UIState {
 export component AppWindow inherits Window {
     in-out property <UIState> state: Ready;
     in-out property <float> progress: 0.0;
-    in-out property <int> pca_k: 10;
-    in-out property <int> kmpp_k: 3;
-    in-out property <int> kmpp_i: 3;
+    in-out property <int> pca_k: 15;
+    in-out property <int> kmpp_k: 5;
+    in-out property <int> kmpp_i: 8;
 
     out property <bool> show_default: state == UIState.Ready || state == UIState.Success;
     out property <bool> show_progress: state == UIState.Running;

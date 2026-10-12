@@ -1,4 +1,5 @@
 pub const ESCOLAS_ID: &str = "CO_ENTIDADE";
+pub const ENEM_ESCOLA: &str = "CO_ESCOLA";
 
 // `(?<=^|;)(?!QT_)[^;]+;` to select and remove all non Qt. headers
 pub const ESCOLAS_QTS: &[&str] = &[
