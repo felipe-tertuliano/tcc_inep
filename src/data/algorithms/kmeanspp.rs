@@ -114,7 +114,7 @@ impl DataSource {
             ds.foreach(|di| {
                 let pos = (0..n_clusters)
                     .map(|i| (i, Self::_sqr_dist(&include, &centroids[i], &di)))
-                    .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+                    .min_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap()) // TODO: validade error
                     .map(|(i, _)| i)
                     .unwrap();
 

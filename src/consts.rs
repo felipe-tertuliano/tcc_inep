@@ -158,3 +158,8 @@ pub const ESCOLAS_QTS: &[&str] = &[
     "QT_TUR_FUND_AF_INT",
     "QT_TUR_MED_INT",
 ];
+
+pub const ENEM_NOTA: &[&str] = &[
+    "NU_NOTA_LC",
+    "NU_NOTA_MT",
+];
