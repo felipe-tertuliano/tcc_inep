@@ -1,5 +1,15 @@
-import { Button, VerticalBox, ProgressIndicator, HorizontalBox, Palette, StyleMetrics } from "std-widgets.slint";
+import { Button, VerticalBox, ProgressIndicator, HorizontalBox, ScrollView } from "std-widgets.slint";
 import { CompIntInput } from "comp_int_input.slint";
+
+export struct Escola {
+    id: string,
+    avg_grade: int,
+}
+
+export struct ClusterEscola {
+    avg_grade: int,
+    outliers: [Escola],
+}
 
 export enum UIState {
     Ready,
@@ -10,49 +20,45 @@ export enum UIState {
 
 export component AppWindow inherits Window {
     in-out property <UIState> state: Ready;
-    in-out property <float> progress: 0.0;
-    in-out property <int> pca_k: 15;
-    in-out property <int> kmpp_k: 5;
-    in-out property <int> kmpp_i: 8;
-
-    out property <bool> show_default: state == UIState.Ready || state == UIState.Success;
-    out property <bool> show_progress: state == UIState.Running;
-    out property <bool> show_response: state == UIState.Success;
-    out property <bool> show_error: state == UIState.Error;
+    in property <[ClusterEscola]> response;
+    in property <float> progress: 0.0;
+    out property <int> pca_k: 15;
+    out property <int> kmpp_k: 5;
+    out property <int> kmpp_i: 8;
 
     callback exe_data_mining();
 
     VerticalBox {
         StyledText {
-            text: @markdown("**Dados Abertos, Microdados Enem 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem)");
+            text: @markdown("**[Dados Abertos, Microdados Enem 2024](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem)**");
         }
         StyledText {
-            text: @markdown("**Dados Abertos, Microdados Censo Escolar 2024:** [link](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar)");
+            text: @markdown("**[Dados Abertos, Microdados Censo Escolar 2024](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/censo-escolar)**");
         }
         CompIntInput {
             text: @markdown("**PCA:** N° de componentes: ");
-            enabled: show_default;
+            enabled: state == UIState.Ready;
             value: root.pca_k;
         }
         CompIntInput {
             text: @markdown("**K-Means++:** N° de conjuntos: ");
-            enabled: show_default;
+            enabled: state == UIState.Ready;
             value: root.kmpp_k;
         }
         CompIntInput {
             text: @markdown("**K-Means++:** N° de iterações: ");
-            enabled: show_default;
+            enabled: state == UIState.Ready;
             value: root.kmpp_i;
         }
         Button {
-            visible: show_default;
+            enabled: state != UIState.Running;
             text: "Executar mineração";
             clicked => {
                 root.exe_data_mining();
             }
         }
         HorizontalBox {
-            visible: show_progress;
+            visible: state == UIState.Running;
             Text {
                 text: "\{root.progress * 100}%";
             }
@@ -60,5 +66,11 @@ export component AppWindow inherits Window {
                 progress: progress;
             }
         }
+        /* ScrollView {
+            visible: state == UIState.Success;
+            for cluster[index] in root.response: Rectangle {
+                
+            }
+        } */
     }
 }

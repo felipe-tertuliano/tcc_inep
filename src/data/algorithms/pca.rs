@@ -15,21 +15,6 @@ impl DataSource {
     where
         S: AsRef<str> + ToString + Hash + Eq,
     {
-        return Ok([
-            "QT_PROF_REVISOR_BRAILLE",
-            "QT_PROF_NUTRICIONISTA",
-            "QT_PROF_TRAD_LIBRAS",
-            "QT_MAT_MED_PROP_4",
-            "QT_MAT_ZR_NA",
-            "QT_PROF_FONAUDIOLOGO",
-            "QT_PROF_GESTAO",
-            "QT_PROF_SECRETARIO",
-            "QT_PROF_ASSIST_SOCIAL",
-            "QT_MAT_MED_CT_NS",
-        ]
-        .iter()
-        .map(|v| v.to_string())
-        .collect()); // ! (for tests only)
         self.read(true, None)?;
 
         let mut include = self.get_header()?.clone();
@@ -38,17 +23,11 @@ impl DataSource {
         }
         let include = include.keys().map(|k| k.to_owned()).collect::<Vec<_>>();
 
-        // ---------------------------------------------------------
-        // 1. Calculate avg
-        // ---------------------------------------------------------
-
+        // Calculate avg
         let (avg, n) = self.avg::<_, f64>(&include).await?;
         let n = n as u32;
 
-        // ---------------------------------------------------------
-        // 2. Calculate covariance matrix
-        // ---------------------------------------------------------
-
+        // Calculate covariance matrix
         let feature_count = avg.len();
         let covariance = self
             .parallel_foreach(move |di| {
@@ -77,22 +56,14 @@ impl DataSource {
                 acc
             })
             .await;
-
         let covariance = DMatrix::from_vec(feature_count, feature_count, covariance);
 
-        // ---------------------------------------------------------
-        // 3. Eigen decomposition
-        // ---------------------------------------------------------
-
+        // Eigen decomposition
         let decomposition = SymmetricEigen::new(covariance);
-
         let eigenvalues = decomposition.eigenvalues;
         let eigenvectors = decomposition.eigenvectors;
 
-        // ---------------------------------------------------------
-        // 4. Sort components by eigenvalue
-        // ---------------------------------------------------------
-
+        // Sort components by eigenvalue
         let mut components = (0..feature_count)
             .map(|component| {
                 let eigenvalue = eigenvalues[component];
@@ -105,18 +76,11 @@ impl DataSource {
 
         components.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
 
-        // ---------------------------------------------------------
-        // 5. Total variance
-        // ---------------------------------------------------------
-
+        // Total variance
         let total_variance: f64 = components.iter().map(|(eigenvalue, _)| *eigenvalue).sum();
 
-        // ---------------------------------------------------------
-        // 6. Calculate feature influence
-        // ---------------------------------------------------------
-
+        // Calculate feature influence
         let mut scores = vec![0.0; feature_count];
-
         for (eigenvalue, eigenvector) in components {
             let explained_variance = eigenvalue / total_variance;
 
@@ -127,9 +91,7 @@ impl DataSource {
             }
         }
 
-        // ---------------------------------------------------------
-        // 7. Associate scores with field names
-        // ---------------------------------------------------------
+        // Associate scores with field names
 
         let mut principal = include
             .iter()
@@ -137,15 +99,11 @@ impl DataSource {
             .map(|(i, h)| (h.to_owned(), scores[i]))
             .collect::<Vec<_>>();
 
-        // ---------------------------------------------------------
-        // 8. Sort fields by influence
-        // ---------------------------------------------------------
+        // Sort fields by influence
 
         principal.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
-        // ---------------------------------------------------------
-        // 9. Return the N most influential fields
-        // ---------------------------------------------------------
+        // Return the N most influential fields
 
         Ok(principal
             .into_iter()
