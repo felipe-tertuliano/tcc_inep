@@ -22,9 +22,9 @@ export component AppWindow inherits Window {
     in-out property <UIState> state: Ready;
     in property <[ClusterEscola]> response;
     in property <float> progress: 0.0;
-    out property <int> pca_k: 15;
-    out property <int> kmpp_k: 5;
-    out property <int> kmpp_i: 8;
+    out property <int> pca_k: 30;
+    out property <int> kmpp_k: 6;
+    out property <int> kmpp_i: 20;
 
     callback exe_data_mining();
 
@@ -66,11 +66,5 @@ export component AppWindow inherits Window {
                 progress: progress;
             }
         }
-        /* ScrollView {
-            visible: state == UIState.Success;
-            for cluster[index] in root.response: Rectangle {
-                
-            }
-        } */
     }
 }

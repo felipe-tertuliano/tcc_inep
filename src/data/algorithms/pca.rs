@@ -92,7 +92,6 @@ impl DataSource {
         }
 
         // Associate scores with field names
-
         let mut principal = include
             .iter()
             .enumerate()
@@ -100,11 +99,9 @@ impl DataSource {
             .collect::<Vec<_>>();
 
         // Sort fields by influence
-
         principal.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
         // Return the N most influential fields
-
         Ok(principal
             .into_iter()
             .take(k)

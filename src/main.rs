@@ -14,7 +14,7 @@ use data::DataSource;
 use dotenv::dotenv;
 use tokio::sync::mpsc as tokio_mpsc;
 
-use crate::{data::DataItem, types::Source};
+use crate::{data::DataItem, types::{Source, models}};
 
 slint::include_modules!();
 
@@ -92,7 +92,7 @@ async fn step_one_escola(
     }
     update_progress(p_tx, 2, 1, 5, 5).await?;
 
-    Result::Ok(hash)
+    Ok(hash)
 }
 
 fn get_grade(di: &DataItem) -> u32 {
@@ -106,7 +106,8 @@ async fn step_two(
     enem: &mut DataSource,
     clusters: Vec<HashSet<String>>,
     p_tx: &tokio_mpsc::Sender<f32>,
-) -> Result<Vec<(u32, Vec<(String, u32)>)>> {
+    r_tx: &tokio_mpsc::Sender<Vec<(u32, Vec<(String, u32)>)>>,
+) -> Result<()> {
     let mut clusters_v = vec![(0, 0, HashMap::new()); clusters.len()];
 
     enem.foreach(|di| {
@@ -187,10 +188,30 @@ async fn step_two(
         .collect::<Vec<_>>();
     update_progress(p_tx, 2, 2, 4, 4).await?;
 
-    Result::Ok(clusters_v)
+    // TODO: Check different way to save the data
+    let model = clusters_v.iter().enumerate().map(|(i, (v, e))| models::ClusterEscolaModel {
+        id: i,
+        avg_grade: *v,
+        outliers: e.iter().map(|(k, v)| models::EscolaModel {
+            id: k.to_owned(),
+            avg_grade: *v,
+        }).collect(),
+    }).collect::<Vec<_>>();
+    let model = serde_json::to_string_pretty(&model)?;
+    let file = std::fs::File::create("resources/data/sources/response.json")?;
+    serde_json::to_writer_pretty(file, &model)?;
+
+    r_tx.send(clusters_v).await?;
+
+    Ok(())
 }
 
-async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), p_tx: tokio_mpsc::Sender<f32>) {
+async fn exe_data_mining(
+    pca_k: usize,
+    kmpp: (usize, usize),
+    p_tx: tokio_mpsc::Sender<f32>,
+    r_tx: tokio_mpsc::Sender<Vec<(u32, Vec<(String, u32)>)>>,
+) {
     let mut enem = DataSource::new(Source::Remote(
         "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
         "https://download.inep.gov.br/microdados/microdados_enem_2024.zip".to_owned(),
@@ -206,9 +227,9 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), p_tx: tokio_mpsc::S
         step_one_enem(&mut enem),
         step_one_escola(&mut escolas, pca_k, kmpp, &p_tx)
     ) {
-        (Ok(mut enem), Ok(clusters)) => match step_two(&mut enem, clusters, &p_tx).await {
-            Ok(outliers) => {
-                println!("{:?}", outliers);
+        (Ok(mut enem), Ok(clusters)) => match step_two(&mut enem, clusters, &p_tx, &r_tx).await {
+            Ok(()) => {
+                println!("Success");
             }
             Err(err) => println!("{}", err),
         },
@@ -223,9 +244,14 @@ async fn exe_data_mining(pca_k: usize, kmpp: (usize, usize), p_tx: tokio_mpsc::S
     }
 }
 
+fn into_slint<T: Clone + 'static>(value: Vec<T>) -> slint::ModelRc<T> {
+    slint::ModelRc::new(slint::VecModel::from(value))
+}
+
 fn main() -> Result<()> {
     dotenv().ok();
-    let (ui_progress_tx, mut ui_progress_rx) = tokio_mpsc::channel::<f32>(1);
+    let (ui_progress_tx, mut ui_progress_rx) = tokio_mpsc::channel(1);
+    let (ui_response_tx, mut ui_response_rx) = tokio_mpsc::channel(1);
     let rt = tokio::runtime::Runtime::new().unwrap();
     let ui = AppWindow::new()?;
 
@@ -235,6 +261,7 @@ fn main() -> Result<()> {
         let rt = rt_handle.clone();
         let ui = ui_handle.unwrap();
         let progress_tx = ui_progress_tx.clone();
+        let response_tx = ui_response_tx.clone();
 
         ui.set_state(UIState::Running);
         slint::spawn_local(async move {
@@ -242,7 +269,7 @@ fn main() -> Result<()> {
             let kmpp_k = ui.get_kmpp_k().try_into().unwrap();
             let kmpp_i = ui.get_kmpp_i().try_into().unwrap();
             match rt
-                .spawn(async move { exe_data_mining(pca_k, (kmpp_k, kmpp_i), progress_tx).await })
+                .spawn(async move { exe_data_mining(pca_k, (kmpp_k, kmpp_i), progress_tx, response_tx).await })
                 .await
             {
                 Ok(_) => ui.set_state(UIState::Success),
@@ -258,10 +285,19 @@ fn main() -> Result<()> {
         slint::TimerMode::Repeated,
         std::time::Duration::from_secs(1),
         move || {
-            if let Some(ui) = ui_handle.upgrade()
-                && let Ok(v) = ui_progress_rx.try_recv()
-            {
-                ui.set_progress(v);
+            if let Some(ui) = ui_handle.upgrade() {
+                if let Ok(v) = ui_progress_rx.try_recv() {
+                    ui.set_progress(v);
+                }
+                if let Ok(v) = ui_response_rx.try_recv() {
+                    ui.set_response(into_slint(v.iter().map(|(avg_grade, escolas)| ClusterEscola {
+                        avg_grade: *avg_grade as i32,
+                        outliers: into_slint(escolas.iter().map(|(id, avg_grade)| Escola {
+                            id: id.into(),
+                            avg_grade: *avg_grade as i32,
+                        }).collect()),
+                    }).collect()));
+                }
             }
         },
     );
