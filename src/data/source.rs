@@ -35,8 +35,8 @@ impl DataSource {
         let env_dsp = env::var("DATA_SOURCE_PATH")?;
         let os_path = PathBuf::from(&env_dsp)
             .join(match &source {
-                Source::Local(p) => p,
-                Source::Remote(p, _) => p,
+                Source::Local(p) => format!("{}.csv", p),
+                Source::Remote(p, _) => p.to_string(),
             })
             .as_os_str()
             .to_owned();
@@ -71,11 +71,10 @@ impl DataSource {
 
     pub fn child(&self, name: Option<String>) -> Result<Self> {
         if self._is_initialized {
-            Self::new(Source::Local(format!(
-                "{}.csv",
+            Self::new(Source::Local(
                 name.map(|s| s.to_string())
-                    .unwrap_or(Uuid::new_v4().to_string())
-            )))
+                    .unwrap_or(Uuid::new_v4().to_string()),
+            ))
         } else {
             msg_error!("DataSource is not initialized")
         }
@@ -358,7 +357,9 @@ impl DataSource {
                 ._reader
                 .as_mut()
                 .expect("Error while obtaining read permission");
-            while res.is_none() && let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0 {
+            while res.is_none()
+                && let Some(value) = Self::_read_line(reader, &mut buf, None, false)?.0
+            {
                 res = f(DataItem::new(UniRef::Ref(&header), value))?;
             }
             self.read(false, None)?;

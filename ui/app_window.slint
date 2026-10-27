@@ -1,4 +1,4 @@
-import { Button, VerticalBox, ProgressIndicator, HorizontalBox, ScrollView } from "std-widgets.slint";
+import { Button, VerticalBox, ProgressIndicator, HorizontalBox, ScrollView, StandardTableView } from "std-widgets.slint";
 import { CompIntInput } from "comp_int_input.slint";
 
 export struct Escola {
@@ -20,7 +20,7 @@ export enum UIState {
 
 export component AppWindow inherits Window {
     in-out property <UIState> state: Ready;
-    in property <[ClusterEscola]> response;
+    in property <[[StandardListViewItem]]> response;
     in property <float> progress: 0.0;
     out property <int> pca_k: 30;
     out property <int> kmpp_k: 6;
@@ -60,11 +60,21 @@ export component AppWindow inherits Window {
         HorizontalBox {
             visible: state == UIState.Running;
             Text {
-                text: "\{root.progress * 100}%";
+                text: "\{round(root.progress * 100)}%";
             }
             ProgressIndicator {
                 progress: progress;
             }
+        }
+        StandardTableView {
+            visible: state == UIState.Success;
+            columns: [
+                { title: "Cluster Code" },
+                { title: "Cluster Average" },
+                { title: "School Code" },
+                { title: "School Average" },
+            ];
+            rows: root.response;
         }
     }
 }

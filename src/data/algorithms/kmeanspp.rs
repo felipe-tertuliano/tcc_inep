@@ -21,7 +21,7 @@ impl DataSource {
 
     fn _sqr_dist(include: &[String], c: &DataItem, p: &DataItem) -> f64 {
         include.iter().fold(0.0, |mut acc, field| {
-            acc += (p.get::<_, f64>(field).unwrap() - c.get::<_, f64>(field).unwrap()).powi(2);
+            acc += (p.get::<_, f64>(field).unwrap() - c.get::<_, f64>(field).unwrap()).powi(2); // TODO: validade error
             acc
         })
     }
