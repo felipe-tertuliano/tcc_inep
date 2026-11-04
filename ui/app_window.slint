@@ -20,13 +20,14 @@ export enum UIState {
 
 export component AppWindow inherits Window {
     in-out property <UIState> state: Ready;
-    in property <[[StandardListViewItem]]> response;
+    in-out property <[[StandardListViewItem]]> response;
     in property <float> progress: 0.0;
-    out property <int> pca_k: 30;
-    out property <int> kmpp_k: 6;
-    out property <int> kmpp_i: 20;
+    out property <int> pca_k: 15;
+    out property <int> kmpp_k: 3;
+    out property <int> kmpp_i: 9;
 
     callback exe_data_mining();
+    callback sort_slvi([[StandardListViewItem]], int, bool) -> [[StandardListViewItem]];
 
     VerticalBox {
         StyledText {
@@ -75,6 +76,8 @@ export component AppWindow inherits Window {
                 { title: "School Average" },
             ];
             rows: root.response;
+            sort-ascending(col) => { root.response = root.sort_slvi(root.response, col, true); }
+            sort-descending(col) => { root.response = root.sort_slvi(root.response, col, false); }
         }
     }
 }

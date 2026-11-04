@@ -1,3 +1,4 @@
+use crate::utils;
 use std::{ops::AddAssign, ops::DivAssign, str::FromStr};
 use super::super::DataSource;
 use anyhow::Result;
@@ -6,11 +7,17 @@ impl DataSource {
     pub async fn avg<S, T>(&mut self, include: &[S]) -> Result<(Vec<(String, T)>, T)>
     where
         T: Default + AddAssign + DivAssign + FromStr + From<u8> + Copy,
-        S: AsRef<str> + ToString
+        S: AsRef<str> + ToString,
     {
-        let mut avg = include.iter().map(|x| (x.to_string(), T::default())).collect::<Vec<_>>();
+        let mut dt = utils::DebugTimer::new();
+        println!("Average Start");
+
+        let mut avg = include
+            .iter()
+            .map(|x| (x.to_string(), T::default()))
+            .collect::<Vec<_>>();
         let mut n = T::default();
-        let one = T::from(1u8); 
+        let one = T::from(1u8);
         self.foreach(|di| {
             n += one;
             for (header, value) in &mut avg {
@@ -22,6 +29,8 @@ impl DataSource {
         for (_, value) in &mut avg {
             *value /= n
         }
+
+        println!("Average End - {:.2}s", dt.lap().as_secs_f32());
         Ok((avg, n))
     }
 }

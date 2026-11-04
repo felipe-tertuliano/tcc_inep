@@ -15,12 +15,14 @@ use anyhow::Result;
 use consts::{ENEM_ESCOLA, ENEM_NOTA, ESCOLAS_ID, ESCOLAS_QTS};
 use data::DataSource;
 use dotenv::dotenv;
+use slint::Model;
 use tokio::sync::mpsc as tokio_mpsc;
 
 use crate::{data::DataItem, types::Source};
 
 slint::include_modules!();
 
+/* #region exe_data_mining */
 async fn update_progress(
     p_tx: &tokio_mpsc::Sender<f32>,
     steps: usize,
@@ -136,111 +138,117 @@ async fn step_two(
     clusters: Vec<HashSet<String>>,
     p_tx: &tokio_mpsc::Sender<f32>,
 ) -> Result<DataSource> {
-    let mut clusters_v = vec![(0, 0, HashMap::new()); clusters.len()];
+    let mut response = DataSource::new(Source::Local("response".to_owned()))?;
 
-    enem.foreach(|di| {
-        let escola = di.get::<_, String>(ENEM_ESCOLA).unwrap();
+    if !response.exists() {
+        let mut clusters_v = vec![(0, 0, HashMap::new()); clusters.len()];
 
-        // Sum of grades per cluster
-        if let Some((cluster, _)) = clusters
-            .iter()
-            .enumerate()
-            .find(|(_, h)| h.contains(&escola))
-            && let Some((n, v, e)) = clusters_v.get_mut(cluster)
-        {
-            let grade = get_grade(&di);
-            *n += 1;
-            *v += grade;
+        enem.foreach(|di| {
+            let escola = di.get::<_, String>(ENEM_ESCOLA).unwrap();
 
-            // Sum of grades per escolas per cluster
-            if let Some((n, v)) = e.get_mut(&escola) {
+            // Sum of grades per cluster
+            if let Some((cluster, _)) = clusters
+                .iter()
+                .enumerate()
+                .find(|(_, h)| h.contains(&escola))
+                && let Some((n, v, e)) = clusters_v.get_mut(cluster)
+            {
+                let grade = get_grade(&di);
                 *n += 1;
                 *v += grade;
-            } else {
-                e.insert(escola.to_owned(), (1, grade));
+
+                // Sum of grades per escolas per cluster
+                if let Some((n, v)) = e.get_mut(&escola) {
+                    *n += 1;
+                    *v += grade;
+                } else {
+                    e.insert(escola.to_owned(), (1, grade));
+                }
+            }
+            Ok(true)
+        })
+        .await?;
+        update_progress(p_tx, 2, 2, 5, 1).await?;
+
+        // Average of grades
+        let clusters_v = clusters_v
+            .iter()
+            .map(|(n, v, e)| {
+                (
+                    *n,
+                    v.checked_div(*n).unwrap_or(*v),
+                    e.iter()
+                        .map(|(k, (n, v))| (k.to_owned(), (*n, v.checked_div(*n).unwrap_or(*v))))
+                        .collect::<HashMap<_, _>>(),
+                )
+            })
+            .collect::<Vec<_>>();
+        update_progress(p_tx, 2, 2, 5, 2).await?;
+
+        // Standard deviation per cluster
+        let clusters_v = clusters_v
+            .iter()
+            .map(|(_, v, e)| {
+                (
+                    (if e.is_empty() {
+                        0.0
+                    } else {
+                        e.values()
+                            .map(|(_, v_i)| v_i.abs_diff(*v).pow(2))
+                            .sum::<u32>() as f64
+                            / e.len() as f64
+                    })
+                    .sqrt()
+                    .round() as u32,
+                    *v,
+                    e,
+                )
+            })
+            .collect::<Vec<_>>();
+        update_progress(p_tx, 2, 2, 5, 3).await?;
+
+        let clusters_v = clusters_v
+            .iter()
+            .map(|(d, v, e)| {
+                (
+                    *v,
+                    e.iter()
+                        .filter(|(_, (_, v_i))| v_i.abs_diff(*v) > 2 * d)
+                        .map(|(k, (_, v_i))| (k.to_owned(), *v_i))
+                        .collect::<Vec<_>>(),
+                )
+            })
+            .collect::<Vec<_>>();
+        update_progress(p_tx, 2, 2, 5, 4).await?;
+
+        let mut response = DataSource::new(Source::Local("response".to_owned()))?;
+        response.init().await?;
+        response.write(true)?;
+        let mut header = HashMap::new();
+        header.insert("CLUSTER_CODE".to_owned(), 0);
+        header.insert("CLUSTER_AVG_GRADE".to_owned(), 1);
+        header.insert("ESCOLA_CODE".to_owned(), 2);
+        header.insert("ESCOLA_AVG_GRADE".to_owned(), 3);
+        response.set_header(&header)?;
+        for (c_code, (c_avg, escolas_v)) in clusters_v.iter().enumerate() {
+            for (e_code, e_avg) in escolas_v {
+                response.write_item(DataItem::new(
+                    types::UniRef::Ref(&header),
+                    vec![
+                        c_code.to_string(),
+                        c_avg.to_string(),
+                        e_code.to_string(),
+                        e_avg.to_string(),
+                    ],
+                ))?;
             }
         }
-        Ok(true)
-    })
-    .await?;
-    update_progress(p_tx, 2, 2, 5, 1).await?;
-
-    // Average of grades
-    let clusters_v = clusters_v
-        .iter()
-        .map(|(n, v, e)| {
-            (
-                *n,
-                v.checked_div(*n).unwrap_or(*v),
-                e.iter()
-                    .map(|(k, (n, v))| (k.to_owned(), (*n, v.checked_div(*n).unwrap_or(*v))))
-                    .collect::<HashMap<_, _>>(),
-            )
-        })
-        .collect::<Vec<_>>();
-    update_progress(p_tx, 2, 2, 5, 2).await?;
-
-    // Standard deviation per cluster
-    let clusters_v = clusters_v
-        .iter()
-        .map(|(_, v, e)| {
-            (
-                (if e.is_empty() {
-                    0.0
-                } else {
-                    e.values()
-                        .map(|(_, v_i)| v_i.abs_diff(*v).pow(2))
-                        .sum::<u32>() as f64
-                        / e.len() as f64
-                })
-                .sqrt()
-                .round() as u32,
-                *v,
-                e,
-            )
-        })
-        .collect::<Vec<_>>();
-    update_progress(p_tx, 2, 2, 5, 3).await?;
-
-    let clusters_v = clusters_v
-        .iter()
-        .map(|(d, v, e)| {
-            (
-                *v,
-                e.iter()
-                    .filter(|(_, (_, v_i))| v_i.abs_diff(*v) > 2 * d)
-                    .map(|(k, (_, v_i))| (k.to_owned(), *v_i))
-                    .collect::<Vec<_>>(),
-            )
-        })
-        .collect::<Vec<_>>();
-    update_progress(p_tx, 2, 2, 5, 4).await?;
-
-    let mut response = DataSource::new(Source::Local("response".to_owned()))?;
-    response.init().await?;
-    response.write(true)?;
-    let mut header = HashMap::new();
-    header.insert("CLUSTER_CODE".to_owned(), 0);
-    header.insert("CLUSTER_AVG_GRADE".to_owned(), 1);
-    header.insert("ESCOLA_CODE".to_owned(), 2);
-    header.insert("ESCOLA_AVG_GRADE".to_owned(), 3);
-    response.set_header(&header)?;
-    for (c_code, (c_avg, escolas_v)) in clusters_v.iter().enumerate() {
-        for (e_code, e_avg) in escolas_v {
-            response.write_item(DataItem::new(
-                types::UniRef::Ref(&header),
-                vec![
-                    c_code.to_string(),
-                    c_avg.to_string(),
-                    e_code.to_string(),
-                    e_avg.to_string(),
-                ],
-            ))?;
-        }
+        response.write(false)?;
+    } else {
+        response.init().await?;
     }
-    response.write(false)?;
-    update_progress(p_tx, 2, 2, 5, 5).await?;
 
+    update_progress(p_tx, 2, 2, 5, 5).await?;
     Ok(response)
 }
 
@@ -300,6 +308,33 @@ async fn exe_data_mining(
         }
     }
 }
+/* #endregion */
+
+/* #region sort_list */
+fn sort_slvi(
+    slvi: slint::ModelRc<slint::ModelRc<slint::StandardListViewItem>>,
+    column: usize,
+    ascending: bool,
+) -> slint::ModelRc<slint::ModelRc<slint::StandardListViewItem>> {
+    let mut vec_slvi = slvi.iter().collect::<Vec<_>>();
+    vec_slvi.sort_by(|a, b| {
+        let a_val = a
+            .row_data(column)
+            .map(|i| i.text.to_string())
+            .unwrap_or_default();
+        let b_val = b
+            .row_data(column)
+            .map(|i| i.text.to_string())
+            .unwrap_or_default();
+        let ord = match (a_val.parse::<f64>(), b_val.parse::<f64>()) {
+            (Ok(na), Ok(nb)) => na.partial_cmp(&nb).unwrap_or(std::cmp::Ordering::Equal),
+            _ => a_val.cmp(&b_val),
+        };
+        if ascending { ord } else { ord.reverse() }
+    });
+    slint::ModelRc::new(slint::VecModel::from(vec_slvi))
+}
+/* #endregion */
 
 fn main() -> Result<()> {
     dotenv().ok();
@@ -333,6 +368,8 @@ fn main() -> Result<()> {
         })
         .unwrap();
     });
+
+    ui.on_sort_slvi(move |slvi, column, ascending| sort_slvi(slvi, column as usize, ascending));
 
     let ui_handle = ui.as_weak();
     let timer = slint::Timer::default();

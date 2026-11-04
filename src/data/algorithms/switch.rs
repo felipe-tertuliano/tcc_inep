@@ -1,4 +1,5 @@
 use super::super::{DataItem, DataSource};
+use crate::utils;
 use anyhow::Result;
 
 impl DataSource {
@@ -6,8 +7,12 @@ impl DataSource {
     where
         F: Fn(&DataItem) -> bool,
     {
+        let mut dt = utils::DebugTimer::new();
+        println!("Switch Start");
+
         let f = f.iter().enumerate().collect::<Vec<_>>();
-        let mut switch = f.iter()
+        let mut switch = f
+            .iter()
             .map(|(i, _)| {
                 self.child(to.clone().map(|v| format!("{}_{}", v, i)))
                     .unwrap()
@@ -29,6 +34,7 @@ impl DataSource {
             ds.write(false)?;
         }
 
+        println!("Switch End - {:.2}s", dt.lap().as_secs_f32());
         Ok(switch)
     }
 }

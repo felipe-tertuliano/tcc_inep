@@ -1,24 +1,23 @@
 use super::super::DataSource;
-use crate::{data::DataItem, types::UniRef, utils::DebugTimer};
-use std::{fmt::Display, hash::Hash};
+use crate::{data::DataItem, types::UniRef, utils};
 use anyhow::Result;
+use std::{fmt::Display, hash::Hash};
 
 impl DataSource {
-    pub async fn standardize<S>(
-        &mut self,
-        to: Option<String>,
-        include: &[S],
-        id: S,
-    ) -> Result<Self> 
-    where 
-        S: AsRef<str> + Copy + ToString + Display + Hash + Eq
+    pub async fn standardize<S>(&mut self, to: Option<String>, include: &[S], id: S) -> Result<Self>
+    where
+        S: AsRef<str> + Copy + ToString + Display + Hash + Eq,
     {
-        let mut dt = DebugTimer::new();
+        let mut dt = utils::DebugTimer::new();
+        println!("Standardize Start");
+
         let mut standardized = self.child(to)?;
         if !standardized.exists() {
-            let mut variances = include.iter().map(|x| (x.to_string(), 0.0)).collect::<Vec<_>>();
+            let mut variances = include
+                .iter()
+                .map(|x| (x.to_string(), 0.0))
+                .collect::<Vec<_>>();
             let (avg, n) = self.avg::<_, f64>(include).await?;
-            println!("Standardize: Mean Step - {:.2}s", dt.lap().as_secs_f32());
             self.foreach(|di| {
                 for i in 0..include.len() {
                     let (header, mean) = &avg[i];
@@ -31,10 +30,6 @@ impl DataSource {
             for (_, value) in &mut variances {
                 *value = (*value / n).sqrt();
             }
-            println!(
-                "Standardize: Variance Step - {:.2}s",
-                dt.lap().as_secs_f32()
-            );
             standardized.init().await?;
             standardized.write(true)?;
             self.foreach(|di| {
@@ -53,13 +48,11 @@ impl DataSource {
             })
             .await?;
             standardized.write(false)?;
-            println!(
-                "Standardize: Standardize Step - {:.2}s",
-                dt.lap().as_secs_f32()
-            );
         } else {
             standardized.init().await?;
         }
+
+        println!("Standardize End - {:.2}s", dt.lap().as_secs_f32());
         Ok(standardized)
     }
 }

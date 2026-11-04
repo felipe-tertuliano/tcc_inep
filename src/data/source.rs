@@ -80,13 +80,17 @@ impl DataSource {
         }
     }
 
-    pub fn delete(self) -> Result<()> {
-        Ok(fs::remove_file(&self._os_path)?)
-    }
-
     /* #region Helpers */
     pub fn exists(&self) -> bool {
         Path::new(&self._os_path).exists()
+    }
+
+    pub fn delete(&self) -> Result<()> {
+        if self.exists() {
+            Ok(fs::remove_file(&self._os_path)?)
+        } else {
+            Ok(())
+        }
     }
     /* #endregion */
 

@@ -1,4 +1,5 @@
 use super::super::{DataItem, DataSource};
+use crate::utils;
 use anyhow::Result;
 
 impl DataSource {
@@ -6,6 +7,9 @@ impl DataSource {
     where
         F: Fn(DataItem) -> Option<DataItem>,
     {
+        let mut dt = utils::DebugTimer::new();
+        println!("Filter Start");
+
         let mut filtered = self.child(to)?;
         if !filtered.exists() {
             filtered.init().await?;
@@ -21,6 +25,8 @@ impl DataSource {
         } else {
             filtered.init().await?;
         }
+
+        println!("Filter End - {:.2}s", dt.lap().as_secs_f32());
         Ok(filtered)
     }
 }

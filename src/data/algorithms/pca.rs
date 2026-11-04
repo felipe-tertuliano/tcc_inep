@@ -1,6 +1,5 @@
-use crate::{data::DataItem, types};
-
 use super::super::DataSource;
+use crate::{data::DataItem, types, utils};
 use anyhow::Result;
 use nalgebra::{DMatrix, SymmetricEigen};
 use std::{collections::HashMap, hash::Hash};
@@ -11,12 +10,15 @@ impl DataSource {
     ///
     /// Assumes the input data is already standardized.
     ///
-    /// Returns a DataSource with FIELD and SCORE sorted descending by SCORE, 
+    /// Returns a DataSource with FIELD and SCORE sorted descending by SCORE,
     /// the contribution to the variance captured by the principal components.
     pub async fn pca<S>(&mut self, to: Option<String>, exclude: &[S]) -> Result<Self>
     where
         S: AsRef<str> + ToString + Hash + Eq,
     {
+        let mut dt = utils::DebugTimer::new();
+        println!("PCA Start");
+
         let mut pca = self.child(to)?;
         if !pca.exists() {
             self.read(true, None)?;
@@ -113,15 +115,17 @@ impl DataSource {
             header.insert("SCORE".to_owned(), 1);
             pca.set_header(&header)?;
             for (field, score) in principal {
-                pca.write_item(DataItem::new(types::UniRef::Ref(&header), vec![
-                    field.to_string(),
-                    score.to_string(),
-                ]))?;
+                pca.write_item(DataItem::new(
+                    types::UniRef::Ref(&header),
+                    vec![field.to_string(), score.to_string()],
+                ))?;
             }
             pca.write(false)?;
         } else {
             pca.init().await?;
         }
+
+        println!("PCA End - {:.2}s", dt.lap().as_secs_f32());
         Ok(pca)
     }
 }
