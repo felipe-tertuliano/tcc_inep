@@ -221,7 +221,6 @@ async fn step_two(
             .collect::<Vec<_>>();
         update_progress(p_tx, 2, 2, 5, 4).await?;
 
-        let mut response = DataSource::new(Source::Local("response".to_owned()))?;
         response.init().await?;
         response.write(true)?;
         let mut header = HashMap::new();
