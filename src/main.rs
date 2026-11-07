@@ -8,6 +8,8 @@ mod utils;
 
 use std::{
     collections::{HashMap, HashSet},
+    fs,
+    path::PathBuf,
     rc::Rc,
 };
 
@@ -340,8 +342,11 @@ fn main() -> Result<()> {
     let (ui_progress_tx, mut ui_progress_rx) = tokio_mpsc::channel(1);
     let (ui_response_tx, mut ui_response_rx) = tokio_mpsc::channel(1);
     let rt = tokio::runtime::Runtime::new().unwrap();
-    let ui = AppWindow::new()?;
 
+    let ui = AppWindow::new()?;
+    let dialog = CompClearDialog::new()?;
+
+    /* #region UI interactions */
     let rt_handle = rt.handle().clone();
     let ui_handle = ui.as_weak();
     ui.on_exe_data_mining(move || {
@@ -366,6 +371,17 @@ fn main() -> Result<()> {
             }
         })
         .unwrap();
+    });
+
+    ui.on_download_response(move || {
+        if let Some(dest) = rfd::FileDialog::new()
+            .set_file_name("response.csv")
+            .add_filter("CSV Files", &["csv"])
+            .save_file()
+        {
+            let source = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join("response.csv");
+            fs::copy(&source, &dest).unwrap();
+        }
     });
 
     ui.on_sort_slvi(move |slvi, column, ascending| sort_slvi(slvi, column as usize, ascending));
@@ -394,6 +410,50 @@ fn main() -> Result<()> {
             }
         },
     );
+    /* #endregion */
+
+    let dialog_handle = dialog.as_weak();
+    ui.on_open_clear_dialog(move || {
+        if let Some(dialog) = dialog_handle.upgrade() {
+            let os_path = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap());
+            let model = slint::VecModel::default();
+            for (f_name, _) in utils::dir_ls(os_path, Some("csv")).unwrap() {
+                let item = ClearItemStruct {
+                    name: f_name.into(),
+                    checked: false,
+                };
+                model.push(item);
+            }
+            dialog.set_items(Rc::new(model).into());
+            dialog.show().unwrap();
+        }
+    });
+
+    /* #region Dialog interactions */
+    let dialog_handle = dialog.as_weak();
+    dialog.on_call_cancel(move || {
+        if let Some(dialog) = dialog_handle.upgrade() {
+            dialog.hide().unwrap();
+        }
+    });
+
+    let ui_handle = ui.as_weak();
+    let dialog_handle = dialog.as_weak();
+    dialog.on_call_ok(move || {
+        if let Some(dialog) = dialog_handle.upgrade() {
+            let os_path = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap());
+            for ci in dialog.get_items().iter() {
+                if ci.checked {
+                    fs::remove_file(os_path.join(&ci.name)).unwrap();
+                }
+            }
+            if let Some(ui) = ui_handle.upgrade() {
+                ui.set_state(UIState::Ready);
+                dialog.hide().unwrap();
+            }
+        }
+    });
+    /* #endregion */
 
     ui.run()?;
 

@@ -1,0 +1,48 @@
+import {
+    StandardButton,
+    Button,
+    CheckBox,
+    VerticalBox,
+    HorizontalBox,
+} from "std-widgets.slint";
+
+export struct ClearItemStruct {
+    name: string,
+    checked: bool,
+}
+
+export component CompClearDialog inherits Dialog {
+    in-out property <[ClearItemStruct]> items;
+    callback call_ok();
+    callback call_cancel();
+
+    VerticalBox {
+        StyledText {
+            text: @markdown("Caso você tenha alterado os parâmetros e queira executar uma nova mineração **selecione os dados** salvos **para serem recalculados**");
+        }
+
+        StyledText {
+            text: @markdown("**Obs:** Para efetivamente obter novos resultados recomendamos a seleção do `response.csv` e de todos arquivos contendo `kmeansapp`");
+        }
+
+        for item[index] in items: CheckBox {
+            text: item.name;
+            checked: item.checked;
+            toggled => {
+                root.items[index].checked = self.checked;
+            }
+        }
+
+        HorizontalBox {
+            StandardButton {
+                kind: ok;
+                clicked => { root.call_ok(); }
+            }
+
+            StandardButton {
+                kind: cancel;
+                clicked => { root.call_cancel(); }
+            }
+        }
+    }
+}

@@ -1,8 +1,10 @@
 mod debug_timer;
+mod dir_ls;
 mod get_csv_cols;
 mod rand;
 mod unzip;
 pub use debug_timer::*;
+pub use dir_ls::*;
 pub use get_csv_cols::*;
 pub use rand::*;
 pub use unzip::*;
