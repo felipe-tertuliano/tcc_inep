@@ -14,7 +14,7 @@ use std::{
 };
 
 use anyhow::Result;
-use consts::{ENEM_ESCOLA, ENEM_NOTA, ESCOLAS_ID, ESCOLAS_QTS};
+use consts::{ENEM_ESCOLA, ENEM_NOTA, ESCOLA_IN_RES, ESCOLAS_ID, ESCOLAS_QTS};
 use data::DataSource;
 use dotenv::dotenv;
 use slint::Model;
@@ -23,6 +23,21 @@ use tokio::sync::mpsc as tokio_mpsc;
 use crate::{data::DataItem, types::Source};
 
 slint::include_modules!();
+
+fn get_enem() -> DataSource {
+    DataSource::new(Source::Remote(
+        "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
+        "https://download.inep.gov.br/microdados/microdados_enem_2024.zip".to_owned(),
+    ))
+    .expect("Error while creating ENEM's DataSource")
+}
+
+fn get_escolas() -> DataSource {
+    DataSource::new(Source::Remote(
+        "microdados_censo_escolar_2024/microdados_censo_escolar_2024/dados/microdados_ed_basica_2024.csv".to_owned(),
+        "https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_2024.zip".to_owned(),
+	)).expect("Error while creating Escolas's DataSource")
+}
 
 /* #region exe_data_mining */
 async fn update_progress(
@@ -209,6 +224,7 @@ async fn step_two(
             .collect::<Vec<_>>();
         update_progress(p_tx, 2, 2, 5, 3).await?;
 
+        // Select outliers
         let clusters_v = clusters_v
             .iter()
             .map(|(d, v, e)| {
@@ -223,27 +239,57 @@ async fn step_two(
             .collect::<Vec<_>>();
         update_progress(p_tx, 2, 2, 5, 4).await?;
 
-        response.init().await?;
-        response.write(true)?;
+        // Filter grades greater than the average and hashing by escola code
+        let hash_escolas = clusters_v
+            .iter()
+            .enumerate()
+            .flat_map(|(c_code, (c_avg, escolas_v))| {
+                escolas_v
+                    .iter()
+                    .filter(|(_, e_avg)| e_avg > c_avg) // Filter grades greater than the average
+                    .map(move |(e_code, e_avg)| (e_code.to_owned(), (c_code, *c_avg, *e_avg)))
+            })
+            .collect::<HashMap<_, _>>();
+
+        // Setup the response data source
+        let mut escolas = get_escolas();
+        let (e_res, r_res) = tokio::join!(escolas.init(), response.init());
+        e_res?;
+        r_res?;
+
         let mut header = HashMap::new();
         header.insert("CLUSTER_CODE".to_owned(), 0);
         header.insert("CLUSTER_AVG_GRADE".to_owned(), 1);
         header.insert("ESCOLA_CODE".to_owned(), 2);
         header.insert("ESCOLA_AVG_GRADE".to_owned(), 3);
+        for (i, n) in ESCOLA_IN_RES.iter().enumerate() {
+            header.insert((*n).to_owned(), i + 4);
+        }
+        response.write(true)?;
         response.set_header(&header)?;
-        for (c_code, (c_avg, escolas_v)) in clusters_v.iter().enumerate() {
-            for (e_code, e_avg) in escolas_v {
-                response.write_item(DataItem::new(
-                    types::UniRef::Ref(&header),
-                    vec![
+
+        // Transfer data from the Hash and Escolas
+        escolas
+            .foreach(|di| {
+                if let Some(e_code) = di.get::<_, String>(ESCOLAS_ID)
+                    && let Some((c_code, c_avg, e_avg)) = hash_escolas.get(&e_code)
+                {
+                    let mut v = vec![
                         c_code.to_string(),
                         c_avg.to_string(),
                         e_code.to_string(),
                         e_avg.to_string(),
-                    ],
-                ))?;
-            }
-        }
+                    ];
+                    for n in ESCOLA_IN_RES.iter() {
+                        v.push(di.get::<_, String>(n).unwrap_or_default());
+                    }
+                    response
+                        .write_item(DataItem::new(types::UniRef::Ref(&header), v))
+                        .expect("Error inserting response value");
+                }
+                Ok(true)
+            })
+            .await?;
         response.write(false)?;
     } else {
         response.init().await?;
@@ -259,16 +305,9 @@ async fn exe_data_mining(
     p_tx: tokio_mpsc::Sender<f32>,
     r_tx: tokio_mpsc::Sender<Vec<Vec<String>>>,
 ) {
-    let mut enem = DataSource::new(Source::Remote(
-        "microdados_enem_2024/DADOS/RESULTADOS_2024.csv".to_owned(),
-        "https://download.inep.gov.br/microdados/microdados_enem_2024.zip".to_owned(),
-    ))
-    .expect("Error while creating ENEM's DataSource");
+    let mut enem = get_enem();
 
-    let mut escolas = DataSource::new(Source::Remote(
-        "microdados_censo_escolar_2024/microdados_censo_escolar_2024/dados/microdados_ed_basica_2024.csv".to_owned(),
-        "https://download.inep.gov.br/dados_abertos/microdados_censo_escolar_2024.zip".to_owned(),
-	)).expect("Error while creating Escolas's DataSource");
+    let mut escolas = get_escolas();
 
     match tokio::join!(
         step_one_enem(&mut enem),
@@ -379,7 +418,8 @@ fn main() -> Result<()> {
             .add_filter("CSV Files", &["csv"])
             .save_file()
         {
-            let source = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join("response.csv");
+            let source =
+                PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join("response.csv");
             fs::copy(&source, &dest).unwrap();
         }
     });

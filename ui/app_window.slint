@@ -90,10 +90,22 @@ export component AppWindow inherits Window {
         StandardTableView {
             visible: state == UIState.Success;
             columns: [
-                { title: "Cluster Code" },
-                { title: "Cluster Average" },
-                { title: "School Code" },
-                { title: "School Average" },
+                { title: "Cód. Cluster" },
+                { title: "Média Cluster" },
+                { title: "Cód. Escola" },
+                { title: "Média Escola" },
+                { title: "Região" },
+                { title: "Uf" },
+                { title: "Município" },
+                { title: "R. Geo. Interm." },
+                { title: "R. Geo. Imed." },
+                { title: "Mesorregião" },
+                { title: "Microrregião" },
+                { title: "Distrito" },
+                { title: "Entidade" },
+                { title: "Tp Dep." },
+                { title: "Tp Loc." },
+                { title: "Tp Loc. Diferenciada" },
             ];
             rows: root.response;
             sort-ascending(col) => { root.response = root.sort_slvi(root.response, col, true); }

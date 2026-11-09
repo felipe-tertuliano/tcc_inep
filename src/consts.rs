@@ -163,3 +163,18 @@ pub const ENEM_NOTA: &[&str] = &[
     "NU_NOTA_LC",
     "NU_NOTA_MT",
 ];
+
+pub const ESCOLA_IN_RES: &[&str] = &[
+    "NO_REGIAO",
+    "NO_UF",
+    "NO_MUNICIPIO",
+    "NO_REGIAO_GEOG_INTERM",
+    "NO_REGIAO_GEOG_IMED",
+    "NO_MESORREGIAO",
+    "NO_MICRORREGIAO",
+    "NO_DISTRITO",
+    "NO_ENTIDADE",
+    "TP_DEPENDENCIA",
+    "TP_LOCALIZACAO",
+    "TP_LOCALIZACAO_DIFERENCIADA",
+];
