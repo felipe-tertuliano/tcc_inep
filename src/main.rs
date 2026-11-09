@@ -60,10 +60,10 @@ async fn step_one_enem(enem: &mut DataSource) -> Result<DataSource> {
     enem.filter(Some("s1_enem_filter".to_string()), |di| {
         if di
             .get::<_, String>("CO_ESCOLA")
-            .is_some_and(|v| !v.is_empty()) // Students who were at a school
-            && di.get::<_, i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1) // Students who were at the Math exam
-            && di.get::<_, i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1)
-        // Students who were at the Lang. & Codes exam
+            // Students who were at a school
+            .is_some_and(|v| !v.is_empty())
+        // && di.get::<_, i8>("TP_PRESENCA_MT").is_some_and(|v| v == 1) // Students who were at the Math exam
+        // && di.get::<_, i8>("TP_PRESENCA_LC").is_some_and(|v| v == 1) // Students who were at the Lang. & Codes exam
         {
             Some(di)
         } else {

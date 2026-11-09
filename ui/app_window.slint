@@ -21,7 +21,7 @@ export component AppWindow inherits Window {
     in-out property <[[StandardListViewItem]]> response;
     in-out property <bool> dialog_open: false;
     in-out property <UIState> state: UIState.Ready;
-    in property <float> progress: 0.0;
+    in-out property <float> progress: 0.0;
     out property <int> pca_k: 39;
     out property <int> kmpp_k: 6;
     out property <int> kmpp_i: 9;
@@ -63,6 +63,7 @@ export component AppWindow inherits Window {
             text: "Executar mineração";
             clicked => {
                 if state == UIState.Ready {
+                    root.progress = 0.0;
                     root.exe_data_mining();
                 } else {
                     root.open_clear_dialog();
