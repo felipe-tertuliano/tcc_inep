@@ -29,8 +29,11 @@ export component AppWindow inherits Window {
     callback exe_data_mining();
     callback open_clear_dialog();
     callback download_response();
+    callback download_clusters();
     callback sort_slvi([[StandardListViewItem]], int, bool) -> [[StandardListViewItem]];
 
+    title: "Mineração INEP";
+    maximized: true;
     VerticalBox {
         StyledText {
             text: @markdown("**[Dados Abertos, Microdados Enem 2024](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem)**");
@@ -82,10 +85,18 @@ export component AppWindow inherits Window {
             }
         }
 
-        Button {
-            visible: state == UIState.Success;
-            text: "⬇ Download";
-            clicked => { root.download_response(); }
+        HorizontalBox {
+            Button {
+                visible: state == UIState.Success;
+                text: "⬇ Baixar Resposta";
+                clicked => { root.download_response(); }
+            }
+
+            Button {
+                visible: state == UIState.Success;
+                text: "⬇ Baixar Clusters";
+                clicked => { root.download_clusters(); }
+            }
         }
 
         StandardTableView {

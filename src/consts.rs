@@ -178,3 +178,5 @@ pub const ESCOLA_IN_RES: &[&str] = &[
     "TP_LOCALIZACAO",
     "TP_LOCALIZACAO_DIFERENCIADA",
 ];
+
+pub const CLEAR_RE: &str = r"^(response|cluster_\d+|s1_escolas_kmeanspp_\d+_\d+)\.csv$";

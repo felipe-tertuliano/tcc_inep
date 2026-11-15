@@ -13,14 +13,13 @@ use std::{
     rc::Rc,
 };
 
+use crate::{data::DataItem, types::Source};
 use anyhow::Result;
-use consts::{ENEM_ESCOLA, ENEM_NOTA, ESCOLA_IN_RES, ESCOLAS_ID, ESCOLAS_QTS};
+use consts::{CLEAR_RE, ENEM_ESCOLA, ENEM_NOTA, ESCOLA_IN_RES, ESCOLAS_ID, ESCOLAS_QTS};
 use data::DataSource;
 use dotenv::dotenv;
 use slint::Model;
 use tokio::sync::mpsc as tokio_mpsc;
-
-use crate::{data::DataItem, types::Source};
 
 slint::include_modules!();
 
@@ -150,9 +149,9 @@ fn get_grade(di: &DataItem) -> u32 {
     })
 }
 
-async fn step_two(
+async fn step_two_response(
     enem: &mut DataSource,
-    clusters: Vec<HashSet<String>>,
+    clusters: &[HashSet<String>],
     p_tx: &tokio_mpsc::Sender<f32>,
 ) -> Result<DataSource> {
     let mut response = DataSource::new(Source::Local("response".to_owned()))?;
@@ -299,6 +298,52 @@ async fn step_two(
     Ok(response)
 }
 
+async fn step_two_clusters(clusters: &[HashSet<String>]) -> Result<Vec<DataSource>> {
+    let mut exists = true;
+    let mut clusters_ds = Vec::with_capacity(clusters.len());
+    for i in 0..clusters.len() {
+        let cluster_ds = DataSource::new(Source::Local(format!("cluster_{}", i)))?;
+        exists = exists && cluster_ds.exists();
+        clusters_ds.push(cluster_ds);
+    }
+
+    if !exists {
+        for cluster_ds in clusters_ds.iter_mut() {
+            cluster_ds.delete()?;
+            cluster_ds.init().await?;
+            cluster_ds.write(true)?;
+        }
+
+        let mut escolas = get_escolas();
+        escolas.init().await?;
+
+        escolas
+            .foreach(|di| {
+                if let Some(id) = di.get::<_, String>(ESCOLAS_ID)
+                    && let Some(cluster_ds) = clusters
+                        .iter()
+                        .enumerate()
+                        .find(|(_, c)| c.contains(&id))
+                        .map(|(i, _)| &mut clusters_ds[i])
+                {
+                    cluster_ds.write_item(di)?;
+                }
+                Ok(true)
+            })
+            .await?;
+
+        for cluster_ds in clusters_ds.iter_mut() {
+            cluster_ds.write(false)?;
+        }
+    } else {
+        for cluster_ds in clusters_ds.iter_mut() {
+            cluster_ds.init().await?;
+        }
+    }
+
+    Ok(clusters_ds)
+}
+
 async fn exe_data_mining(
     pca_k: usize,
     kmpp: (usize, usize),
@@ -313,31 +358,43 @@ async fn exe_data_mining(
         step_one_enem(&mut enem),
         step_one_escola(&mut escolas, pca_k, kmpp, &p_tx)
     ) {
-        (Ok(mut enem), Ok(clusters)) => match step_two(&mut enem, clusters, &p_tx).await {
-            Ok(mut response) => {
-                let mut data = vec![];
-                match response
-                    .foreach(|di| {
-                        if let Some(vec) = di.to_vec() {
-                            let row = vec
-                                .iter()
-                                .map(|(_, cell)| cell.to_owned())
-                                .collect::<Vec<_>>();
-                            data.push(row);
-                        }
-                        Ok(true)
-                    })
-                    .await
-                {
-                    Ok(_) => match r_tx.send(data).await {
-                        Ok(_) => println!("Success"),
+        (Ok(mut enem), Ok(clusters)) => {
+            match tokio::join!(
+                step_two_response(&mut enem, &clusters, &p_tx),
+                step_two_clusters(&clusters),
+            ) {
+                (Ok(mut response), Ok(_)) => {
+                    let mut data = vec![];
+                    match response
+                        .foreach(|di| {
+                            if let Some(vec) = di.to_vec() {
+                                let row = vec
+                                    .iter()
+                                    .map(|(_, cell)| cell.to_owned())
+                                    .collect::<Vec<_>>();
+                                data.push(row);
+                            }
+                            Ok(true)
+                        })
+                        .await
+                    {
+                        Ok(_) => match r_tx.send(data).await {
+                            Ok(_) => println!("Success"),
+                            Err(err) => println!("{}", err),
+                        },
                         Err(err) => println!("{}", err),
-                    },
-                    Err(err) => println!("{}", err),
-                };
+                    };
+                }
+                (response, clusters) => {
+                    if let Err(err_response) = response {
+                        println!("{}", err_response);
+                    }
+                    if let Err(err_clusters) = clusters {
+                        println!("{}", err_clusters);
+                    }
+                }
             }
-            Err(err) => println!("{}", err),
-        },
+        }
         (enem, escolas) => {
             if let Err(err_enem) = enem {
                 println!("{}", err_enem);
@@ -413,14 +470,31 @@ fn main() -> Result<()> {
     });
 
     ui.on_download_response(move || {
-        if let Some(dest) = rfd::FileDialog::new()
-            .set_file_name("response.csv")
-            .add_filter("CSV Files", &["csv"])
-            .save_file()
+        let source = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join("response.csv");
+        if source.is_file()
+            && let Some(dest) = rfd::FileDialog::new()
+                .set_file_name("response.csv")
+                .add_filter("CSV Files", &["csv"])
+                .save_file()
         {
-            let source =
-                PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join("response.csv");
             fs::copy(&source, &dest).unwrap();
+        }
+    });
+
+    ui.on_download_clusters(move || {
+        let mut i = 0;
+        let mut name = format!("cluster_{}.csv", i);
+        let mut source = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join(&name);
+        while source.is_file()
+            && let Some(dest) = rfd::FileDialog::new()
+                .set_file_name(&name)
+                .add_filter("CSV Files", &["csv"])
+                .save_file()
+        {
+            fs::copy(&source, &dest).unwrap();
+            i += 1;
+            name = format!("cluster_{}.csv", i);
+            source = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap()).join(&name);
         }
     });
 
@@ -457,10 +531,11 @@ fn main() -> Result<()> {
         if let Some(dialog) = dialog_handle.upgrade() {
             let os_path = PathBuf::from(std::env::var("DATA_SOURCE_PATH").unwrap());
             let model = slint::VecModel::default();
+            let re = regex::Regex::new(CLEAR_RE).unwrap();
             for (f_name, _) in utils::dir_ls(os_path, Some("csv")).unwrap() {
                 let item = ClearItemStruct {
+                    checked: re.is_match(&f_name),
                     name: f_name.into(),
-                    checked: false,
                 };
                 model.push(item);
             }
