@@ -85,8 +85,10 @@ async fn step_one_escola(
     // Filter ESCOLAS data
     let mut escolas = escolas
         .filter(Some("s1_escolas_filter".to_string()), |di| {
-            if di.get::<_, u8>("TP_DEPENDENCIA").is_some_and(|v| v != 4) {
-                // Public schools
+            if di.get::<_, u8>("TP_DEPENDENCIA").is_some_and(|v| v != 4) // Public schools
+                && di.get::<_, u8>("IN_MED").is_some_and(|v| v == 1)
+            // Schools with highschool
+            {
                 Some(di)
             } else {
                 None
