@@ -1,0 +1,495 @@
+CLUSTER_CODE;CLUSTER_AVG_GRADE;ESCOLA_CODE;ESCOLA_AVG_GRADE;NO_REGIAO;NO_UF;NO_MUNICIPIO;NO_REGIAO_GEOG_INTERM;NO_REGIAO_GEOG_IMED;NO_MESORREGIAO;NO_MICRORREGIAO;NO_DISTRITO;NO_ENTIDADE;TP_DEPENDENCIA;TP_LOCALIZACAO;TP_LOCALIZACAO_DIFERENCIADA
+4;70;11017775;145;Norte;Rond�nia;Ouro Preto do Oeste;Ji-Paran�;Ji-Paran�;Leste Rondoniense;Ji-Paran�;Ouro Preto do Oeste;COLEGIO TIRADENTES DA POLICIA MILITAR - CTPM XII;2;1;0
+0;72;11039582;176;Norte;Rond�nia;Buritis;Porto Velho;Ariquemes;Madeira-Guapor�;Porto Velho;Buritis;EEEMTI MARECHAL RONDON;2;1;0
+0;72;11031964;154;Norte;Rond�nia;S�o Felipe D'Oeste;Ji-Paran�;Cacoal;Leste Rondoniense;Vilhena;S�o Felipe D'Oeste;EEEFM FELIPE CAMARAO;2;1;0
+4;70;12015334;144;Norte;Acre;Porto Acre;Rio Branco;Rio Branco;Vale do Acre;Rio Branco;Porto Acre;ESC EDMUNDO PINTO DE ALMEIDA NETO;2;2;0
+4;70;13026577;136;Norte;Amazonas;Manaus;Manaus;Manaus;Centro Amazonense;Manaus;Manaus;COLEGIO MILITAR DA POLICIA MILITAR DO AMAZONAS;2;1;0
+0;72;13096648;158;Norte;Amazonas;Presidente Figueiredo;Manaus;Manaus;Centro Amazonense;Rio Preto da Eva;Presidente Figueiredo;ESCOLA ESTADUAL DE BALBINA;2;2;0
+0;72;15170713;152;Norte;Par�;Abaetetuba;Bel�m;Abaetetuba;Nordeste Paraense;Camet�;Abaetetuba;ANEXO EE PROF BENVINDA DE ARAUJO PONTES - RIO ITACURUCA;2;2;3
+0;72;15104893;147;Norte;Par�;Altamira;Altamira;Altamira;Sudoeste Paraense;Altamira;Altamira;ESCOLA ESTADUAL PROFA DAIRCE PEDROSA TORRES;2;1;0
+4;70;15039153;126;Norte;Par�;Bel�m;Bel�m;Bel�m;Metropolitana de Bel�m;Bel�m;Bel�m;COLEGIO TENENTE REGO BARROS;1;1;0
+4;70;15039773;135;Norte;Par�;Bel�m;Bel�m;Bel�m;Metropolitana de Bel�m;Bel�m;Guam�;ESCOLA ESTADUAL SANTOS DUMONT;2;1;0
+0;72;15056791;178;Norte;Par�;Bragan�a;Castanhal;Bragan�a;Nordeste Paraense;Bragantina;Bragan�a;ESCOLA ESTADUAL MANOEL JULIAO GARCIA CASTANHO;2;1;0
+4;70;15045471;140;Norte;Par�;Castanhal;Castanhal;Castanhal;Metropolitana de Bel�m;Castanhal;Castanhal;ESCOLA ESTADUAL PADRE SALVADOR TRACCAIOLLI;2;1;0
+4;70;15046567;131;Norte;Par�;Castanhal;Castanhal;Castanhal;Metropolitana de Bel�m;Castanhal;Castanhal;ESCOLA ESTADUAL MARIA PIA DOS SANTOS AMARAL;2;1;0
+0;72;15111822;159;Norte;Par�;Itupiranga;Marab�;Marab�;Sudeste Paraense;Tucuru�;Itupiranga;ESCOLA ESTADUAL BRASIL TROPICAL;2;2;0
+4;70;15127079;133;Norte;Par�;Marab�;Marab�;Marab�;Sudeste Paraense;Marab�;Marab�;ESCOLA ESTADUAL O PEQUENO PRINCIPE;2;1;0
+4;70;15107035;125;Norte;Par�;Medicil�ndia;Altamira;Altamira;Sudoeste Paraense;Altamira;Medicil�ndia;ESCOLA ESTADUAL FRANCISCA GOMES DOS SANTOS;2;1;0
+0;72;15169065;171;Norte;Par�;Monte Alegre;Santar�m;Santar�m;Baixo Amazonas;Santar�m;Monte Alegre;ANEXO EE FRANCISCO NOBRE DE ALMEIDA - PA 245 KM 11;2;2;0
+0;72;16001192;173;Norte;Amap�;Serra do Navio;Oiapoque - Porto Grande;Porto Grande;Sul do Amap�;Macap�;Serra do Navio;ESC EST DR HERMELINO HERBSTER GUSMAO;2;1;0
+4;70;16009606;125;Norte;Amap�;Macap�;Macap�;Macap�;Sul do Amap�;Macap�;Macap�;ESC EST PROF ANTONIO MESSIAS G DA SILVA;2;1;0
+0;72;16005783;148;Norte;Amap�;Mazag�o;Macap�;Macap�;Sul do Amap�;Mazag�o;Carv�o;ESC EST FAGUNDES VARELA;2;2;8
+0;72;16005414;166;Norte;Amap�;Mazag�o;Macap�;Macap�;Sul do Amap�;Mazag�o;Mazag�o Velho;ESC EST PROF� ANTONIA SILVA SANTOS;2;2;0
+0;72;17004985;152;Norte;Tocantins;Aragua�na;Aragua�na;Aragua�na;Ocidental do Tocantins;Aragua�na;Aragua�na;CENTRO DE ENSINO MEDIO BENJAMIM JOSE DE ALMEIDA;2;1;0
+0;72;17039436;175;Norte;Tocantins;Taboc�o;Aragua�na;Guara�;Ocidental do Tocantins;Miracema do Tocantins;Taboc�o;ESCOLA ESTADUAL GIRASSOL DE TEMPO INTEGRAL MAJOR JUVENAL PEREIRA DE SOUZA;2;1;0
+0;72;17048826;163;Norte;Tocantins;Ja� do Tocantins;Gurupi;Gurupi;Ocidental do Tocantins;Gurupi;Ja� do Tocantins;COLEGIO ESTADUAL ADELAIDE FRANCISCO SOARES;2;1;0
+4;70;17014654;131;Norte;Tocantins;Miracema do Tocantins;Palmas;Miracema do Tocantins;Ocidental do Tocantins;Miracema do Tocantins;Miracema do Tocantins;COLEGIO TOCANTINS;2;1;0
+0;72;17019095;185;Norte;Tocantins;Nova Rosal�ndia;Palmas;Para�so do Tocantins;Ocidental do Tocantins;Rio Formoso;Nova Rosal�ndia;COLEGIO ESTADUAL VEREADOR PEDRO XAVIER TEIXEIRA;2;1;0
+4;70;17016231;123;Norte;Tocantins;Colm�ia;Aragua�na;Guara�;Ocidental do Tocantins;Miracema do Tocantins;Colm�ia;COL EST SERRA DAS CORDILHEIRAS;2;1;0
+4;70;17024960;155;Norte;Tocantins;Porto Nacional;Palmas;Porto Nacional;Oriental do Tocantins;Porto Nacional;Porto Nacional;COLEGIO ESTADUAL MARECHAL ARTUR DA COSTA E SILVA;2;1;0
+4;70;17003440;165;Norte;Tocantins;Sampaio;Aragua�na;Araguatins;Ocidental do Tocantins;Bico do Papagaio;Sampaio;ESCOLA ESTADUAL SAMPAIO;2;1;0
+0;72;21001685;148;Nordeste;Maranh�o;Bacuri;S�o Lu�s;Cururupu;Norte Maranhense;Litoral Ocidental Maranhense;Bacuri;CENTRO DE ENSINO AMERICA DO NORTE;2;1;0
+4;70;21160058;148;Nordeste;Maranh�o;Caxias;Caxias;Caxias;Leste Maranhense;Caxias;Caxias;COLEGIO MILITAR TIRADENTES IV - CAXIAS;2;1;0
+0;72;21258236;163;Nordeste;Maranh�o;Lago dos Rodrigues;Santa In�s - Bacabal;Pedreiras;Centro Maranhense;M�dio Mearim;Lago dos Rodrigues;CENTRO DE ENSINO HOSANO GOMES FERREIRA - ANEXO I - SAO JOAO DA MATA;2;2;0
+0;72;21275092;166;Nordeste;Maranh�o;Mat�es;Caxias;Timon;Leste Maranhense;Caxias;Mat�es;CENTRO DE ENSINO JOAO PAULO I - ANEXO I - SANTO ANTONIO;2;2;0
+4;70;21428204;170;Nordeste;Maranh�o;Olho d'�gua das Cunh�s;Santa In�s - Bacabal;Bacabal;Centro Maranhense;M�dio Mearim;Olho d'�gua das Cunh�s;CENTRO DE ENSINO JOSE DE MATOS OLIVEIRA - ANEXO I - CENTRO DO JOSE RODRIGUES;2;2;0
+0;72;21283290;153;Nordeste;Maranh�o;Presidente Dutra;Presidente Dutra;Presidente Dutra;Centro Maranhense;Presidente Dutra;Presidente Dutra;IFMA - CAMPUS PRESIDENTE DUTRA;1;2;0
+0;72;21213593;156;Nordeste;Maranh�o;S�o Lu�s;S�o Lu�s;S�o Lu�s;Norte Maranhense;Aglomera��o Urbana de S�o Lu�s;S�o Lu�s;CENTRO EDUCA MAIS PROFESSOR IGNACIO RANGEL;2;1;0
+4;70;22061754;138;Nordeste;Piau�;Bom Jesus;Corrente - Bom Jesus;Bom Jesus;Sudoeste Piauiense;Alto M�dio Gurgu�ia;Bom Jesus;UFPI - COLEGIO TECNICO DE BOM JESUS;1;1;0
+0;72;22135782;151;Nordeste;Piau�;Caxing�;Parna�ba;Parna�ba;Norte Piauiense;Litoral Piauiense;Caxing�;CETI PROF MARIA DO SOCORRO SAMPAIO MARTINS;2;1;0
+4;70;22043853;143;Nordeste;Piau�;Jardim do Mulato;Teresina;Amarante - �gua Branca - Regenera��o;Centro-Norte Piauiense;M�dio Parna�ba Piauiense;Jardim do Mulato;CETI JOSE BORBA DE CARVALHO;2;1;0
+4;70;22005242;156;Nordeste;Piau�;Joaquim Pires;Parna�ba;Esperantina;Norte Piauiense;Baixo Parna�ba Piauiense;Joaquim Pires;CETI DOROTEU SERTAO;2;1;0
+0;72;22132597;173;Nordeste;Piau�;Lagoa de S�o Francisco;Parna�ba;Piripiri;Centro-Norte Piauiense;Campo Maior;Lagoa de S�o Francisco;CETI ARTUR GONCALVES DE SOUSA;2;1;0
+0;72;22095500;166;Nordeste;Piau�;Patos do Piau�;Picos;Paulistana;Sudeste Piauiense;Alto M�dio Canind�;Patos do Piau�;CETI REUNIDA DE PATOS;2;1;0
+0;72;22050027;178;Nordeste;Piau�;Santa Cruz dos Milagres;Teresina;Valen�a do Piau�;Centro-Norte Piauiense;Valen�a do Piau�;Santa Cruz dos Milagres;CETI EUSTAQUIO PORTELA;2;1;0
+0;72;22135731;193;Nordeste;Piau�;S�o Jo�o do Piau�;S�o Raimundo Nonato;S�o Jo�o do Piau�;Sudeste Piauiense;Alto M�dio Canind�;S�o Jo�o do Piau�;U E AGENOR DA SILVA;2;2;1
+0;72;22141170;215;Nordeste;Piau�;S�o Louren�o do Piau�;S�o Raimundo Nonato;S�o Raimundo Nonato;Sudoeste Piauiense;S�o Raimundo Nonato;S�o Louren�o do Piau�;ESCOLA FAMILIA AGRICOLA SERRA DA CAPIVARA;2;1;0
+2;92;22027726;155;Nordeste;Piau�;Teresina;Teresina;Teresina;Centro-Norte Piauiense;Teresina;Teresina;CETI DESEMBARGADOR HENRIQUE COUTO;2;1;0
+4;70;22127275;130;Nordeste;Piau�;Vila Nova do Piau�;Picos;Picos;Sudeste Piauiense;Alto M�dio Canind�;Vila Nova do Piau�;CETI LUIZ UBIRACI DE CARVALHO;2;1;0
+0;72;23061693;156;Nordeste;Cear�;Aquiraz;Fortaleza;Fortaleza;Metropolitana de Fortaleza;Fortaleza;Jaca�na;EEMTI CORONEL OSVALDO STUDART;2;1;0
+0;72;23156201;153;Nordeste;Cear�;Cariria�u;Juazeiro do Norte;Juazeiro do Norte;Sul Cearense;Cariria�u;Cariria�u;EEMTI SAO PEDRO;2;1;0
+4;70;23264675;124;Nordeste;Cear�;Caucaia;Fortaleza;Fortaleza;Metropolitana de Fortaleza;Fortaleza;Caucaia;EEMTI PROFESSORA IRACI PEREIRA DE ALCANTARA;2;1;0
+2;92;23564229;154;Nordeste;Cear�;Crate�s;Crate�s;Crate�s;Sert�es Cearenses;Sert�o de Crat�us;Crate�s;IFCE - CAMPUS CRATEUS;1;1;0
+0;72;23068183;177;Nordeste;Cear�;Fortaleza;Fortaleza;Fortaleza;Metropolitana de Fortaleza;Fortaleza;Fortaleza;EEMTI PROFESSOR EDMILSON GUIMARAES DE ALMEIDA;2;1;0
+0;72;23069171;150;Nordeste;Cear�;Fortaleza;Fortaleza;Fortaleza;Metropolitana de Fortaleza;Fortaleza;Fortaleza;EEFM SANTA LUZIA;2;1;0
+4;70;23165278;140;Nordeste;Cear�;Juazeiro do Norte;Juazeiro do Norte;Juazeiro do Norte;Sul Cearense;Cariri;Juazeiro do Norte;COLEGIO DA POLICIA MILITAR DO CEARA CORONEL HERVANO MACEDO JUNIOR;2;1;0
+2;92;23533986;157;Nordeste;Cear�;Limoeiro do Norte;Quixad�;Russas - Limoeiro do Norte;Jaguaribe;Baixo Jaguaribe;Limoeiro do Norte;IFCE - CAMPUS LIMOEIRO DO NORTE;1;1;0
+0;72;24064238;186;Nordeste;Rio Grande do Norte;�gua Nova;Mossor�;Pau dos Ferros;Oeste Potiguar;Serra de S�o Miguel;�gua Nova;ESCOLA ESTADUAL PROFESSOR PEDRO RAIMUNDO DO NASCIMENTO;2;1;0
+0;72;24080578;163;Nordeste;Rio Grande do Norte;Apodi;Mossor�;Mossor�;Oeste Potiguar;Chapada do Apodi;Apodi;ESCOLA ESTADUAL VALDEMIRO PEDRO VIANA;2;2;0
+0;72;24023302;149;Nordeste;Rio Grande do Norte;Martins;Mossor�;Pau dos Ferros;Oeste Potiguar;Umarizal;Martins;ESCOLA ESTADUAL DOUTOR JOAQUIM INACIO ENSINO MEDIO EM TEMPO INTEGRAL;2;1;0
+4;70;24001902;157;Nordeste;Rio Grande do Norte;Mossor�;Mossor�;Mossor�;Oeste Potiguar;Mossor�;Mossor�;ESCOLA ESTADUAL GILBERTO ROLA;2;2;1
+0;72;24002224;163;Nordeste;Rio Grande do Norte;Mossor�;Mossor�;Mossor�;Oeste Potiguar;Mossor�;Mossor�;ESCOLA ESTADUAL FRANCISCO ANTONIO MEDEIROS;2;1;0
+4;70;24002410;139;Nordeste;Rio Grande do Norte;Mossor�;Mossor�;Mossor�;Oeste Potiguar;Mossor�;Mossor�;ESCOLA ESTADUAL PROFESSOR JOSE NOGUEIRA;2;1;0
+0;72;24057606;232;Nordeste;Rio Grande do Norte;Natal;Natal;Natal;Leste Potiguar;Natal;Natal;ESCOLA ESTADUAL BELEM CAMARA;2;1;0
+0;72;24058386;151;Nordeste;Rio Grande do Norte;Natal;Natal;Natal;Leste Potiguar;Natal;Natal;ESCOLA ESTADUAL PROFESSOR LUIS ANTONIO;2;1;0
+0;72;24018716;160;Nordeste;Rio Grande do Norte;Pil�es;Mossor�;Pau dos Ferros;Oeste Potiguar;Pau dos Ferros;Pil�es;ESCOLA ESTADUAL DESEMBARGADOR SINVAL MOREIRA DIAS;2;1;0
+0;72;25051598;166;Nordeste;Para�ba;Alcantil;Campina Grande;Campina Grande;Borborema;Cariri Oriental;Alcantil;ECIT PROFESSORA MARIA CECILIA DE CASTRO;2;1;0
+0;72;25020374;232;Nordeste;Para�ba;Areia de Bara�nas;Patos;Patos;Sert�o Paraibano;Patos;Areia de Bara�nas;ECI CLOVIS SATIRO;2;1;0
+0;72;25050427;153;Nordeste;Para�ba;Assun��o;Campina Grande;Campina Grande;Borborema;Cariri Ocidental;Assun��o;ECI JOAO ROGERIO DIAS TOLEDO;2;1;0
+2;92;25064894;197;Nordeste;Para�ba;Bananeiras;Jo�o Pessoa;Guarabira;Agreste Paraibano;Brejo Paraibano;Bananeiras;ECIT JOSE ROCHA SOBRINHO;2;1;0
+0;72;25091000;175;Nordeste;Para�ba;Bayeux;Jo�o Pessoa;Jo�o Pessoa;Mata Paraibana;Jo�o Pessoa;Bayeux;EEEFM TANCREDO NEVES;2;1;0
+0;72;25067133;156;Nordeste;Para�ba;Bel�m;Jo�o Pessoa;Guarabira;Agreste Paraibano;Guarabira;Bel�m;ECIT ENGENHEIRA MARCIA GUEDES ALCOFORADO DE CARVALHO;2;1;0
+0;72;25000047;189;Nordeste;Para�ba;Bel�m do Brejo do Cruz;Patos;Catol� do Rocha - S�o Bento;Sert�o Paraibano;Catol� do Rocha;Bel�m do Brejo do Cruz;ECI NOSSA SENHORA DA CONCEICAO;2;1;0
+2;92;25008978;165;Nordeste;Para�ba;Cajazeiras;Sousa - Cajazeiras;Cajazeiras;Sert�o Paraibano;Cajazeiras;Cajazeiras;IFPB - CAMPUS CAJAZEIRAS;1;1;0
+0;72;25029789;155;Nordeste;Para�ba;Diamante;Patos;Itaporanga;Sert�o Paraibano;Itaporanga;Diamante;ECIT PROFESSORA ADILINA DE SOUZA DINIZ;2;1;0
+0;72;25094408;197;Nordeste;Para�ba;Jo�o Pessoa;Jo�o Pessoa;Jo�o Pessoa;Mata Paraibana;Jo�o Pessoa;Jo�o Pessoa;EEEFM DESEMBARGADOR BOTO DE MENEZES;2;1;0
+0;72;25046764;149;Nordeste;Para�ba;Ouro Velho;Campina Grande;Monteiro;Borborema;Cariri Ocidental;Ouro Velho;ECI NOSSA SENHORA DAS GRACAS;2;1;0
+0;72;25153200;160;Nordeste;Para�ba;Pedra Lavrada;Campina Grande;Cuit� - Nova Floresta;Borborema;Serid� Oriental Paraibano;Pedra Lavrada;EEEM MATILDES DE MELO BURITI;2;2;0
+0;72;25057820;181;Nordeste;Para�ba;Rem�gio;Campina Grande;Campina Grande;Agreste Paraibano;Curimata� Ocidental;Rem�gio;ECIT JOSE BRONZEADO SOBRINHO;2;1;0
+0;72;25051660;163;Nordeste;Para�ba;Riacho de Santo Ant�nio;Campina Grande;Campina Grande;Borborema;Cariri Oriental;Riacho de Santo Ant�nio;ECI ANA FERREIRA DA COSTA;2;1;0
+0;72;25012932;153;Nordeste;Para�ba;Joca Claudino;Sousa - Cajazeiras;Sousa;Sert�o Paraibano;Cajazeiras;Joca Claudino;ECI SAO JOSE OPERARIO;2;1;0
+0;72;26001896;165;Nordeste;Pernambuco;Araripina;Petrolina;Araripina;Sert�o Pernambucano;Araripina;Bom Jardim do Araripe;ESCOLA VITALINA MARIA DE JESUS;2;1;0
+4;70;26051176;132;Nordeste;Pernambuco;Bezerros;Caruaru;Caruaru;Agreste Pernambucano;Vale do Ipojuca;Bezerros;ESCOLA DE REFERENCIA EM ENSINO FUNDAMENTAL E ENSINO MEDIO EURICO QUEIROZ;2;1;0
+4;70;26088282;126;Nordeste;Pernambuco;Carpina;Recife;Carpina;Mata Pernambucana;Mata Setentrional Pernambucana;Carpina;ESCOLA DE REFERENCIA EM ENSINO MEDIO JOAQUIM OLAVO;2;1;0
+2;92;26525798;162;Nordeste;Pernambuco;Goiana;Recife;Goiana � Timba�ba;Mata Pernambucana;Mata Setentrional Pernambucana;Goiana;ESCOLA TECNICA ESTADUAL ADERICO ALVES DE VASCONCELOS;2;1;0
+0;72;26042479;173;Nordeste;Pernambuco;Jatob�;Serra Talhada;Serra Talhada;S�o Francisco Pernambucano;Itaparica;Jatob�;ESCOLA PANKARARUS;2;2;2
+4;70;26077825;138;Nordeste;Pernambuco;Jupi;Caruaru;Garanhuns;Agreste Pernambucano;Garanhuns;Jupi;ESCOLA DE REFERENCIA EM ENSINO MEDIO SEBASTIAO TIAGO DE OLIVEIRA;2;1;0
+0;72;26116324;151;Nordeste;Pernambuco;Paulista;Recife;Recife;Metropolitana de Recife;Recife;Paulista;ESCOLA DE REFERENCIA EM ENSINO MEDIO PROFESSOR ARNALDO CARNEIRO LEAO;2;1;0
+4;70;26036177;165;Nordeste;Pernambuco;Petrolina;Petrolina;Petrolina;S�o Francisco Pernambucano;Petrolina;Petrolina;ESCOLA NUCLEO DE MORADORES - 6;2;2;0
+4;70;26036193;154;Nordeste;Pernambuco;Petrolina;Petrolina;Petrolina;S�o Francisco Pernambucano;Petrolina;Petrolina;ESCOLA NUCLEO DE MORADORES-7;2;2;0
+0;72;26124297;147;Nordeste;Pernambuco;Recife;Recife;Recife;Metropolitana de Recife;Recife;Recife;COLEGIO DE APLICACAO DO CE DA UFPE;1;1;0
+4;70;26139618;147;Nordeste;Pernambuco;Recife;Recife;Recife;Metropolitana de Recife;Recife;Recife;COLEGIO MILITAR DO RECIFE;1;1;0
+0;72;26024616;162;Nordeste;Pernambuco;Tuparetama;Serra Talhada;Afogados da Ingazeira;Sert�o Pernambucano;Paje�;Santa Rita;ESCOLA MUNICIPAL ANCHIETA TORRES;3;2;0
+4;70;27051528;154;Nordeste;Alagoas;Arapiraca;Arapiraca;Arapiraca;Agreste Alagoano;Arapiraca;Arapiraca;COLEGIO DA POLICIA MILITAR TIRADENTES - UNIDADE AGRESTE;2;1;0
+0;72;27001407;194;Nordeste;Alagoas;Inhapi;Arapiraca;Delmiro Gouveia;Sert�o Alagoano;Serrana do Sert�o Alagoano;Inhapi;ESCOLA ESTADUAL RUBENS NUNES DE OLIVEIRA;2;1;0
+4;70;27037037;150;Nordeste;Alagoas;Macei�;Macei�;Macei�;Leste Alagoano;Macei�;Macei�;ESCOLA ESTADUAL PROFESSOR THEONILO GAMA;2;1;0
+4;70;27038734;165;Nordeste;Alagoas;Macei�;Macei�;Macei�;Leste Alagoano;Macei�;Macei�;ESC ESTADUAL PROF EDMILSON DE VASCONCELOS PONTES;2;1;0
+4;70;28015622;137;Nordeste;Sergipe;Pacatuba;Aracaju;Propri�;Leste Sergipano;Japaratuba;Pacatuba;CENTRO DE EXCELENCIA DR LEANDRO MACIEL;2;1;0
+0;72;28003055;150;Nordeste;Sergipe;Porto da Folha;Itabaiana;Nossa Senhora da Gl�ria;Sert�o Sergipano;Sergipana do Sert�o do S�o Francisco;Porto da Folha;CENTRO DE EXCELENCIA QUILOMBOLA 27 DE MAIO;2;2;3
+0;72;28040201;147;Nordeste;Sergipe;Salgado;Itabaiana;Lagarto;Leste Sergipano;Boquim;Salgado;CENTRO DE EXCELENCIA DEPUTADO JOALDO VIEIRA BARBOSA;2;1;0
+4;70;28021142;125;Nordeste;Sergipe;S�o Crist�v�o;Aracaju;Aracaju;Leste Sergipano;Aracaju;S�o Crist�v�o;COLEGIO ESTADUAL PROF GLORITA PORTUGAL;2;1;0
+0;72;29139155;155;Nordeste;Bahia;Concei��o do Coit�;Feira de Santana;Concei��o do Coit�;Nordeste Baiano;Serrinha;Aroeira;COLEGIO ESTADUAL DO CAMPO DUQUE DE CAXIAS;2;2;0
+2;92;29468744;166;Nordeste;Bahia;Euclides da Cunha;Paulo Afonso;Euclides da Cunha;Nordeste Baiano;Euclides da Cunha;Euclides da Cunha;IFBA - CAMPUS EUCLIDES DA CUNHA;1;1;0
+4;70;29097541;166;Nordeste;Bahia;Feira de Santana;Feira de Santana;Feira de Santana;Centro Norte Baiano;Feira de Santana;Tiquaru�u;COLEGIO ESTADUAL DO CAMPO ITAN GUIMARAES CERQUEIRA POVOADO DE SANTA QUITERIA;2;2;0
+2;92;29397987;161;Nordeste;Bahia;Jequi�;Vit�ria da Conquista;Jequi�;Centro Sul Baiano;Jequi�;Jequi�;IFBA - CAMPUS JEQUIE;1;1;0
+0;72;29475830;194;Nordeste;Bahia;Lauro de Freitas;Salvador;Salvador;Metropolitana de Salvador;Salvador;Lauro de Freitas;IFBA - CAMPUS LAURO DE FREITAS;1;1;0
+0;72;29423708;148;Nordeste;Bahia;Rodelas;Paulo Afonso;Paulo Afonso;Vale S�o-Franciscano da Bahia;Paulo Afonso;Rodelas;COLEGIO ESTADUAL INDIGENA CAPITAO FRANCISCO RODELAS;2;2;2
+4;70;29182239;157;Nordeste;Bahia;Salvador;Salvador;Salvador;Metropolitana de Salvador;Salvador;Salvador;COLEGIO ESTADUAL PEDRO CALMON;2;1;0
+4;70;29182395;165;Nordeste;Bahia;Salvador;Salvador;Salvador;Metropolitana de Salvador;Salvador;Salvador;COLEGIO MILITAR DE SALVADOR;1;1;0
+4;70;29193567;138;Nordeste;Bahia;Salvador;Salvador;Salvador;Metropolitana de Salvador;Salvador;Salvador;COLEGIO ESTADUAL MARIA AMELIA SANTOS;2;1;0
+0;72;31205613;187;Sudeste;Minas Gerais;Cachoeira de Paje�;Te�filo Otoni;Pedra Azul;Jequitinhonha;Pedra Azul;�guas Altas;EE DO POVOADO DE AGUAS ALTAS;2;1;0
+0;72;31166651;157;Sudeste;Minas Gerais;Araguari;Uberl�ndia;Uberl�ndia;Tri�ngulo Mineiro/Alto Parana�ba;Uberl�ndia;Araguari;EE ISOLINA FRANCA SOARES TORRES;2;1;0
+2;92;31030947;190;Sudeste;Minas Gerais;Arcos;Divin�polis;Formiga;Oeste de Minas;Formiga;Arcos;IFMG - CAMPUS AVANCADO ARCOS;1;1;0
+0;72;31015334;155;Sudeste;Minas Gerais;Barroso;Barbacena;Barbacena;Campo das Vertentes;Barbacena;Barroso;EE CONEGO LUIZ GIAROLA CARLOS;2;1;0
+4;70;31001368;130;Sudeste;Minas Gerais;Belo Horizonte;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Belo Horizonte;COLEGIO TIRADENTES PMMG - UNIDADE ARGENTINO MADEIRA;2;1;0
+4;70;31002356;124;Sudeste;Minas Gerais;Belo Horizonte;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Belo Horizonte;EE DEPUTADO ALVARO SALLES;2;1;0
+4;70;31291030;125;Sudeste;Minas Gerais;Belo Horizonte;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Belo Horizonte;COLEGIO MILITAR DE BELO HORIZONTE;1;1;0
+4;70;31307696;152;Sudeste;Minas Gerais;Belo Horizonte;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Belo Horizonte;COLEGIO TIRADENTES PMMG GAMELEIRA;2;1;0
+0;72;31002330;189;Sudeste;Minas Gerais;Belo Horizonte;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Venda Nova;EE SIRIA MARQUES DA SILVA;2;1;0
+0;72;31002551;154;Sudeste;Minas Gerais;Belo Horizonte;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Venda Nova;EE MARGARIDA DE MELLO PRADO;2;1;0
+0;72;31007889;205;Sudeste;Minas Gerais;Betim;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Betim;EE SARAH KUBITSCHEK;2;1;0
+4;70;31321061;173;Sudeste;Minas Gerais;Betim;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Betim;COLEGIO TIRADENTES PMMG;2;1;0
+4;70;31108669;124;Sudeste;Minas Gerais;Brasil�ndia de Minas;Patos de Minas;Patos de Minas;Noroeste de Minas;Paracatu;Brasil�ndia de Minas;EE DOUTOR JOSE PACHECO PIMENTA;2;1;0
+0;72;31214981;151;Sudeste;Minas Gerais;Bras�lia de Minas;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Angicos de Minas;EE FRANCISCO XAVIER ANTUNES;2;2;0
+0;72;31054607;173;Sudeste;Minas Gerais;Cachoeira de Minas;Pouso Alegre;Pouso Alegre;Sul/Sudoeste de Minas;Santa Rita do Sapuca�;Cachoeira de Minas;EE CONEGO JOSE EUGENIO DE FARIA;2;1;0
+4;70;31008338;125;Sudeste;Minas Gerais;Caet�;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Caet�;EE JOSE BRANDAO;2;1;0
+0;72;31019780;217;Sudeste;Minas Gerais;Caratinga;Ipatinga;Caratinga;Vale do Rio Doce;Caratinga;Santa Luzia de Caratinga;EE PROFESSORA MARIA FONTES;2;1;0
+0;72;31019828;151;Sudeste;Minas Gerais;Caratinga;Ipatinga;Caratinga;Vale do Rio Doce;Caratinga;Santo Ant�nio do Manhua�u;EE ANTONIO PENNA SOBRINHO;2;1;0
+0;72;31171999;165;Sudeste;Minas Gerais;Carvalh�polis;Varginha;Alfenas;Sul/Sudoeste de Minas;Alfenas;Carvalh�polis;EE JOAO DE PAULA CAPRONI;2;1;0
+0;72;31042021;148;Sudeste;Minas Gerais;Central de Minas;Governador Valadares;Mantena;Vale do Rio Doce;Mantena;Central de Minas;EE PRESIDENTE TANCREDO NEVES;2;1;0
+0;72;31032883;180;Sudeste;Minas Gerais;Cl�udio;Divin�polis;Divin�polis;Oeste de Minas;Divin�polis;Monsenhor Jo�o Alexandre;EE CUSTODIO COSTA;2;1;0
+0;72;31193551;151;Sudeste;Minas Gerais;Conselheiro Lafaiete;Barbacena;Conselheiro Lafaiete;Metropolitana de Belo Horizonte;Conselheiro Lafaiete;Conselheiro Lafaiete;EE AUGUSTO JOSE VIEIRA;2;1;0
+0;72;31193666;217;Sudeste;Minas Gerais;Conselheiro Lafaiete;Barbacena;Conselheiro Lafaiete;Metropolitana de Belo Horizonte;Conselheiro Lafaiete;Conselheiro Lafaiete;EE MONSENHOR HORTA;2;1;0
+4;70;31212652;163;Sudeste;Minas Gerais;Contagem;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Contagem;EE VINICIUS DE MORAES;2;1;0
+0;72;31014281;169;Sudeste;Minas Gerais;Contagem;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Parque Industrial;IEC-UNIDADE CRUZEIRO DO SUL;3;1;0
+0;72;31172375;210;Sudeste;Minas Gerais;Cordisl�ndia;Varginha;Varginha;Sul/Sudoeste de Minas;Santa Rita do Sapuca�;Cordisl�ndia;EE PROFESSORA CELINA DE REZENDE VILELA;2;1;0
+0;72;31190802;163;Sudeste;Minas Gerais;Coronel Fabriciano;Ipatinga;Ipatinga;Vale do Rio Doce;Ipatinga;Coronel Fabriciano;EE ALBERTO GIOVANNINI;2;1;0
+0;72;31133949;176;Sudeste;Minas Gerais;Coronel Xavier Chaves;Barbacena;S�o Jo�o del Rei;Campo das Vertentes;S�o Jo�o Del Rei;Coronel Xavier Chaves;EE CORONEL XAVIER CHAVES;2;1;0
+0;72;31351067;192;Sudeste;Minas Gerais;Crist�lia;Montes Claros;Montes Claros;Norte de Minas;Gr�o Mogol;Crist�lia;EE DE ENSINO FUNDAMENTAL E MEDIO;2;2;0
+0;72;31368288;154;Sudeste;Minas Gerais;Curvelo;Belo Horizonte;Curvelo;Central Mineira;Curvelo;Curvelo;COLEGIO TIRADENTES PMMG - UNIDADE CURVELO;2;1;0
+0;72;31055000;156;Sudeste;Minas Gerais;Delfim Moreira;Pouso Alegre;Itajub�;Sul/Sudoeste de Minas;Itajub�;Delfim Moreira;EE MARQUES DE SAPUCAI;2;1;0
+0;72;31106101;147;Sudeste;Minas Gerais;Diogo de Vasconcelos;Ju�z de Fora;Ponte Nova;Metropolitana de Belo Horizonte;Ouro Preto;Diogo de Vasconcelos;EE CORONEL NICOLAU SAMPAIO;2;1;0
+0;72;31108375;148;Sudeste;Minas Gerais;Dom Bosco;Patos de Minas;Una�;Noroeste de Minas;Una�;Dom Bosco;EE DOM BOSCO;2;1;0
+0;72;31055042;158;Sudeste;Minas Gerais;Esp�rito Santo do Dourado;Pouso Alegre;Pouso Alegre;Sul/Sudoeste de Minas;Pouso Alegre;Esp�rito Santo do Dourado;EE DOM FRANCISCO SILVA;2;1;0
+0;72;31068292;240;Sudeste;Minas Gerais;Ewbank da C�mara;Ju�z de Fora;Juiz de Fora;Zona da Mata;Juiz de Fora;Ewbank da C�mara;EE ANTONIO MACEDO;2;1;0
+0;72;31147249;175;Sudeste;Minas Gerais;Francisc�polis;Te�filo Otoni;Te�filo Otoni;Vale do Mucuri;Te�filo Otoni;Francisc�polis;EE MARIA DA SILVA ROCHA;2;1;0
+0;72;31043125;173;Sudeste;Minas Gerais;Governador Valadares;Governador Valadares;Governador Valadares;Vale do Rio Doce;Governador Valadares;Governador Valadares;EE LABOR CLUB;2;1;0
+4;70;31043371;130;Sudeste;Minas Gerais;Governador Valadares;Governador Valadares;Governador Valadares;Vale do Rio Doce;Governador Valadares;Governador Valadares;COLEGIO TIRADENTES PMMG;2;1;0
+2;92;31347701;199;Sudeste;Minas Gerais;Governador Valadares;Governador Valadares;Governador Valadares;Vale do Rio Doce;Governador Valadares;Governador Valadares;IFMG - CAMPUS GOVERNADOR VALADARES;1;1;0
+0;72;31080411;164;Sudeste;Minas Gerais;Gr�o Mogol;Montes Claros;Montes Claros;Norte de Minas;Gr�o Mogol;Gr�o Mogol;EE PROFESSOR BICALHO;2;1;0
+0;72;31181137;152;Sudeste;Minas Gerais;Guidoval;Ju�z de Fora;Ub�;Zona da Mata;Ub�;Guidoval;EE MARIANA DE PAIVA;2;1;0
+0;72;31134007;166;Sudeste;Minas Gerais;Ibituruna;Varginha;Lavras;Oeste de Minas;Oliveira;Ibituruna;EE PROFESSOR JULIO BUENO;2;1;0
+0;72;31063266;163;Sudeste;Minas Gerais;Icara� de Minas;Montes Claros;S�o Francisco;Norte de Minas;Janu�ria;Icara� de Minas;EE LIDIA VIEIRA GUIMARAES;2;2;0
+0;72;31191264;175;Sudeste;Minas Gerais;Ipatinga;Ipatinga;Ipatinga;Vale do Rio Doce;Ipatinga;Ipatinga;EE MANOELA SOARES BICALHO;2;1;0
+4;70;31217310;152;Sudeste;Minas Gerais;Ipatinga;Ipatinga;Ipatinga;Vale do Rio Doce;Ipatinga;Ipatinga;EE NILZA LUZIA DE SOUZA BUTTA;2;1;0
+4;70;31043737;139;Sudeste;Minas Gerais;Itabirinha;Governador Valadares;Mantena;Vale do Rio Doce;Mantena;Itabirinha;EE GOVERNADOR LACERDA DE AGUIAR;2;1;0
+4;70;31146731;138;Sudeste;Minas Gerais;Itaip�;Te�filo Otoni;Te�filo Otoni;Vale do Mucuri;Te�filo Otoni;Itaip�;EE CORONEL CLEMENTE LUIZ;2;1;0
+0;72;31024228;188;Sudeste;Minas Gerais;Itamarandiba;Te�filo Otoni;Capelinha;Jequitinhonha;Capelinha;Itamarandiba;EE MESTRE JOAO SILVERIO;2;1;0
+0;72;31305324;164;Sudeste;Minas Gerais;Itamarati de Minas;Ju�z de Fora;Cataguases;Zona da Mata;Cataguases;Itamarati de Minas;EE ISA MORAES FREITAS;2;1;0
+0;72;31196576;204;Sudeste;Minas Gerais;Ituiutaba;Uberl�ndia;Ituiutaba;Tri�ngulo Mineiro/Alto Parana�ba;Ituiutaba;Ituiutaba;EE ARTHUR JUNQUEIRA DE ALMEIDA;2;1;0
+0;72;31338680;200;Sudeste;Minas Gerais;Jana�ba;Montes Claros;Jana�ba;Norte de Minas;Jana�ba;Quem-Quem;EE DOUTOR JOSE ESTEVES RODRIGUES;2;1;0
+0;72;31062511;149;Sudeste;Minas Gerais;Janu�ria;Montes Claros;Janu�ria;Norte de Minas;Janu�ria;Brejo do Amparo;EE CONEGO RAMIRO LEITE;2;1;3
+0;72;31172961;150;Sudeste;Minas Gerais;Jesu�nia;Pouso Alegre;S�o Louren�o;Sul/Sudoeste de Minas;S�o Louren�o;Jesu�nia;EE JOAO DE ALMEIDA LISBOA;2;1;0
+0;72;31068691;198;Sudeste;Minas Gerais;Juiz de Fora;Ju�z de Fora;Juiz de Fora;Zona da Mata;Juiz de Fora;Juiz de Fora;EE MARIA DE MAGALHAES PINTO;2;1;0
+0;72;31068802;214;Sudeste;Minas Gerais;Juiz de Fora;Ju�z de Fora;Juiz de Fora;Zona da Mata;Juiz de Fora;Juiz de Fora;EE PROFESSOR JOSE SAINT CLAIR M ALVES;2;1;0
+0;72;31294471;182;Sudeste;Minas Gerais;Juiz de Fora;Ju�z de Fora;Juiz de Fora;Zona da Mata;Juiz de Fora;Juiz de Fora;COLEGIO MILITAR DE JUIZ DE FORA;1;1;0
+0;72;31062995;150;Sudeste;Minas Gerais;Juven�lia;Montes Claros;Janu�ria;Norte de Minas;Janu�ria;Juven�lia;EE ANTONIO ORTIGA;2;1;0
+0;72;31079677;159;Sudeste;Minas Gerais;Luisl�ndia;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Luisl�ndia;EE TEOFILO PIRES;2;1;0
+0;72;31075345;194;Sudeste;Minas Gerais;Manhua�u;Ju�z de Fora;Manhua�u;Zona da Mata;Manhua�u;Dom Corr�a;EE MANOEL AGOSTINHO FERREIRA;2;1;0
+0;72;31075337;171;Sudeste;Minas Gerais;Manhua�u;Ju�z de Fora;Manhua�u;Zona da Mata;Manhua�u;S�o Pedro do Ava�;EE ANA MENDES PEREIRA DUTRA;2;1;0
+0;72;31106275;183;Sudeste;Minas Gerais;Mariana;Belo Horizonte;Santa B�rbara - Ouro Preto;Metropolitana de Belo Horizonte;Ouro Preto;Mariana;EE DOM BENEVIDES;2;1;0
+0;72;31191361;189;Sudeste;Minas Gerais;Marli�ria;Ipatinga;Ipatinga;Vale do Rio Doce;Ipatinga;Marli�ria;EE LIBERATO DE CASTRO;2;1;0
+0;72;31118737;185;Sudeste;Minas Gerais;Matutina;Patos de Minas;Patos de Minas;Tri�ngulo Mineiro/Alto Parana�ba;Patos de Minas;Matutina;EE ANA ROCHA;2;1;0
+0;72;31062898;164;Sudeste;Minas Gerais;Mirav�nia;Montes Claros;Jana�ba;Norte de Minas;Janu�ria;Mirav�nia;EE DONA MARIA CARLOS DA MOTA;2;1;0
+0;72;31063061;154;Sudeste;Minas Gerais;Montalv�nia;Montes Claros;Janu�ria;Norte de Minas;Janu�ria;Capitania;EE DE CACHOEIRA;2;1;0
+4;70;31081591;127;Sudeste;Minas Gerais;Montes Claros;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Montes Claros;EE ELOY PEREIRA;2;1;0
+2;92;31349607;154;Sudeste;Minas Gerais;Montes Claros;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Montes Claros;IFNMG - CAMPUS MONTES CLAROS;1;1;0
+0;72;31353833;175;Sudeste;Minas Gerais;Montes Claros;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Vila Nova de Minas;EE DE ENSINO MEDIO;2;1;0
+2;92;31347914;173;Sudeste;Minas Gerais;Muria�;Ju�z de Fora;Muria�;Zona da Mata;Muria�;Muria�;CAMPUS MURIAE;1;1;0
+0;72;31147508;147;Sudeste;Minas Gerais;Nanuque;Te�filo Otoni;Te�filo Otoni;Vale do Mucuri;Nanuque;Vila Pereira;EE PERICLES COELHO;2;1;0
+0;72;31055867;182;Sudeste;Minas Gerais;Nat�rcia;Pouso Alegre;Pouso Alegre;Sul/Sudoeste de Minas;Santa Rita do Sapuca�;Nat�rcia;EE JOAO GOULART SANTIAGO BRUM;2;1;0
+0;72;31009610;163;Sudeste;Minas Gerais;Nova Lima;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Nova Lima;EE JOSEFINA WANDERLEY AZEREDO;2;1;0
+4;70;31326135;126;Sudeste;Minas Gerais;Nova Serrana;Divin�polis;Divin�polis;Oeste de Minas;Divin�polis;Nova Serrana;EE PADRE LAURO;2;1;0
+0;72;31034924;161;Sudeste;Minas Gerais;Par� de Minas;Divin�polis;Par� de Minas;Metropolitana de Belo Horizonte;Par� de Minas;Par� de Minas;EE MANOEL BATISTA;2;1;0
+0;72;31035173;237;Sudeste;Minas Gerais;Par� de Minas;Divin�polis;Par� de Minas;Metropolitana de Belo Horizonte;Par� de Minas;Torneiros;EE ZICO FERREIRA;2;1;0
+2;92;31002625;160;Sudeste;Minas Gerais;Passos;Varginha;Passos;Sul/Sudoeste de Minas;Passos;Passos;IFSULDEMINAS - CAMPUS PASSOS;1;1;0
+0;72;31115428;158;Sudeste;Minas Gerais;Passos;Varginha;Passos;Sul/Sudoeste de Minas;Passos;Passos;EE DEUS UNIVERSO E VIRTUDE;2;1;0
+2;92;31009921;173;Sudeste;Minas Gerais;Patroc�nio;Patos de Minas;Patroc�nio;Tri�ngulo Mineiro/Alto Parana�ba;Patroc�nio;Patroc�nio;IFTM - CAMPUS PATROCINIO;1;1;0
+0;72;31159328;150;Sudeste;Minas Gerais;Pedrin�polis;Uberaba;Arax�;Tri�ngulo Mineiro/Alto Parana�ba;Arax�;Pedrin�polis;EE PROFESSOR LEAO COELHO DE ALMEIDA;2;1;0
+0;72;31194298;190;Sudeste;Minas Gerais;Piranga;Barbacena;Conselheiro Lafaiete;Zona da Mata;Vi�osa;Santo Ant�nio do Pirapetinga;EE ANTONIO DE PAULA DIAS;2;1;3
+2;92;31014259;164;Sudeste;Minas Gerais;Piumhi;Varginha;Piumhi;Oeste de Minas;Piu�;Piumhi;IFMG - CAMPUS AVANCADO PIUMHI;1;1;0
+0;72;31063495;148;Sudeste;Minas Gerais;Ponto Chique;Montes Claros;Pirapora;Norte de Minas;Montes Claros;Ponto Chique;EE PROFESSOR EDILSON BRANDAO;2;1;0
+0;72;31147010;151;Sudeste;Minas Gerais;Ponto dos Volantes;Te�filo Otoni;Te�filo Otoni;Jequitinhonha;Ara�ua�;Ponto dos Volantes;EE ALONZO BARBUDA;2;1;0
+0;72;31338702;210;Sudeste;Minas Gerais;Porteirinha;Montes Claros;Jana�ba;Norte de Minas;Jana�ba;Porteirinha;EE MESTRE TOMAZ VALERIANO DE ARAUJO;2;2;0
+0;72;31362280;156;Sudeste;Minas Gerais;Pouso Alegre;Pouso Alegre;Pouso Alegre;Sul/Sudoeste de Minas;Pouso Alegre;Pouso Alegre;COLEGIO TIRADENTES PMMG;2;1;0
+4;70;31218995;143;Sudeste;Minas Gerais;Ribeir�o das Neves;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Justin�polis;EE MANOEL MARTINS DE MELO;2;1;0
+2;92;31355402;164;Sudeste;Minas Gerais;Sabar�;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Sabar�;IFMG - CAMPUS SABARA;1;1;0
+2;92;31361224;155;Sudeste;Minas Gerais;Sacramento;Uberaba;Uberaba;Tri�ngulo Mineiro/Alto Parana�ba;Arax�;Sacramento;EE ESCRITORA CAROLINA MARIA DE JESUS;2;1;0
+4;70;31010731;124;Sudeste;Minas Gerais;Santa Luzia;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;S�o Benedito;EE LEONINA MOURTHE DE ARAUJO;2;1;0
+2;92;31358150;156;Sudeste;Minas Gerais;Santa Luzia;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;S�o Benedito;IFMG - CAMPUS SANTA LUZIA;1;1;0
+0;72;31082686;181;Sudeste;Minas Gerais;S�o Jo�o da Ponte;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Santo Ant�nio da Boa Vista;EE MARIA BELTRAO DE ALMEIDA;2;1;0
+4;70;31011096;124;Sudeste;Minas Gerais;S�o Jos� da Lapa;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;S�o Jos� da Lapa;EE JOSE ELIAS ISSA;2;1;0
+0;72;31045420;159;Sudeste;Minas Gerais;S�o Jos� do Jacuri;Governador Valadares;Guanh�es;Vale do Rio Doce;Pe�anha;S�o Jos� do Jacuri;EE DE TABOLEIRO;2;2;0
+0;72;31137847;171;Sudeste;Minas Gerais;S�o Pedro da Uni�o;Varginha;Guaxup�;Sul/Sudoeste de Minas;S�o Sebasti�o do Para�so;S�o Pedro da Uni�o;ESCOLA ESTADUAL CORONEL JOAO FERREIRA BARBOSA;2;1;0
+4;70;31147362;142;Sudeste;Minas Gerais;Setubinha;Te�filo Otoni;Te�filo Otoni;Vale do Mucuri;Te�filo Otoni;Setubinha;EE NAGIB MAHMUD NEDIR;2;1;0
+0;72;31025003;161;Sudeste;Minas Gerais;Serro;Te�filo Otoni;Diamantina;Metropolitana de Belo Horizonte;Concei��o do Mato Dentro;S�o Gon�alo do Rio das Pedras;EE MESTRA VIRGINIA REIS;2;1;0
+0;72;31141810;238;Sudeste;Minas Gerais;Sete Lagoas;Belo Horizonte;Sete Lagoas;Metropolitana de Belo Horizonte;Sete Lagoas;Sete Lagoas;EE MODESTINO ANDRADE SOBRINHO;2;1;0
+4;70;31213675;158;Sudeste;Minas Gerais;Sete Lagoas;Belo Horizonte;Sete Lagoas;Metropolitana de Belo Horizonte;Sete Lagoas;Sete Lagoas;EE JULIO CESAR REIS OLIVEIRA;2;1;0
+4;70;31368237;129;Sudeste;Minas Gerais;Sete Lagoas;Belo Horizonte;Sete Lagoas;Metropolitana de Belo Horizonte;Sete Lagoas;Sete Lagoas;COLEGIO TIRADENTES PMMG - UNIDADE SETE LAGOAS;2;1;0
+4;70;31147940;164;Sudeste;Minas Gerais;Te�filo Otoni;Te�filo Otoni;Te�filo Otoni;Vale do Mucuri;Te�filo Otoni;Te�filo Otoni;EE ALBERTO BARREIROS;2;1;0
+0;72;31134881;163;Sudeste;Minas Gerais;Tiradentes;Barbacena;S�o Jo�o del Rei;Campo das Vertentes;S�o Jo�o Del Rei;Tiradentes;EE BASILIO DA GAMA;2;1;0
+0;72;31119679;160;Sudeste;Minas Gerais;Tiros;Patos de Minas;Patos de Minas;Tri�ngulo Mineiro/Alto Parana�ba;Patos de Minas;Tiros;EE PADRE JOSE COELHO;2;1;0
+0;72;31142042;147;Sudeste;Minas Gerais;Tr�s Marias;Belo Horizonte;Curvelo;Central Mineira;Tr�s Marias;Andrequic�;EE CARLOS ALEXANDRE DE OLIVEIRA;2;1;0
+0;72;31181994;151;Sudeste;Minas Gerais;Ub�;Ju�z de Fora;Ub�;Zona da Mata;Ub�;Ub�;EE DOUTOR LEVINDO COELHO;2;1;0
+4;70;31020079;129;Sudeste;Minas Gerais;Ubaporanga;Ipatinga;Caratinga;Vale do Rio Doce;Caratinga;Ubaporanga;EE DOM CAVATI;2;1;0
+2;92;31009107;174;Sudeste;Minas Gerais;Uberl�ndia;Uberl�ndia;Uberl�ndia;Tri�ngulo Mineiro/Alto Parana�ba;Uberl�ndia;Uberl�ndia;IFTM - CAMPUS UBERLANDIA CENTRO;1;1;0
+4;70;31167665;124;Sudeste;Minas Gerais;Uberl�ndia;Uberl�ndia;Uberl�ndia;Tri�ngulo Mineiro/Alto Parana�ba;Uberl�ndia;Uberl�ndia;EE DO BAIRRO JARDIM DAS PALMEIRAS;2;1;0
+0;72;31217719;170;Sudeste;Minas Gerais;Varginha;Varginha;Varginha;Sul/Sudoeste de Minas;Varginha;Varginha;EE PROFESSOR ANTONIO CORREA CARVALHO;2;1;0
+4;70;31063509;131;Sudeste;Minas Gerais;Varzel�ndia;Montes Claros;Montes Claros;Norte de Minas;Montes Claros;Varzel�ndia;EE PADRE JOSE SILVEIRA;2;1;0
+0;72;31374288;157;Sudeste;Minas Gerais;Vespasiano;Belo Horizonte;Belo Horizonte;Metropolitana de Belo Horizonte;Belo Horizonte;Vespasiano;EE DE ENSINO MEDIO;2;1;0
+0;72;31128074;154;Sudeste;Minas Gerais;Vi�osa;Ju�z de Fora;Vi�osa;Zona da Mata;Vi�osa;Vi�osa;COL DE APLICACAO DA UFV - COLUNI;1;1;0
+0;72;32027753;163;Sudeste;Esp�rito Santo;Afonso Cl�udio;Vit�ria;Afonso Cl�udio - Venda Nova do Imigrante - Santa Maria de Jetib�;Central Esp�rito-santense;Afonso Cl�udio;Serra Pelada;EEEFM ELVIRA BARROS;2;1;8
+4;70;32020333;124;Sudeste;Esp�rito Santo;Aracruz;S�o Mateus;Linhares;Litoral Norte Esp�rito-santense;Linhares;Riacho;EEEFM ERMENTINA LEAL;2;1;0
+0;72;32026846;161;Sudeste;Esp�rito Santo;Brejetuba;Vit�ria;Afonso Cl�udio - Venda Nova do Imigrante - Santa Maria de Jetib�;Central Esp�rito-santense;Afonso Cl�udio;S�o Jorge de Oliveira;EEEFM SAO JORGE;2;1;0
+4;70;32002939;171;Sudeste;Esp�rito Santo;Ecoporanga;Colatina;Nova Ven�cia;Noroeste Esp�rito-santense;Barra de S�o Francisco;Ecoporanga;CEEFMTI DANIEL COMBONI;2;1;0
+0;72;32030983;157;Sudeste;Esp�rito Santo;Itagua�u;Colatina;Colatina;Central Esp�rito-santense;Santa Teresa;Itaimb�;EEEFM ALFREDO LEMOS;2;1;0
+0;72;32050364;161;Sudeste;Esp�rito Santo;Muniz Freire;Cachoeiro do Itapemirim;Alegre;Sul Esp�rito-santense;Alegre;Pia�u;EEEFM ARQUIMIMO MATTOS;2;1;0
+0;72;32032200;154;Sudeste;Esp�rito Santo;Santa Maria de Jetib�;Vit�ria;Afonso Cl�udio - Venda Nova do Imigrante - Santa Maria de Jetib�;Central Esp�rito-santense;Santa Teresa;Santa Maria de Jetib�;EEEFM FREDERICO BOLDT;2;2;0
+0;72;32078498;158;Sudeste;Esp�rito Santo;Vila Velha;Vit�ria;Vit�ria;Central Esp�rito-santense;Vit�ria;Vila Velha;IFES - CAMPUS VILA VELHA;1;1;0
+0;72;33019428;158;Sudeste;Rio de Janeiro;Cantagalo;Petr�polis;Nova Friburgo;Centro Fluminense;Cantagalo-Cordeiro;Santa Rita da Floresta;CE DOUTOR FRANCISCO LEITE TEIXEIRA;2;1;0
+0;72;33020205;181;Sudeste;Rio de Janeiro;Cordeiro;Petr�polis;Nova Friburgo;Centro Fluminense;Cantagalo-Cordeiro;Cordeiro;CE CONSTANCA SOARES TEIXEIRA;2;1;0
+0;72;33142351;159;Sudeste;Rio de Janeiro;Duas Barras;Petr�polis;Nova Friburgo;Centro Fluminense;Nova Friburgo;Monnerat;CIEP 511 ALAIDE ARAUJO STORCK MELLOR MARQUES;2;1;0
+0;72;33048975;184;Sudeste;Rio de Janeiro;Duque de Caxias;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Duque de Caxias;CE MIGUEL COUTO;2;1;0
+2;92;33162158;153;Sudeste;Rio de Janeiro;Duque de Caxias;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Duque de Caxias;ESCOLA TECNICA ESTADUAL IMBARIE;2;1;0
+0;72;33001014;164;Sudeste;Rio de Janeiro;Italva;Campos dos Goytacazes;Campos dos Goytacazes;Noroeste Fluminense;Itaperuna;Italva;CIEP 141 VEREADOR SAID TANUS JOSE;2;1;0
+4;70;33057117;124;Sudeste;Rio de Janeiro;Niter�i;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Niter�i;IE PROFESSOR ISMAEL COUTINHO;2;1;0
+0;72;33096805;178;Sudeste;Rio de Janeiro;Niter�i;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Niter�i;CIEP 449 GOVERNADOR LEONEL DE MOURA BRIZOLA BRASIL FRANCA;2;1;0
+2;92;33476217;156;Sudeste;Rio de Janeiro;Nova Friburgo;Petr�polis;Nova Friburgo;Centro Fluminense;Nova Friburgo;Conselheiro Paulino;CEFET-RJ - UNED NOVA FRIBURGO;1;1;0
+0;72;33467285;195;Sudeste;Rio de Janeiro;Petr�polis;Petr�polis;Petr�polis;Metropolitana do Rio de Janeiro;Serrana;Petr�polis;CEFET-RJ - UNED PETROPOLIS;1;1;0
+4;70;33062706;166;Sudeste;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;CPII - CAMPUS CENTRO;1;1;0
+2;92;33065250;160;Sudeste;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;COLEGIO DE APLICACAO DA UNIVERSIDADE FEDERAL DO RIO DE JANEIRO;1;1;0
+0;72;33074054;150;Sudeste;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;CE NUNO ALVARES PEREIRA;2;1;0
+4;70;33085447;142;Sudeste;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;Rio de Janeiro;COL BRIGADEIRO NEWTON BRAGA;1;1;0
+0;72;33088926;154;Sudeste;Rio de Janeiro;S�o Gon�alo;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;S�o Gon�alo;CIEP 240 PROFESSOR HAROLDO TEIXEIRA VALLADAO;2;1;0
+2;92;33507210;168;Sudeste;Rio de Janeiro;S�o Gon�alo;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;S�o Gon�alo;CE COMENDADOR VALENTIM DOS SANTOS DINIZ;2;1;0
+4;70;33093423;130;Sudeste;Rio de Janeiro;S�o Jo�o de Meriti;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Rio de Janeiro;S�o Mateus;CIEP 139 MANUEL BANDEIRA;2;1;0
+0;72;33045542;153;Sudeste;Rio de Janeiro;Serop�dica;Rio de Janeiro;Rio de Janeiro;Metropolitana do Rio de Janeiro;Itagua�;Serop�dica;CE ALICE DE SOUZA BRUNO;2;2;0
+0;72;33042543;174;Sudeste;Rio de Janeiro;Teres�polis;Petr�polis;Petr�polis;Metropolitana do Rio de Janeiro;Serrana;Teres�polis;CE PRESIDENTE BERNARDES;2;1;0
+0;72;33018367;179;Sudeste;Rio de Janeiro;Tr�s Rios;Petr�polis;Tr�s Rios - Para�ba do Sul;Centro Fluminense;Tr�s Rios;Tr�s Rios;CE ROBERTO COELHO PEDROSO;2;1;0
+0;72;33018430;166;Sudeste;Rio de Janeiro;Tr�s Rios;Petr�polis;Tr�s Rios - Para�ba do Sul;Centro Fluminense;Tr�s Rios;Tr�s Rios;CE URBANO CARLOS DE ALMEIDA;2;1;0
+0;72;33035407;160;Sudeste;Rio de Janeiro;Valen�a;Volta Redonda - Barra Mansa;Valen�a;Sul Fluminense;Barra do Pira�;Valen�a;CIA MONSENHOR TOMAS TEJERINA DE PRADO;2;2;0
+0;72;33036519;229;Sudeste;Rio de Janeiro;Valen�a;Volta Redonda - Barra Mansa;Valen�a;Sul Fluminense;Barra do Pira�;Santa Isabel do Rio Preto;CE DOUTOR GUILHERME MILWARD;2;2;0
+0;72;33033196;178;Sudeste;Rio de Janeiro;Volta Redonda;Volta Redonda - Barra Mansa;Volta Redonda - Barra Mansa;Sul Fluminense;Vale do Para�ba Fluminense;Volta Redonda;CE ROTARY;2;1;0
+0;72;33103097;273;Sudeste;Rio de Janeiro;Volta Redonda;Volta Redonda - Barra Mansa;Volta Redonda - Barra Mansa;Sul Fluminense;Vale do Para�ba Fluminense;Volta Redonda;CIEP 403 MARIA DE LOURDES GIOVANETTI CIVICO MILITAR;2;1;0
+2;92;33150915;153;Sudeste;Rio de Janeiro;Volta Redonda;Volta Redonda - Barra Mansa;Volta Redonda - Barra Mansa;Sul Fluminense;Vale do Para�ba Fluminense;Volta Redonda;ETE AMAURI CESAR VIEIRA;2;1;0
+0;72;35026037;173;Sudeste;S�o Paulo;Agudos;Bauru;Bauru;Bauru;Bauru;Agudos;JOAO BATISTA RIBEIRO;2;1;0
+0;72;35028952;147;Sudeste;S�o Paulo;�lvares Florence;S�o Jos� do Rio Preto;Votuporanga;S�o Jos� do Rio Preto;Votuporanga;�lvares Florence;GERALDO ALVES MACHADO PROF;2;1;0
+0;72;35017176;179;Sudeste;S�o Paulo;Americana;Campinas;Campinas;Campinas;Campinas;Americana;MAGI MONSENHOR;2;1;0
+0;72;35578563;153;Sudeste;S�o Paulo;Americana;Campinas;Campinas;Campinas;Campinas;Americana;PROFESSORA MARIA LUCIA PADOVANI DE OLIVEIRA;2;1;0
+0;72;35921567;240;Sudeste;S�o Paulo;Americana;Campinas;Campinas;Campinas;Campinas;Americana;WILSON CAMARGO PROF;2;1;0
+0;72;35923205;150;Sudeste;S�o Paulo;Aruj�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Guarulhos;Aruj�;EDIR PAULINO ALBUQUERQUE PROFA;2;1;0
+0;72;35015581;153;Sudeste;S�o Paulo;Bar�o de Antonina;Sorocaba;Itapeva;Itapetininga;Itapeva;Bar�o de Antonina;SANDRA REGINA PIRES PROFESSORA;2;1;0
+2;92;35920538;187;Sudeste;S�o Paulo;Barra Bonita;Bauru;Ja�;Bauru;Ja�;Barra Bonita;ETEC COMENDADOR JOAO RAYS;2;1;0
+0;72;35025173;151;Sudeste;S�o Paulo;Bauru;Bauru;Bauru;Bauru;Bauru;Bauru;PLINIO FERRAZ;2;1;0
+0;72;35025458;160;Sudeste;S�o Paulo;Bauru;Bauru;Bauru;Bauru;Bauru;Bauru;MORAIS PACHECO PROF;2;1;0
+0;72;35030272;182;Sudeste;S�o Paulo;Birigui;Ara�atuba;Birigui - Pen�polis;Ara�atuba;Birigui;Birigui;REGINA VALARINI VIEIRA PROFA;2;1;0
+0;72;35039743;186;Sudeste;S�o Paulo;Cabre�va;Campinas;Jundia�;Macro Metropolitana Paulista;Sorocaba;Cabre�va;HELADIO CORREA LAURINI MONSENHOR;2;1;0
+0;72;35005599;147;Sudeste;S�o Paulo;Caieiras;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Franco da Rocha;Caieiras;OLINDO DARTORA DR;2;1;0
+0;72;35040873;152;Sudeste;S�o Paulo;Campinas;Campinas;Campinas;Campinas;Campinas;Campinas;JAMIL GADIA DEPUTADO;2;1;0
+2;92;35337882;151;Sudeste;S�o Paulo;Caraguatatuba;S�o Jos� dos Campos;Caraguatatuba - Ubatuba - S�o Sebasti�o;Vale do Para�ba Paulista;Caraguatatuba;Caraguatatuba;IFSP - CAMPUS CARAGUATATUBA;1;1;0
+4;70;35909221;131;Sudeste;S�o Paulo;Carapicu�ba;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Osasco;Carapicu�ba;MARIA DE LOURDES TEIXEIRA;2;1;0
+0;72;35919068;155;Sudeste;S�o Paulo;Carapicu�ba;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Osasco;Carapicu�ba;ANTONIO DE OLIVEIRA GODINHO PADRE;2;1;0
+0;72;35918763;156;Sudeste;S�o Paulo;Cotia;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Itapecerica da Serra;Cotia;ROQUE SAVIOLI;2;1;0
+0;72;35462792;154;Sudeste;S�o Paulo;Cravinhos;Ribeir�o Preto;Ribeir�o Preto;Ribeir�o Preto;Ribeir�o Preto;Cravinhos;BAIRRO FRANCISCO CASTILHO;2;1;0
+0;72;35033078;217;Sudeste;S�o Paulo;Cruz�lia;Mar�lia;Assis;Assis;Assis;Cruz�lia;JOAQUIM GONCALVES DE OLIVEIRA;2;1;0
+0;72;35041178;206;Sudeste;S�o Paulo;Diadema;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Diadema;OSWALDO LACERDA GOMES CARDIM PROFESSOR;2;1;0
+0;72;35911173;158;Sudeste;S�o Paulo;Dracena;Presidente Prudente;Dracena;Presidente Prudente;Dracena;Dracena;ALFREDO MACHADO;2;1;0
+0;72;35032815;149;Sudeste;S�o Paulo;Emilian�polis;Presidente Prudente;Presidente Prudente;Presidente Prudente;Presidente Prudente;Emilian�polis;HEMILSON CARLOS MAGRINI PROFESSOR;2;1;0
+0;72;35030181;150;Sudeste;S�o Paulo;Glic�rio;Ara�atuba;Birigui - Pen�polis;Ara�atuba;Birigui;Glic�rio;MARIA MATHILDE CASTEIN CASTILHO PROFESSORA;2;1;0
+0;72;35035725;151;Sudeste;S�o Paulo;Guarulhos;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Guarulhos;Guarulhos;MARIA HILDA ORNELAS DE OLIVEIRA PROFESSORA;2;1;0
+4;70;35901830;147;Sudeste;S�o Paulo;Guarulhos;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Guarulhos;Guarulhos;ANTONIO PRATICI PREFEITO;2;1;0
+0;72;35462019;211;Sudeste;S�o Paulo;Hortol�ndia;Campinas;Campinas;Campinas;Campinas;Hortol�ndia;MARIA CRISTINA DE SOUZA LOBO PROFESSORA;2;1;0
+2;92;35337705;154;Sudeste;S�o Paulo;Ibitinga;Araraquara;Araraquara;Araraquara;Araraquara;Ibitinga;ETEC VEREADOR E VICE PREFEITO SERGIO DA FONSECA;2;1;0
+0;72;35908344;148;Sudeste;S�o Paulo;Iguape;Sorocaba;Registro;Litoral Sul Paulista;Registro;Iguape;JOFRE MANOEL PREFEITO;2;2;0
+0;72;35903206;164;Sudeste;S�o Paulo;Itaber�;Sorocaba;Itapeva;Itapetininga;Itapeva;Itaber�;MARIA TEREZA DE SOUZA FALCARELI PROFESSORA;2;1;0
+0;72;35009957;165;Sudeste;S�o Paulo;Itapecerica da Serra;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Itapecerica da Serra;Itapecerica da Serra;PORCINO RODRIGUES PROF;2;1;0
+0;72;35029488;171;Sudeste;S�o Paulo;Itapura;Ara�atuba;Andradina;Ara�atuba;Andradina;Itapura;PAULO GRASSI BONILHA DR;2;1;0
+2;92;35011599;161;Sudeste;S�o Paulo;Itaquaquecetuba;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Mogi das Cruzes;Itaquaquecetuba;IFSP - CAMPUS ITAQUAQUECETUBA;1;1;0
+0;72;35015696;167;Sudeste;S�o Paulo;Itu;Sorocaba;Sorocaba;Macro Metropolitana Paulista;Sorocaba;Itu;JOSE LEITE PINHEIRO JR PROF;2;1;0
+0;72;35039597;155;Sudeste;S�o Paulo;Jacare�;S�o Jos� dos Campos;S�o Jos� dos Campos;Vale do Para�ba Paulista;S�o Jos� dos Campos;Jacare�;BENEDITA FREIRE DE MACEDO DONA;2;1;0
+0;72;35039639;150;Sudeste;S�o Paulo;Jacare�;S�o Jos� dos Campos;S�o Jos� dos Campos;Vale do Para�ba Paulista;S�o Jos� dos Campos;Jacare�;OLIVIA DO AMARAL SANTOS CANETTIERI PROFA;2;1;0
+0;72;35918787;150;Sudeste;S�o Paulo;Jandira;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Osasco;Jandira;WILMAR SOARES DA SILVA;2;1;0
+0;72;35025636;221;Sudeste;S�o Paulo;Ja�;Bauru;Ja�;Bauru;Ja�;Ja�;TULLIO ESPINDOLA DE CASTRO PROFESSOR;2;1;0
+0;72;35908423;183;Sudeste;S�o Paulo;Mairipor�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Franco da Rocha;Mairipor�;CARLOS AUGUSTO DE PADUA FLEURY PROF;2;1;0
+0;72;35027900;180;Sudeste;S�o Paulo;Marapoama;S�o Jos� do Rio Preto;Catanduva;S�o Jos� do Rio Preto;Novo Horizonte;Marapoama;BENTO DE SIQUEIRA PROFESSOR;2;1;0
+0;72;35033819;243;Sudeste;S�o Paulo;Mar�lia;Mar�lia;Mar�lia;Mar�lia;Mar�lia;Padre N�brega;MARIA IZABEL SAMPAIO VIDAL;2;1;0
+0;72;35922559;167;Sudeste;S�o Paulo;Mirante do Paranapanema;Presidente Prudente;Presidente Prudente;Presidente Prudente;Presidente Prudente;Mirante do Paranapanema;FAZENDA SAO BENTO;2;2;1
+0;72;35044982;159;Sudeste;S�o Paulo;Mogi das Cruzes;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Mogi das Cruzes;Br�s Cubas;CLAUDIO ABRAHAO PROFESSOR;2;1;0
+0;72;35029634;148;Sudeste;S�o Paulo;Murutinga do Sul;Ara�atuba;Andradina;Ara�atuba;Andradina;Murutinga do Sul;ANCHIETA PADRE;2;1;0
+0;72;35027947;204;Sudeste;S�o Paulo;Novo Horizonte;S�o Jos� do Rio Preto;S�o Jos� do Rio Preto;S�o Jos� do Rio Preto;Novo Horizonte;Novo Horizonte;PEDRO TEIXEIRA DE QUEIROZ;2;1;0
+0;72;35046620;164;Sudeste;S�o Paulo;Osasco;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Osasco;Osasco;JOSE RIBEIRO DE SOUZA PROFESSOR;2;1;0
+0;72;35924039;166;Sudeste;S�o Paulo;Osasco;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Osasco;Osasco;CLAUDINEI GARCIA PROFESSOR;2;1;0
+0;72;35013985;185;Sudeste;S�o Paulo;Paraibuna;S�o Jos� dos Campos;S�o Jos� dos Campos;Vale do Para�ba Paulista;Paraibuna/Paraitinga;Paraibuna;CERQUEIRA CESAR DOUTOR;2;1;0
+0;72;35042161;155;Sudeste;S�o Paulo;Peru�be;S�o Paulo;Santos;Litoral Sul Paulista;Itanha�m;Peru�be;CARMEN MIRANDA;2;1;0
+0;72;35021179;154;Sudeste;S�o Paulo;Piracicaba;Campinas;Piracicaba;Piracicaba;Piracicaba;Piracicaba;JORGE COURY DOUTOR;2;1;0
+0;72;35021180;154;Sudeste;S�o Paulo;Piracicaba;Campinas;Piracicaba;Piracicaba;Piracicaba;Piracicaba;SAMUEL DE CASTRO NEVES DOUTOR;2;1;0
+0;72;35462925;160;Sudeste;S�o Paulo;Piracicaba;Campinas;Piracicaba;Piracicaba;Piracicaba;Piracicaba;ATTILIO VIDAL LAFRATA PROFESSOR;2;1;0
+0;72;35007316;147;Sudeste;S�o Paulo;Po�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Mogi das Cruzes;Po�;MARGARIDA DE CAMILLIS;2;1;0
+0;72;35900965;205;Sudeste;S�o Paulo;Presidente Prudente;Presidente Prudente;Presidente Prudente;Presidente Prudente;Presidente Prudente;Presidente Prudente;FATIMA APARECIDA COSTA FALCON PROFESSORA;2;1;0
+0;72;35034149;167;Sudeste;S�o Paulo;Ribeir�o do Sul;Mar�lia;Ourinhos;Assis;Ourinhos;Ribeir�o do Sul;NICOLA MARTINS ROMEIRA;2;1;0
+0;72;35910200;154;Sudeste;S�o Paulo;Ribeir�o Pires;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Ribeir�o Pires;FARID EID;2;1;0
+0;72;35023826;148;Sudeste;S�o Paulo;Ribeir�o Preto;Ribeir�o Preto;Ribeir�o Preto;Ribeir�o Preto;Ribeir�o Preto;Ribeir�o Preto;BARROS CONEGO;2;1;0
+0;72;35028290;154;Sudeste;S�o Paulo;Santana da Ponte Pensa;S�o Jos� do Rio Preto;Santa F� do Sul;S�o Jos� do Rio Preto;Jales;Santana da Ponte Pensa;DOMINGOS DONATO RIVELLI;2;1;0
+0;72;35008059;158;Sudeste;S�o Paulo;Santo Andr�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Santo Andr�;CELSO GAMA DOUTOR;2;1;0
+0;72;35008175;220;Sudeste;S�o Paulo;Santo Andr�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Santo Andr�;NADIR LESSA TOGNINI PROFESSORA;2;1;0
+1;97;35008285;180;Sudeste;S�o Paulo;Santo Andr�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Santo Andr�;ETEC JULIO DE MESQUITA;2;1;0
+0;72;35008369;159;Sudeste;S�o Paulo;Santo Andr�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Santo Andr�;JOAO BAPTISTA MARIGO MARTINS;2;1;0
+0;72;35008459;169;Sudeste;S�o Paulo;Santo Andr�;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Santo Andr�;WALDOMIRO GUIMARAES PROFESSOR;2;1;0
+0;72;35909816;158;Sudeste;S�o Paulo;Santos;S�o Paulo;Santos;Metropolitana de S�o Paulo;Santos;Santos;ESCOLA ESTADUAL DEPUTADO EMILIO JUSTO;2;1;0
+0;72;35009325;170;Sudeste;S�o Paulo;S�o Bernardo do Campo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;S�o Bernardo do Campo;ANESIA LOUREIRO GAMA PROFESSORA;2;1;0
+0;72;35042031;170;Sudeste;S�o Paulo;S�o Bernardo do Campo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;S�o Bernardo do Campo;SANTA DALMOLIN DEMARCHI;2;1;0
+0;72;35039342;167;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Anhanguera;JOSE OSCAR ABREU SAMPAIO;2;1;0
+0;72;35000462;148;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Casa Verde;AUGUSTO MEIRELLES REIS FILHO PROFESSOR;2;1;0
+0;72;35904284;184;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Cidade Tiradentes;FERNANDO PESSOA;2;1;0
+0;72;35004741;153;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Cursino;JULIO RIBEIRO;2;1;0
+0;72;35001144;169;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Ja�an�;JULIO PESTANA;2;1;0
+0;72;35438042;246;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Jardim �ngela;NAIR OLEGARIO CAJUEIRO;2;1;0
+0;72;35000413;179;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Pirituba;JOAQUIM SILVADO DOUTOR;2;1;0
+0;72;35000723;293;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Santana;OCTAVIO MENDES DOUTOR;2;1;0
+0;72;35001867;158;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;S�o Lucas;LUIZA MENDES CORREA SOUZA PROFESSORA;2;1;0
+0;72;35003001;202;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;S�o Miguel;DARIO DE QUEIROZ PROF;2;1;0
+0;72;35001326;158;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Trememb�;PEDRO DE MORAES VICTOR DR;2;1;0
+0;72;35000802;148;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Vila Maria;IMPERATRIZ LEOPOLDINA;2;1;0
+0;72;35001855;159;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;Vila Prudente;AMERICO DE MOURA PROFESSOR;2;1;0
+0;72;35000176;213;Sudeste;S�o Paulo;S�o Paulo;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;S�o Paulo;S�o Domingos;ZENAIDE VILALVA DE ARAUJO PROFESSORA;2;1;0
+0;72;35924106;149;Sudeste;S�o Paulo;Sorocaba;Sorocaba;Sorocaba;Macro Metropolitana Paulista;Sorocaba;Sorocaba;DULCE ESMERALDA BASILE FERREIRA PROFESSORA;2;1;0
+2;92;35456512;155;Sudeste;S�o Paulo;Suzano;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Mogi das Cruzes;Suzano;IFSP - CAMPUS SUZANO;1;1;0
+4;70;35921087;125;Sudeste;S�o Paulo;Suzano;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Mogi das Cruzes;Suzano;JACQUES YVES COUSTEAU COMANDANTE;2;1;0
+0;72;35044885;175;Sudeste;S�o Paulo;Tabo�o da Serra;S�o Paulo;S�o Paulo;Metropolitana de S�o Paulo;Itapecerica da Serra;Tabo�o da Serra;FRANCISCO VICENTE LOPES GONCALVES PROFESSOR;2;1;0
+0;72;35021921;168;Sudeste;S�o Paulo;Trabiju;Araraquara;Araraquara;Araraquara;Araraquara;Trabiju;ALFREDO EVANGELISTA NOGUEIRA;2;1;0
+2;92;35011998;151;Sudeste;S�o Paulo;Tup�;Mar�lia;Tup�;Mar�lia;Tup�;Tup�;IFSP - CAMPUS AVANCADO TUPA;1;1;0
+0;72;35011186;149;Sudeste;S�o Paulo;Ubatuba;S�o Jos� dos Campos;Caraguatatuba - Ubatuba - S�o Sebasti�o;Vale do Para�ba Paulista;Caraguatatuba;Ubatuba;SEMIRAMIS PRADO DE OLIVEIRA PROFESSORA;2;1;0
+0;72;35026190;273;Sudeste;S�o Paulo;Uru;Bauru;Lins;Bauru;Bauru;Uru;PASCHOAL FLAMINO;2;1;0
+0;72;35018168;197;Sudeste;S�o Paulo;Valinhos;Campinas;Campinas;Campinas;Campinas;Valinhos;CYRO DE BARROS REZENDE PROFESSOR;2;1;0
+0;72;35040400;155;Sudeste;S�o Paulo;Valinhos;Campinas;Campinas;Campinas;Campinas;Valinhos;MARIA NEIVA ABDELMASSIH JUSTO PROFESSORA;2;1;0
+0;72;35033893;149;Sudeste;S�o Paulo;Chavantes;Mar�lia;Ourinhos;Assis;Ourinhos;Chavantes;ERNESTO FONSECA DOUTOR;2;1;0
+0;72;41122925;212;Sul;Paran�;Almirante Tamandar�;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Almirante Tamandar�;JACI REAL P OLIVEIRA C E CM PROFAEF M;2;1;0
+4;70;41004388;137;Sul;Paran�;Alt�nia;Maring�;Umuarama;Noroeste Paranaense;Umuarama;Alt�nia;LUCIA A DE OLIVEIRA SCHOFFEN C EEF M;2;1;0
+0;72;41407245;206;Sul;Paran�;Antonina;Curitiba;Paranagu�;Metropolitana de Curitiba;Paranagu�;Antonina;ALTAHIR GONCALVES C E PROFAEF M;2;1;0
+0;72;41568923;149;Sul;Paran�;Arapoti;Ponta Grossa;Ponta Grossa;Centro Oriental Paranaense;Jaguaria�va;Arapoti;CENTRO EST EDUC PROFIS DE ARAPOTI;2;2;0
+0;72;41389565;169;Sul;Paran�;Arauc�ria;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Arauc�ria;JOAO NERLI DA CRUZ C E PROFEF M;2;1;0
+0;72;41021436;161;Sul;Paran�;Bela Vista do Para�so;Londrina;Londrina;Norte Central Paranaense;Porecatu;Bela Vista do Para�so;JAYME CANET C EM PROF NORMAL;2;1;0
+0;72;41084136;213;Sul;Paran�;Boa Esperan�a do Igua�u;Cascavel;Dois Vizinhos;Sudoeste Paranaense;Francisco Beltr�o;Boa Esperan�a do Igua�u;BOA E DO IGUACU C EEF M;2;1;0
+0;72;41124839;151;Sul;Paran�;Campina Grande do Sul;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Campina Grande do Sul;TERRA BOA C E CEF M;2;2;0
+0;72;41361687;186;Sul;Paran�;Campo Largo;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Campo Largo;SAO FRANCISCO DE ASSIS C E CEF M;2;2;0
+0;72;41361628;187;Sul;Paran�;Campo Largo;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;S�o Silvestre;ALOISIO C E C PROFEF M;2;2;0
+0;72;41071980;194;Sul;Paran�;Cascavel;Cascavel;Cascavel;Oeste Paranaense;Cascavel;Cascavel;PEDRO ERNESTO GARLET C E CEF M;2;2;0
+0;72;41072146;169;Sul;Paran�;Cascavel;Cascavel;Cascavel;Oeste Paranaense;Cascavel;Cascavel;SAO JOAO C E CE F M;2;1;0
+0;72;41060466;153;Sul;Paran�;Castro;Ponta Grossa;Ponta Grossa;Centro Oriental Paranaense;Ponta Grossa;Castro;NICOLAU BALTASAR C E PEEF M;2;1;0
+0;72;41072391;160;Sul;Paran�;Catanduvas;Cascavel;Cascavel;Oeste Paranaense;Cascavel;Catanduvas;JOAO F NEVES C E CM DREF M;2;1;0
+0;72;41126173;148;Sul;Paran�;Colombo;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Colombo;JULIA CAVASSIN C EEF M;2;1;0
+0;72;41378237;153;Sul;Paran�;Contenda;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Contenda;ADHELMAR SICURO C E C DREF M;2;1;0
+0;72;41127021;194;Sul;Paran�;Curitiba;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Curitiba;ALCYONE M C VELLOZO C E PROFEF M PROFI;2;1;0
+0;72;41128915;247;Sul;Paran�;Curitiba;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Curitiba;DOMINGOS ZANLORENZI C EEF M PROFIS;2;1;0
+0;72;41129512;156;Sul;Paran�;Curitiba;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Curitiba;GABRIELA MISTRAL C EEF M;2;1;0
+0;72;41133366;161;Sul;Paran�;Curitiba;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;Curitiba;SAO SEBASTIAO C EEFM;2;1;0
+0;72;41064100;150;Sul;Paran�;Diamante D'Oeste;Cascavel;Cascavel;Oeste Paranaense;Toledo;Diamante D'Oeste;DIAMANTE D OESTE C EEF M;2;1;0
+0;72;41084845;156;Sul;Paran�;Dois Vizinhos;Cascavel;Dois Vizinhos;Sudoeste Paranaense;Francisco Beltr�o;Dois Vizinhos;MONTEIRO LOBATO C EEF M;2;1;0
+0;72;41112555;197;Sul;Paran�;Fernandes Pinheiro;Ponta Grossa;Irati;Sudeste Paranaense;Prudent�polis;Fernandes Pinheiro;ANGAI C E C DEEF M;2;1;0
+0;72;41076125;154;Sul;Paran�;Foz do Igua�u;Cascavel;Foz do Igua�u;Oeste Paranaense;Foz do Igua�u;Foz do Igua�u;CARMELITA S DIAS C E CM PROFAEF M P;2;1;0
+0;72;41012747;227;Sul;Paran�;Goioer�;Maring�;Campo Mour�o;Centro Ocidental Paranaense;Goioer�;Goioer�;VILA GUAIRA C E CMEF M;2;1;0
+0;72;41009690;185;Sul;Paran�;Guaporema;Maring�;Cianorte;Noroeste Paranaense;Cianorte;Guaporema;ARNALDO BUSATO C EEF M;2;1;0
+0;72;41367855;157;Sul;Paran�;In�cio Martins;Guarapuava;Guarapuava;Centro-Sul Paranaense;Guarapuava;In�cio Martins;AUREA APARECIDA LOPES C E CE F M;2;2;0
+0;72;41113217;206;Sul;Paran�;Irati;Ponta Grossa;Irati;Sudeste Paranaense;Irati;Irati;GONCALVES JUNIOR C E CEF M;2;2;0
+0;72;41047192;192;Sul;Paran�;Jacarezinho;Londrina;Santo Ant�nio da Platina;Norte Pioneiro Paranaense;Jacarezinho;Jacarezinho;JOSE PAVAN C E CMEF M;2;1;0
+0;72;41058496;159;Sul;Paran�;Jaguaria�va;Ponta Grossa;Ponta Grossa;Centro Oriental Paranaense;Jaguaria�va;Jaguaria�va;OLAVO BILAC C E CMEF M;2;1;0
+0;72;41121945;154;Sul;Paran�;Lapa;Curitiba;Curitiba;Metropolitana de Curitiba;Lapa;Lapa;MANOEL A DA CUNHA C E CMEF M;2;1;0
+2;92;41157923;151;Sul;Paran�;Laranjeiras do Sul;Cascavel;Laranjeiras do Sul - Quedas do Igua�u;Centro-Sul Paranaense;Guarapuava;Laranjeiras do Sul;CENTRO EST ED PROF PROFA NAIANA B SOUZA;2;1;0
+0;72;41021819;217;Sul;Paran�;Miraselva;Londrina;Londrina;Norte Central Paranaense;Porecatu;Miraselva;ARNALDO BUSATO C EEF M;2;1;0
+0;72;41020499;181;Sul;Paran�;Munhoz de Melo;Maring�;Maring�;Norte Central Paranaense;Astorga;Munhoz de Melo;JOSE F SALDANHA C E ENGEF M;2;1;0
+0;72;41061330;153;Sul;Paran�;Palmeira;Ponta Grossa;Ponta Grossa;Centro Oriental Paranaense;Ponta Grossa;Palmeira;FRITZ KLIEWER C E CEF M;2;2;0
+0;72;41061624;157;Sul;Paran�;Palmeira;Ponta Grossa;Ponta Grossa;Centro Oriental Paranaense;Ponta Grossa;Palmeira;PINHEIRAL DE BAIXO C E C DEEF M;2;2;0
+0;72;41156048;268;Sul;Paran�;Pitanga;Guarapuava;Pitanga;Centro-Sul Paranaense;Pitanga;Pitanga;IFPR - CAMPUS PITANGA;1;1;0
+0;72;41081366;153;Sul;Paran�;Planalto;Cascavel;Francisco Beltr�o;Sudoeste Paranaense;Capanema;Planalto;JOSE DE ANCHIETA C EEF M P;2;1;0
+2;92;41062086;158;Sul;Paran�;Ponta Grossa;Ponta Grossa;Ponta Grossa;Centro Oriental Paranaense;Ponta Grossa;Ponta Grossa;CENTRO EST EDUC PROF AGR AUGUSTO RIBAS;2;1;0
+4;70;41021983;133;Sul;Paran�;Porecatu;Londrina;Londrina;Norte Central Paranaense;Porecatu;Porecatu;RICARDO LUNARDELLI C EEI EF M PROFIS;2;1;0
+0;72;41102339;213;Sul;Paran�;Porto Barreiro;Cascavel;Laranjeiras do Sul - Quedas do Igua�u;Centro-Sul Paranaense;Guarapuava;Porto Barreiro;GABRIELA MISTRAL C EEF M;2;1;0
+0;72;41110960;156;Sul;Paran�;Prudent�polis;Guarapuava;Guarapuava;Sudeste Paranaense;Prudent�polis;Prudent�polis;ALBERTO DE CARVALHO C EEF M PROFIS;2;1;0
+0;72;41111923;170;Sul;Paran�;Prudent�polis;Guarapuava;Guarapuava;Sudeste Paranaense;Prudent�polis;Prudent�polis;PAPANDUVA DE CIMA C E C DEEF M;2;2;0
+0;72;41142039;213;Sul;Paran�;Quitandinha;Curitiba;Curitiba;Metropolitana de Curitiba;Rio Negro;Quitandinha;CAETANO M DA ROCHA C E DO C DREF M;2;2;0
+0;72;41114469;150;Sul;Paran�;Rebou�as;Ponta Grossa;Irati;Sudeste Paranaense;Irati;Rebou�as;MARIA IGNACIA C E CM PROFAEF M;2;1;0
+0;72;41067428;219;Sul;Paran�;Santa Helena;Cascavel;Toledo;Oeste Paranaense;Toledo;Santa Helena;VERONICA ZIMERMANN C E C PROFAEF M;2;1;0
+0;72;41003713;159;Sul;Paran�;S�o Carlos do Iva�;Maring�;Paranava�;Noroeste Paranaense;Paranava�;S�o Carlos do Iva�;SAO CARLOS DO IVAI C EEF M;2;1;0
+0;72;41041712;170;Sul;Paran�;S�o Jer�nimo da Serra;Londrina;Corn�lio Proc�pio � Bandeirantes;Norte Pioneiro Paranaense;Assa�;S�o Jer�nimo da Serra;JOAO XXIII C E CMEF M;2;1;0
+0;72;41022955;163;Sul;Paran�;S�o Jorge do Iva�;Maring�;Maring�;Norte Central Paranaense;Flora�;S�o Jorge do Iva�;MARCIA VAZ T ABREU C EEF M;2;1;0
+0;72;41361512;171;Sul;Paran�;S�o Jos� dos Pinhais;Curitiba;Curitiba;Metropolitana de Curitiba;Curitiba;S�o Jos� dos Pinhais;BARRO PRETO C EEF M;2;1;0
+0;72;41068688;158;Sul;Paran�;Toledo;Cascavel;Toledo;Oeste Paranaense;Toledo;Toledo;JOAO ARNALDO RITT C E CMEF M;2;1;0
+0;72;42005159;148;Sul;Santa Catarina;�guas Mornas;Florian�polis;Florian�polis;Grande Florian�polis;Tabuleiro;�guas Mornas;EEB CONSELHEIRO MANOEL PHILIPPI;2;1;0
+0;72;42049679;161;Sul;Santa Catarina;Alto Bela Vista;Chapec�;Conc�rdia;Oeste Catarinense;Conc�rdia;Alto Bela Vista;EEB TEIXEIRA DE FREITAS;2;1;0
+0;72;42060591;159;Sul;Santa Catarina;Bandeirante;Chapec�;S�o Miguel do Oeste;Oeste Catarinense;S�o Miguel do Oeste;Bandeirante;EEB HELIO WASUM;2;1;0
+0;72;42019222;211;Sul;Santa Catarina;Benedito Novo;Blumenau;Blumenau;Vale do Itaja�;Blumenau;Santa Maria;EEB TERCILIO LONGO;2;1;0
+0;72;42002443;154;Sul;Santa Catarina;Bigua�u;Florian�polis;Florian�polis;Grande Florian�polis;Florian�polis;Bigua�u;EEB PROFA TANIA MARA F E SILVA LOCKS;2;1;0
+4;70;42016223;138;Sul;Santa Catarina;Blumenau;Blumenau;Blumenau;Vale do Itaja�;Blumenau;Blumenau;EEB DR MAX TAVARES D AMARAL;2;1;0
+0;72;42081106;154;Sul;Santa Catarina;Botuver�;Blumenau;Brusque;Vale do Itaja�;Blumenau;Botuver�;EEB PE JOAO STOLTE;2;1;0
+0;72;42065780;200;Sul;Santa Catarina;Campo Er�;Chapec�;S�o Louren�o do Oeste;Oeste Catarinense;Chapec�;Campo Er�;EEB RAUL POMPEIA;2;1;0
+0;72;42054290;171;Sul;Santa Catarina;Caxambu do Sul;Chapec�;Chapec�;Oeste Catarinense;Chapec�;Caxambu do Sul;EEB CANDIDO RAMOS;2;1;0
+0;72;42077877;247;Sul;Santa Catarina;Ermo;Crici�ma;Ararangu�;Sul Catarinense;Ararangu�;Ermo;EEB PEDRO SIMON;2;1;0
+0;72;42001404;156;Sul;Santa Catarina;Florian�polis;Florian�polis;Florian�polis;Grande Florian�polis;Florian�polis;Ribeir�o da Ilha;EEB DOM JAIME DE BARROS CAMARA;2;1;0
+0;72;42067898;151;Sul;Santa Catarina;Guaraciaba;Chapec�;S�o Miguel do Oeste;Oeste Catarinense;S�o Miguel do Oeste;Guaraciaba;EEB SARA CASTELHANO KLEINKAUF;2;1;0
+0;72;42086710;176;Sul;Santa Catarina;Ipua�u;Chapec�;Xanxer�;Oeste Catarinense;Xanxer�;Ipua�u;EEB PE ANTONIO VIEIRA;2;1;0
+2;92;42073529;152;Sul;Santa Catarina;Itaja�;Blumenau;Itaja�;Vale do Itaja�;Itaja�;Itaja�;IFSC - CAMPUS ITAJAI;1;1;0
+0;72;42091551;197;Sul;Santa Catarina;Jaragu� do Sul;Joinville;Joinville;Norte Catarinense;Joinville;Jaragu� do Sul;EEB PROF HELEODORO BORGES;2;1;0
+0;72;42021103;148;Sul;Santa Catarina;Joinville;Joinville;Joinville;Norte Catarinense;Joinville;Joinville;EEB FRANCISCO EBERHARDT;2;2;0
+0;72;42086272;152;Sul;Santa Catarina;Jupi�;Chapec�;S�o Louren�o do Oeste;Oeste Catarinense;Xanxer�;Jupi�;EEB MARIA MADALENA DE MOURA FERRO;2;1;0
+0;72;42004225;161;Sul;Santa Catarina;Palho�a;Florian�polis;Florian�polis;Grande Florian�polis;Florian�polis;Palho�a;EEB PROF NICOLINA TANCREDO;2;1;0
+0;72;42055245;148;Sul;Santa Catarina;Palmitos;Chapec�;Chapec�;Oeste Catarinense;Chapec�;Palmitos;EEB PRINCESA ISABEL;2;1;0
+0;72;42049725;147;Sul;Santa Catarina;Peritiba;Chapec�;Conc�rdia;Oeste Catarinense;Conc�rdia;Peritiba;EEB IRMA ANUNCIATA SPERANDIO;2;1;0
+0;72;42141770;153;Sul;Santa Catarina;Pomerode;Blumenau;Blumenau;Vale do Itaja�;Blumenau;Pomerode;EEM ERWIN CURT TEICHMANN;2;1;0
+0;72;42022770;157;Sul;Santa Catarina;Rio do Sul;Blumenau;Rio do Sul;Vale do Itaja�;Rio do Sul;Rio do Sul;EEB DEP JOAO CUSTODIO DA LUZ;2;1;0
+0;72;42007186;235;Sul;Santa Catarina;Tubar�o;Crici�ma;Tubar�o;Sul Catarinense;Tubar�o;Tubar�o;EEB STO ANJO DA GUARDA;2;2;0
+0;72;42024536;229;Sul;Santa Catarina;Vitor Meireles;Blumenau;Ibirama - Presidente Get�lio;Vale do Itaja�;Rio do Sul;Barra da Prata;EEB VICTOR MEIRELLES;2;1;0
+0;72;43012795;155;Sul;Rio Grande do Sul;Alegria;Iju�;Tr�s de Maio;Noroeste Rio-grandense;Iju�;Alegria;COL ESTADUAL CALDAS JUNIOR;2;1;0
+0;72;43026168;154;Sul;Rio Grande do Sul;Braga;Iju�;Tr�s Passos;Noroeste Rio-grandense;Tr�s Passos;Braga;ESC EST ENS MED SANTO PAZINI;2;1;0
+0;72;43028217;189;Sul;Rio Grande do Sul;Cacequi;Santa Maria;Santa Maria;Centro Ocidental Rio-grandense;Santa Maria;Cacequi;COL ESTADUAL PROF ANTONIO LEMOS DE ARAUJO;2;1;0
+0;72;43081878;175;Sul;Rio Grande do Sul;Cap�o Bonito do Sul;Passo Fundo;Lagoa Vermelha;Nordeste Rio-grandense;Vacaria;Cap�o Bonito do Sul;ESC EST ENS MED DR ABELARDO JOSE NACUL;2;1;0
+0;72;43043224;193;Sul;Rio Grande do Sul;Caxias do Sul;Caxias do Sul;Caxias do Sul;Nordeste Rio-grandense;Caxias do Sul;Caxias do Sul;ESC EST ENS MED JOSE GENEROSI;2;1;0
+0;72;43127029;149;Sul;Rio Grande do Sul;Chu�;Pelotas;Pelotas;Sudeste Rio-grandense;Litoral Lagunar;Chu�;ESC EST ENS MED MARECHAL SOARES DE ANDREA;2;1;0
+0;72;43033377;230;Sul;Rio Grande do Sul;Cruzaltense;Passo Fundo;Erechim;Noroeste Rio-grandense;Erechim;Cruzaltense;ESC EST ENS MED VERA CRUZ;2;1;0
+0;72;43059864;158;Sul;Rio Grande do Sul;Esta��o;Passo Fundo;Erechim;Noroeste Rio-grandense;Erechim;Esta��o;ESC EST ENS MED FRANCISCO DE ASSIS;2;1;0
+0;72;43079865;195;Sul;Rio Grande do Sul;Jaguari;Santa Maria;Santa Maria;Centro Ocidental Rio-grandense;Santa Maria;Jaguari;INST EST EDUC PROFA GUILHERMINA JAVORSKI;2;1;0
+0;72;43090923;150;Sul;Rio Grande do Sul;Nova Br�scia;Santa Cruz do Sul - Lajeado;Encantado;Centro Oriental Rio-grandense;Lajeado-Estrela;Nova Br�scia;ESC EST ENS MED NOVA BRESCIA;2;1;0
+0;72;43160727;265;Sul;Rio Grande do Sul;Novo Machado;Iju�;Santa Rosa;Noroeste Rio-grandense;Santa Rosa;Novo Machado;ESC EST ENS MED PROFESSOR ANTONIO BARELLA;2;1;0
+0;72;43094325;181;Sul;Rio Grande do Sul;Paim Filho;Passo Fundo;Tapejara - Sananduva;Noroeste Rio-grandense;Sananduva;Paim Filho;ESC EST ED BAS LUIZA FORMIGHIERI;2;1;0
+0;72;43000304;196;Sul;Rio Grande do Sul;Pelotas;Pelotas;Pelotas;Sudeste Rio-grandense;Pelotas;Pelotas;COLEGIO TIRADENTES PELOTAS;2;1;0
+0;72;43105815;150;Sul;Rio Grande do Sul;Porto Alegre;Porto Alegre;Porto Alegre;Metropolitana de Porto Alegre;Porto Alegre;Porto Alegre;ESC EST ENS MED ALMIRANTE BARROSO;2;1;0
+0;72;43107354;204;Sul;Rio Grande do Sul;Porto Alegre;Porto Alegre;Porto Alegre;Metropolitana de Porto Alegre;Porto Alegre;Porto Alegre;ESC EST ENS MED VISCONDE DO RIO GRANDE;2;1;0
+4;70;43107583;127;Sul;Rio Grande do Sul;Porto Alegre;Porto Alegre;Porto Alegre;Metropolitana de Porto Alegre;Porto Alegre;Porto Alegre;INST EST EDUC GENERAL FLORES DA CUNHA;2;1;0
+0;72;43108067;156;Sul;Rio Grande do Sul;Porto Alegre;Porto Alegre;Porto Alegre;Metropolitana de Porto Alegre;Porto Alegre;Porto Alegre;INST EST EDUC PAULO DA GAMA;2;1;0
+0;72;43113613;205;Sul;Rio Grande do Sul;Rio Grande;Pelotas;Pelotas;Sudeste Rio-grandense;Litoral Lagunar;Rio Grande;ESC EST ENS MED DR AUGUSTO DUPRAT;2;1;0
+1;97;43121926;223;Sul;Rio Grande do Sul;Santa Maria;Santa Maria;Santa Maria;Centro Ocidental Rio-grandense;Santa Maria;Santa Maria;UFSM - COLEGIO POLITECNICO;1;1;0
+0;72;43295070;169;Sul;Rio Grande do Sul;Santa Maria;Santa Maria;Santa Maria;Centro Ocidental Rio-grandense;Santa Maria;Santa Maria;COLEGIO TIRADENTES SANTA MARIA;2;1;0
+2;92;43352065;168;Sul;Rio Grande do Sul;Santa Rosa;Iju�;Santa Rosa;Noroeste Rio-grandense;Santa Rosa;Santa Rosa;IF FARROUPILHA - CAMPUS SANTA ROSA;1;1;0
+0;72;43182143;178;Sul;Rio Grande do Sul;S�o Leopoldo;Porto Alegre;Novo Hamburgo - S�o Leopoldo;Metropolitana de Porto Alegre;Porto Alegre;S�o Leopoldo;INST ESTADUAL PARQUE DO TRABALHADOR;2;1;0
+0;72;43143784;249;Sul;Rio Grande do Sul;Toropi;Santa Maria;Santa Maria;Centro Ocidental Rio-grandense;Santa Maria;Toropi;ESC EST ENS MED AFONSO MAURER;2;1;0
+0;72;43156681;205;Sul;Rio Grande do Sul;Tr�s Arroios;Passo Fundo;Erechim;Noroeste Rio-grandense;Erechim;Tr�s Arroios;ESC EST ENS MED NOSSA SENHORA DE LOURDES;2;1;0
+0;72;43128068;149;Sul;Rio Grande do Sul;Unistalda;Santa Maria;Santiago;Centro Ocidental Rio-grandense;Santiago;Unistalda;ESC EST ED BAS JOAO AQUINO;2;1;0
+2;92;43279007;158;Sul;Rio Grande do Sul;Vacaria;Caxias do Sul;Vacaria;Nordeste Rio-grandense;Vacaria;Vacaria;IFRS - CAMPUS VACARIA;1;1;0
+0;72;43169155;202;Sul;Rio Grande do Sul;Vista Ga�cha;Iju�;Tr�s Passos;Noroeste Rio-grandense;Tr�s Passos;Vista Ga�cha;ESC EST ENS MED ERICO VERISSIMO;2;1;0
+0;72;43211658;196;Sul;Rio Grande do Sul;Westf�lia;Santa Cruz do Sul - Lajeado;Lajeado;Centro Oriental Rio-grandense;Lajeado-Estrela;Westf�lia;ESC EST ENS MED WESTFALIA;2;1;0
+0;72;50030396;265;Centro-Oeste;Mato Grosso do Sul;Aquidauana;Corumb�;Aquidauana - Anast�cio;Pantanais Sul Mato-grossense;Aquidauana;Aquidauana;EE INDIGENA DE EM PASCOAL LEITE DIAS;2;2;2
+0;72;50037005;163;Centro-Oeste;Mato Grosso do Sul;Dois Irm�os do Buriti;Campo Grande;Campo Grande;Pantanais Sul Mato-grossense;Aquidauana;Dois Irm�os do Buriti;EE INDIGENA CACIQUE NDETI REGINALDO;2;2;2
+0;72;50016016;148;Centro-Oeste;Mato Grosso do Sul;Dourados;Dourados;Dourados;Sudoeste de Mato Grosso do Sul;Dourados;Dourados;EE MIN JOAO PAULO DOS REIS VELOSO;2;1;0
+0;72;50018019;199;Centro-Oeste;Mato Grosso do Sul;Maracaju;Dourados;Dourados;Sudoeste de Mato Grosso do Sul;Dourados;Maracaju;EE CIVICO MILITAR CEL LIMA DE FIGUEIREDO;2;1;0
+2;92;50033212;154;Centro-Oeste;Mato Grosso do Sul;Navira�;Dourados;Navira� - Mundo Novo;Sudoeste de Mato Grosso do Sul;Iguatemi;Navira�;IFMS - CAMPUS NAVIRAI;1;1;0
+0;72;50010034;177;Centro-Oeste;Mato Grosso do Sul;Terenos;Campo Grande;Campo Grande;Centro Norte de Mato Grosso do Sul;Campo Grande;Terenos;EE EDUARDO PEREZ;2;1;0
+0;72;50012100;150;Centro-Oeste;Mato Grosso do Sul;Tr�s Lagoas;Campo Grande;Tr�s Lagoas;Leste de Mato Grosso do Sul;Tr�s Lagoas;Tr�s Lagoas;EE BOM JESUS;2;1;0
+4;70;51004836;140;Centro-Oeste;Mato Grosso;Apiac�s;Sinop;Alta Floresta;Norte Mato-grossense;Alta Floresta;Apiac�s;EE VINICIUS DE MORAES;2;1;0
+4;70;51070189;134;Centro-Oeste;Mato Grosso;Barra do Gar�as;Barra do Gar�as;Barra do Gar�as;Nordeste Mato-grossense;M�dio Araguaia;Barra do Gar�as;EE MILITAR TIRADENTES CABO PM VANILSON SILVA CARVALHO;2;1;0
+4;70;51044013;158;Centro-Oeste;Mato Grosso;C�ceres;C�ceres;C�ceres;Centro-Sul Mato-grossense;Alto Pantanal;C�ceres;EE PROFANA MDAS GRACAS SNORONHA;2;1;0
+0;72;51064456;170;Centro-Oeste;Mato Grosso;Cotrigua�u;Sinop;Ju�na;Norte Mato-grossense;Aripuan�;Cotrigua�u;EE SIDNEY CESAR FUHR;2;2;1
+0;72;51036738;156;Centro-Oeste;Mato Grosso;Cuiab�;Cuiab�;Cuiab�;Centro-Sul Mato-grossense;Cuiab�;Cuiab�;EE ANTONIO EPAMINONDAS;2;1;0
+4;70;51038650;127;Centro-Oeste;Mato Grosso;Cuiab�;Cuiab�;Cuiab�;Centro-Sul Mato-grossense;Cuiab�;Cuiab�;EE LEOVEGILDO DE MELO;2;1;0
+0;72;51034190;200;Centro-Oeste;Mato Grosso;Jangada;Cuiab�;Cuiab�;Centro-Sul Mato-grossense;Ros�rio Oeste;Jangada;EE DAMIAO MAMEDES DO NASCIMENTO;2;2;0
+0;72;51034360;159;Centro-Oeste;Mato Grosso;Jangada;Cuiab�;Cuiab�;Centro-Sul Mato-grossense;Ros�rio Oeste;Jangada;ESCOLA ESTADUAL ARNALDO ESTEVAO DE FIGUEIREDO;2;1;0
+4;70;51168804;133;Centro-Oeste;Mato Grosso;Nossa Senhora do Livramento;Cuiab�;Cuiab�;Centro-Sul Mato-grossense;Cuiab�;Nossa Senhora do Livramento;EE TEREZA CONCEICAO DE ARRUDA;2;2;3
+4;70;51008602;165;Centro-Oeste;Mato Grosso;Nova Cana� do Norte;Sinop;Sinop;Norte Mato-grossense;Col�der;Nova Cana� do Norte;EE NOVA CANAA;2;1;0
+0;72;51017652;148;Centro-Oeste;Mato Grosso;Paranatinga;Rondon�polis;Primavera do Leste;Norte Mato-grossense;Paranatinga;Paranatinga;EE APOLONIO BOURET DE MELO;2;1;0
+0;72;51048582;167;Centro-Oeste;Mato Grosso;Poxor�u;Rondon�polis;Primavera do Leste;Sudeste Mato-grossense;Tesouro;Poxor�u;EE PE CESAR ALBISETTI;2;1;0
+2;92;51068362;162;Centro-Oeste;Mato Grosso;Sinop;Sinop;Sinop;Norte Mato-grossense;Sinop;Sinop;IFMT - CAMPUS AVANCADO SINOP;1;1;0
+0;72;51070456;171;Centro-Oeste;Mato Grosso;Sinop;Sinop;Sinop;Norte Mato-grossense;Sinop;Sinop;EE MILITAR TIRADENTES 2 SGT PM CLAUDEMIR FRANCA MACIEL;2;1;0
+0;72;51013177;159;Centro-Oeste;Mato Grosso;Tabapor�;Sinop;Juara;Norte Mato-grossense;Arinos;Tabapor�;EE FRANCISCO SALDANHA NETO;2;1;0
+4;70;52051773;128;Centro-Oeste;Goi�s;Apor�;Rio Verde;Jata�-Mineiros;Sul Goiano;Sudoeste de Goi�s;Apor�;COLEGIO ESTADUAL JOSE LUDOVICO DE ALMEIDA;2;1;0
+0;72;52022170;174;Centro-Oeste;Goi�s;Ara�u;Goi�nia;Inhumas - Itabera� - Anicuns;Centro Goiano;An�polis;Ara�u;CENTRO DE ENSINO EM PERIODO INTEGRAL HERMOGENES COELHO;2;1;0
+0;72;52001580;163;Centro-Oeste;Goi�s;Araguapaz;Goi�nia;Goi�s - Itapuranga;Noroeste Goiano;Rio Vermelho;Araguapaz;CENTRO DE ENSINO EM PERIODO INTEGRAL BRASIL DE RAMOS CAIADO;2;1;0
+0;72;52094049;204;Centro-Oeste;Goi�s;Baliza;S�o Lu�s de Montes Belos - Ipor�;Ipor�;Noroeste Goiano;Aragar�as;Baliza;COLEGIO ESTADUAL OZIEL ALVES PEREIRA;2;2;1
+0;72;52100880;147;Centro-Oeste;Goi�s;Catal�o;Goi�nia;Catal�o;Sul Goiano;Catal�o;Catal�o;IF GOIANO - CAMPUS AVANCADO CATALAO;1;1;0
+0;72;52056368;180;Centro-Oeste;Goi�s;Ed�ia;S�o Lu�s de Montes Belos - Ipor�;Palmeiras de Goi�s;Sul Goiano;Vale do Rio dos Bois;Ed�ia;CENTRO DE ENSINO EM PERIODO INTEGRAL JOSE DE FARIA;2;1;0
+0;72;52033317;150;Centro-Oeste;Goi�s;Goi�nia;Goi�nia;Goi�nia;Centro Goiano;Goi�nia;Goi�nia;CENTRO DE ENSINO EM PERIODO INTEGRAL AECIO OLIVEIRA DE ANDRADE;2;1;0
+0;72;52033406;200;Centro-Oeste;Goi�s;Goi�nia;Goi�nia;Goi�nia;Centro Goiano;Goi�nia;Goi�nia;CENTRO DE ENSINO EM PERIODO INTEGRAL DO SETOR SUDOESTE;2;1;0
+4;70;52035271;139;Centro-Oeste;Goi�s;Goi�nia;Goi�nia;Goi�nia;Centro Goiano;Goi�nia;Goi�nia;COLEGIO ESTADUAL DA POLICIA MILITAR DE GOIAS MIRIAM BENCHIMOL FERREIRA;2;1;0
+0;72;52106195;169;Centro-Oeste;Goi�s;Goianira;Goi�nia;Goi�nia;Centro Goiano;Goi�nia;Goianira;CENTRO DE ENSINO EM PERIODO INTEGRAL PROF LAZARA DE FATIMA E SILVA FLORES;2;1;0
+2;92;52096408;172;Centro-Oeste;Goi�s;Ipor�;S�o Lu�s de Montes Belos - Ipor�;Ipor�;Centro Goiano;Ipor�;Ipor�;IFGOIANO - CAMPUS IPORA;1;2;0
+2;92;52202372;210;Centro-Oeste;Goi�s;Itumbiara;Itumbiara;Itumbiara;Sul Goiano;Meia Ponte;Itumbiara;IFG - CAMPUS ITUMBIARA;1;1;0
+4;70;52069168;136;Centro-Oeste;Goi�s;Mineiros;Rio Verde;Jata�-Mineiros;Sul Goiano;Sudoeste de Goi�s;Mineiros;COLEGIO ESTADUAL DA POLICIA MILITAR DE GOIAS PROFESSORA ALICE PEREIRA ALVES;2;1;0
+0;72;52060993;165;Centro-Oeste;Goi�s;Piracanjuba;Itumbiara;Piracanjuba;Sul Goiano;Meia Ponte;Piracanjuba;CENTRO DE ENSINO EM PERIODO INTEGRAL RUY BRASIL CAVALCANTE;2;1;0
+0;72;52019080;156;Centro-Oeste;Goi�s;Rian�polis;Porangatu - Urua�u;Ceres - Rialma - Goian�sia;Centro Goiano;Ceres;Rian�polis;CENTRO DE ENSINO EM PERIODO INTEGRAL GRICON E SILVA;2;1;0
+0;72;52030482;149;Centro-Oeste;Goi�s;S�o Lu�s de Montes Belos;S�o Lu�s de Montes Belos - Ipor�;S�o Lu�s de Montes Belos;Centro Goiano;Anicuns;Rosal�ndia;ESCOLA ESTADUAL DE ROSALANDIA;2;2;0
+0;72;52066649;240;Centro-Oeste;Goi�s;Tr�s Ranchos;Goi�nia;Catal�o;Sul Goiano;Catal�o;Tr�s Ranchos;COLEGIO ESTADUAL MARIA ELIAS DE MELO;2;1;0
+2;92;52100936;162;Centro-Oeste;Goi�s;Trindade;Goi�nia;Goi�nia;Centro Goiano;Goi�nia;Trindade;IFGOIANO - CAMPUS TRINDADE;1;1;0
+4;70;53001206;128;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;CEM SETOR LESTE;2;1;0
+4;70;53001354;125;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;COL MILITAR DE BRASILIA;1;1;0
+4;70;53004981;123;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;CED INCRA 08;2;2;0
+4;70;53005465;124;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;CEM 01 DE SOBRADINHO;2;1;0
+4;70;53014316;134;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;CED VALE DO AMANHECER;2;1;0
+2;92;53015223;241;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;IFB - CAMPUS TAGUATINGA;1;1;0
+2;92;53015401;182;Centro-Oeste;Distrito Federal;Bras�lia;Distrito Federal;Distrito Federal;Distrito Federal;Bras�lia;Bras�lia;IFB - CAMPUS SAO SEBASTIAO;1;1;0
