@@ -101,27 +101,47 @@ export component AppWindow inherits Window {
 
         StandardTableView {
             visible: state == UIState.Success;
-            columns: [
-                { title: "Cód. Cluster" },
-                { title: "Média Cluster" },
-                { title: "Cód. Escola" },
-                { title: "Média Escola" },
-                { title: "Região" },
-                { title: "Uf" },
-                { title: "Município" },
-                { title: "R. Geo. Interm." },
-                { title: "R. Geo. Imed." },
-                { title: "Mesorregião" },
-                { title: "Microrregião" },
-                { title: "Distrito" },
-                { title: "Entidade" },
-                { title: "Tp Dep." },
-                { title: "Tp Loc." },
-                { title: "Tp Loc. Diferenciada" },
-            ];
             rows: root.response;
             sort-ascending(col) => { root.response = root.sort_slvi(root.response, col, true); }
             sort-descending(col) => { root.response = root.sort_slvi(root.response, col, false); }
+            columns: [
+                { title: "CLUSTER" },
+                { title: "CLUSTER_AVG_GRADE" },
+                { title: "AVG_GRADE" },
+                { title: "NU_ANO_CENSO" },
+                { title: "NO_REGIAO" },
+                { title: "CO_REGIAO" },
+                { title: "NO_UF" },
+                { title: "SG_UF" },
+                { title: "CO_UF" },
+                { title: "NO_MUNICIPIO" },
+                { title: "CO_MUNICIPIO" },
+                { title: "NO_REGIAO_GEOG_INTERM" },
+                { title: "CO_REGIAO_GEOG_INTERM" },
+                { title: "NO_REGIAO_GEOG_IMED" },
+                { title: "CO_REGIAO_GEOG_IMED" },
+                { title: "NO_MESORREGIAO" },
+                { title: "CO_MESORREGIAO" },
+                { title: "NO_MICRORREGIAO" },
+                { title: "CO_MICRORREGIAO" },
+                { title: "NO_DISTRITO" },
+                { title: "CO_DISTRITO" },
+                { title: "NO_ENTIDADE" },
+                { title: "CO_ENTIDADE" },
+                { title: "TP_DEPENDENCIA" },
+                { title: "TP_CATEGORIA_ESCOLA_PRIVADA" },
+                { title: "TP_LOCALIZACAO" },
+                { title: "TP_LOCALIZACAO_DIFERENCIADA" },
+                { title: "DS_ENDERECO" },
+                { title: "NU_ENDERECO" },
+                { title: "DS_COMPLEMENTO" },
+                { title: "NO_BAIRRO" },
+                { title: "CO_CEP" },
+                { title: "NU_DDD" },
+                { title: "NU_TELEFONE" },
+                { title: "TP_SITUACAO_FUNCIONAMENTO" },
+                { title: "CO_ORGAO_REGIONAL" },
+            ];
         }
     }
 }

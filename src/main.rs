@@ -15,7 +15,7 @@ use std::{
 
 use crate::{data::DataItem, types::Source};
 use anyhow::Result;
-use consts::{CLEAR_RE, ENEM_ESCOLA, ENEM_NOTA, ESCOLA_IN_RES, ESCOLAS_ID, ESCOLAS_QTS};
+use consts::{CLEAR_RE, ENEM_ESCOLA, ENEM_NOTA, ESCOLAS_ID, ESCOLAS_QTS};
 use data::DataSource;
 use dotenv::dotenv;
 use slint::Model;
@@ -259,12 +259,13 @@ async fn step_two_response(
         r_res?;
 
         let mut header = HashMap::new();
-        header.insert("CLUSTER_CODE".to_owned(), 0);
+        header.insert("CLUSTER".to_owned(), 0);
         header.insert("CLUSTER_AVG_GRADE".to_owned(), 1);
-        header.insert("ESCOLA_CODE".to_owned(), 2);
-        header.insert("ESCOLA_AVG_GRADE".to_owned(), 3);
-        for (i, n) in ESCOLA_IN_RES.iter().enumerate() {
-            header.insert((*n).to_owned(), i + 4);
+        header.insert("AVG_GRADE".to_owned(), 2);
+
+        escolas.read(true, None)?;
+        for (n, i) in escolas.get_header()? {
+            header.insert((*n).to_owned(), i + 3);
         }
         response.write(true)?;
         response.set_header(&header)?;
@@ -275,18 +276,15 @@ async fn step_two_response(
                 if let Some(e_code) = di.get::<_, String>(ESCOLAS_ID)
                     && let Some((c_code, c_avg, e_avg)) = hash_escolas.get(&e_code)
                 {
-                    let mut v = vec![
+                    let mut res = DataItem::new(types::UniRef::Ref(&header), vec![
                         c_code.to_string(),
                         c_avg.to_string(),
-                        e_code.to_string(),
                         e_avg.to_string(),
-                    ];
-                    for n in ESCOLA_IN_RES.iter() {
-                        v.push(di.get::<_, String>(n).unwrap_or_default());
+                    ]);
+                    for (n, v) in di.to_vec().unwrap_or_default() {
+                        res.set(n, v).unwrap_or_default();
                     }
-                    response
-                        .write_item(DataItem::new(types::UniRef::Ref(&header), v))
-                        .expect("Error inserting response value");
+                    response.write_item(res).expect("Error inserting response value");
                 }
                 Ok(true)
             })
@@ -372,6 +370,7 @@ async fn exe_data_mining(
                             if let Some(vec) = di.to_vec() {
                                 let row = vec
                                     .iter()
+                                    .take(36)
                                     .map(|(_, cell)| cell.to_owned())
                                     .collect::<Vec<_>>();
                                 data.push(row);
