@@ -49,7 +49,7 @@ A identificação dessas unidades escolares, com desempenho resiliente, permite 
 
 O Exame Nacional do Ensino Médio (ENEM) foi criado em 1998 no Brasil com o intuito de avaliar a educação na rede de escolas do ensino médio nacionais. A adesão ao ENEM foi tímida nas primeiras edições do exame, mas ganhou força, a partir da edição de 2004, quando passou a ser o mecanismo de ingresso ao Programa Universidade para Todos (ProUni), com disputa nacional de bolsas de estudo em instituições privadas. O exame era feito em uma única tarde, composto por uma prova com 63 questões objetivas e uma redação. A sua consagração ocorre, a partir da sua edição de 2009, em que foi reestruturado para o modelo conhecido atualmente, e passou a ser também o mecanismo de ingresso ao Sistema de Seleção Unificada (Sisu). O exame passou a ser feito em 2 turnos, composto por uma redação e quatro provas de 45 questões cada uma, agrupadas em área de conhecimento, a saber: Códigos, Linguagens e suas Tecnologias, Matemática e suas Tecnologias, Ciências da Natureza e suas Tecnologias e, Ciências Humanas e suas Tecnologias. O ENEM representa, na atualidade, a principal forma de democratização do ensino superior, configurando-se também como métrica para se avaliar o Ensino Médio, a etapa final da educação básica \cite{misc:decreto_enem} e prognosticar tendências na educação no país, como base concreta para o desenvolvimento de políticas públicas.
 
-Entre outras ferramentas relevantes para o diagnóstico e o desenvolvimento da educação brasileira temos o Censo Escolar, coordenado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (Inep), o que permite o aprofundamento ainda maior na análise sobre o ensino Brasileiro. O Censo é preenchido anualmente e com caráter declarativo obrigatório para as escolas da educação básica. A plataforma provê dados da estrutura dessas instituições que também servem de métrica para ações no país. Tanto as informações do ENEM como do Censo Escolar são disponibilizadas em seu estado bruto, através de microdados, os quais se configuram como nossas principais fontes de dados.
+Entre outras ferramentas relevantes para o diagnóstico e o desenvolvimento da educação brasileira temos o Censo Escolar, coordenado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), o que permite o aprofundamento ainda maior na análise sobre o ensino Brasileiro. O Censo é preenchido anualmente e com caráter declarativo obrigatório para as escolas da educação básica. A plataforma provê dados da estrutura dessas instituições que também servem de métrica para ações no país. Tanto as informações do ENEM como do Censo Escolar são disponibilizadas em seu estado bruto, através de microdados, os quais se configuram como nossas principais fontes de dados.
 
 Entretanto, somente a disponibilidade desses dados \cite{misc:micro_enem} \cite{misc:micro_escolas} não permite um entendimento concreto sobre a educação, nem possibilita traçar uma abordagem compatível com a realidade do Brasil. Em "Influência da Renda no Desempenho dos Estudantes no Enem: uma Análise Longitudinal" \cite{article:renda_enem}, que fez uma análise de todas as edições do ENEM até 2023 cruzando os dados do questionário socioeconômico com as notas do exame, foi avaliado que, durante todos os anos, a renda familiar foi um fator decisivo para o desempenho dos alunos. Os autores também destacam a importância da ação direcionada para as escolas públicas e em situação desfavorável, pois são nessas escolas em que se encontram os estudantes mais afetados pela desigualdade social.
 
@@ -59,9 +59,11 @@ Assim, a proposta do desenvolvimento de uma ferramenta capaz de mapear esses fat
 
 \section{Metodologia}
 
-Baseado no objetivo do projeto foram escolhidas duas bases de dados a serem tratadas: microdados do ENEM 2024 \cite{misc:micro_enem} e microdados do censo escolar 2024 \cite{misc:micro_escolas}, ambas contendo seus valores e um dicionário que servem de referência para as analises feitas. Com isso foi iniciada a produção de uma ferramenta na linguagem de programação \textit{Rust} \cite{misc:rust_lang} que seja capaz de ler os microdados, tratá-los e processá-los, gerando enfim indicadores relevantes para a proposta. Um repositório \cite{misc:proj_repo} no \textit{GitHub} \cite{misc:github_repo} foi criado para o versionamento e foi escolhida a \textit{IDE VSCode} \cite{misc:vscode_ide} para o desenvolvimento. Entendendo que o projeto desenvolvido está sujeito a mudanças e possíveis extensões à depender de futuras pesquisas, optou-se pelo uso da arquitetura em N camadas \cite{book:n_layers} seguindo os princípios \textit{SOLID} \cite{misc:solid} de desenvolvimento.
+Baseado no objetivo do projeto foram escolhidas duas bases de dados a serem tratadas: microdados do ENEM 2024 \cite{misc:micro_enem} e microdados do censo escolar 2024 \cite{misc:micro_escolas}, ambas contendo seus valores e um dicionário que servem de referência para as analises feitas. Dentro da base de dados do ENEM seu conteúdo é dividido em três tabelas: 1. Questionário socioeconômico, 2. Resultados e dados da aplicação do exame e 3. Itens da prova, que descreve as questões seus detalhes.
 
-Para atender as funcionalidades desejadas no projeto foram escolhidas dentro da linguagem \textit{Rust} \cite{misc:rust_lang} um conjunto de bibliotecas: 1. \textit{Slint} \cite{misc:slint_lib} para a interface e 2. \textit{Tokio} \cite{misc:tokio_lib} para códigos assíncronos e paralelos. na metodologia foi utilizado o processo \textit{Knowledge Discovery in Databases} (KDD) \cite{article:kdd}, no qual se divide a mineração dos dados em etapas, cada uma com um objetivo a fim de melhorar a transformação de dados em informação, conhecimento e, enfim, em ação. Essa sessão será dividida em cinco subseções, cada uma representando e desenvolvendo uma parte do processo KDD, a saber: 1. Seleção, 2. Pre-processamento, 3. Transformação, 4. Mineração e 5. Interpretação.
+Analisado os documentos da base do ENEM 2024 \cite{misc:micro_enem} foi identificado que, segundo o INEP no documento "Leia-Me", para garantir conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD) não foi disponibilizada uma chave única que correlacionasse o questionário socioeconômico com os resultados e aplicação do exame. Portanto para manter a proposta foi optado focar a extração dos indicadores socioeconômicos exclusivamente do censo escolar do mesmo ano \cite{misc:micro_escolas}.
+
+Na metodologia foi utilizado o processo \textit{Knowledge Discovery in Databases} (\textit{KDD}) \cite{article:kdd}, no qual se divide a mineração dos dados em etapas, cada uma com um objetivo, a fim de melhorar a transformação de dados em informação, conhecimento e, enfim, em ação. Essa sessão será dividida em cinco subseções, cada uma representando e desenvolvendo uma parte do processo \textit{KDD}, a saber: 1. Seleção, 2. Pre-processamento, 3. Transformação, 4. Mineração e 5. Interpretação.
 
 \begin{figure}[htbp]
 \centering
@@ -97,9 +99,11 @@ flowchart LR
   class D5 d5
   class D6 d6
 \end{mermaid}
-\caption{Diagrama baseado no processo KDD \cite{article:kdd}}
+\caption{Diagrama baseado no processo \textit{KDD} \cite{article:kdd}}
 \label{fig:kdd}
 \end{figure}
+
+Foi iniciada a produção de uma ferramenta na linguagem de programação \textit{Rust} \cite{misc:rust_lang} com um repositório \cite{misc:proj_repo} no \textit{GitHub} \cite{misc:github_repo} para o versionamento e a \textit{IDE VSCode} \cite{misc:vscode_ide} para o desenvolvimento. Ao se referir ao código foram escolhidas um conjunto de bibliotecas em \textit{Rust} \cite{misc:rust_lang} que atendem as necessidades técnicas: 1. \textit{Slint} \cite{misc:slint_lib} para a interface e 2. \textit{Tokio} \cite{misc:tokio_lib} para códigos assíncronos e paralelos. Entendendo que o projeto deve suportar todas as etapas do \textit{KDD}, está sujeito a mudanças e deve permitir possíveis extensões à depender de futuras pesquisas, optou-se pelo uso da arquitetura em N camadas \cite{book:n_layers} com os princípios \textit{SOLID} \cite{misc:solid}.
 
 \subsection{Seleção}
 
@@ -107,17 +111,24 @@ As bases dos resultados do ENEM quanto do Censo Escolar são obtidas a partir de
 
 \subsection{Pré-processamento}
 
-Seguindo a proposta de trabalho, para o Censo Escolar\cite{misc:micro_escolas} foram selecionadas aquelas entidades que sejam da rede publica de ensino ("TP\_DEPENDENCIA" com valor igual a 4, segundo o dicionário de dados) e que possuí matricula de alunos cursando o ensino médio ("IN\_MED" com valor igual a 1, segundo o dicionário de dados). No caso dos resultados do ENEM\cite{misc:micro_enem}, também partindo da proposta, é necessário cruzar a nota dos participantes com a escola em que esses estão concluindo ou concluíram o ensino médio. Para isso filtramos somente aqueles que contém o campo "CO\_ESCOLA" com valor, essa coluna além de garantir a seleção também é o identificador único capaz de associar os resultados com as escolas na primeira base de dados.
+Seguindo a proposta de trabalho, para o Censo Escolar \cite{misc:micro_escolas} foram selecionadas aquelas entidades que sejam da rede publica de ensino ("TP\_DEPENDENCIA" com valor igual a 4, segundo o dicionário de dados) e que possuí matricula de alunos cursando o ensino médio ("IN\_MED" com valor igual a 1, segundo o dicionário de dados). No caso dos resultados do ENEM \cite{misc:micro_enem}, também partindo da proposta, é necessário cruzar a nota dos participantes com a escola em que estão concluindo ou concluíram o ensino médio. Para isso filtramos somente aqueles que contém o campo "CO\_ESCOLA" com valor, essa coluna além de garantir a seleção também é o identificador único capaz de associar os resultados com as escolas na primeira base de dados.
 
 \subsection{Transformação}
+\label{sec:me_trasf}
 
-Ao analisar os dados do Censo Escolar\cite{misc:micro_escolas} encontramos uma base com 426 campos, onde muitos desses podem causar ruídos e diminuir a performance durante o processo de classificação, então para diminuir a dimensionalidade do conjunto aplicamos uma adaptação da técnica de redução \textit{PCA}\cite{book:pca}. Foram incluídos somente os elementos quantitativos descritos pelo prefixo "QT" (154 campos), esses passam pelas seguintes etapas: 1. Padronização dos valores, 2. Geração da Matriz de Covariância, 3. Geração dos Autovalores e 4. Seleção dos \textit{K} campos que mais influenciam na variância.
+Ao analisar os dados do Censo Escolar \cite{misc:micro_escolas} encontramos uma base com 426 campos, em que muitos podem causar ruídos e diminuir a performance durante o processo de classificação. Então para diminuir a dimensionalidade do conjunto aplicamos uma adaptação da técnica de redução \textit{PCA} \cite{book:pca}. Foram incluídos somente os elementos quantitativos descritos pelo prefixo "QT" (154 campos), esses passam pelas seguintes etapas: 1. Padronização dos valores, 2. Geração da Matriz de Covariância, 3. Geração dos Autovalores e 4. Seleção dos \textit{K} campos que mais influenciam na variância.
 
 \subsection{Mineração}
 
-Para um melhor entendimento dos recortes SE das escolas foi escolhido o algoritmo \textit{K-Means++}\cite{article:kmeanspp}, nele as escolas são agrupadas de forma não supervisionada e diferente do clássico \textit{K-Means} as sementes são selecionadas de forma mais estratégica baseado em estatística. Assim é possível visualizar as características comuns e distintas das instituições e compará-las com seu desempenho no exame nacional.
+Para um melhor entendimento dos recortes SE decidiu-se por agrupar as escolas para que seja possível identificar os conjuntos com indicadores desfavorável. Dado que sem contexto a nota do exame não permite uma visão completa dos fatores externos que podem influência-la, com esse contexto (conjuntos ou \text{clusters}) podemos selecionar as instituições com desempenho realmente excepcional no exame (\textit{outliers}). O algoritmo \textit{K-Means++} \cite{article:kmeanspp} foi selecionado para a agrupação de forma não supervisionada, diferente do clássico \textit{K-Means} as sementes são indicadas de maneira estratégica baseado em estatística, garantindo resultados mais consistentes. Em sua execução os campos obtidos na etapa de transformação (sessão \ref{sec:me_trasf}) com o algoritmo \textit{PCA} adaptado foram a base dos valores usados no calculo dos \text{clusters}.
 
-Após a definição dos \textit{clusters} pelo \textit{K-Means++}, é necessário identificar as escolas consideradas \textit{outliers} em cada grupo. Para isso, calcula-se inicialmente a média aritmética das notas dos alunos de cada \textit{cluster} e a média por escola dentro de cada \textit{cluster}. Seja $C$ um \textit{cluster}, $\bar{x}_C$ a média de $C$, $E_C$ o conjunto de escolas pertencentes a $C$, $\bar{x}_e$ a média de cada escola onde $e \in E_C$, calculamos esses valores por:
+Após a definição dos \textit{clusters} pelo \textit{K-Means++}, é necessário obter as escolas consideradas \textit{outliers} em cada grupo. Entendendo que a proposta tem como foco a capacitação em Tecnologias da Informação e Comunicação (TIC) foram escolhidas as provas de Linguagens e Códigos e de Matemática, encontradas nos campos "NU\_NOTA\_LC" e "NU\_NOTA\_MT" respectivamente, na base de dados do ENEM \cite{misc:micro_enem}. Para avaliar ambas as áreas consideramos que a nota de um aluno $i$ ($x_i$) é dada pela soma dos dois campos citados anteriormente.
+
+\begin{equation}
+x_i = NU\_NOTA\_LC_i + NU\_NOTA\_MT_i
+\end{equation}
+
+Com a nota calcula-se a média aritmética dos alunos de cada \textit{cluster} e a média por escola dentro de cada \textit{cluster}, assim podemos verificar de forma contextualizada o desempenho das instituições. Seja $C$ um \textit{cluster}, $\bar{x}_C$ a média de $C$, $E_C$ o conjunto de escolas pertencentes a $C$, $\bar{x}_e$ a média de cada escola onde $e \in E_C$, calculamos esses valores por:
 
 \begin{equation}
 \bar{x}_C = \frac{1}{N_C}\sum_{i=1}^{N_C} x_i
@@ -139,7 +150,7 @@ Por fim, uma escola $e$ é classificada como \textit{outlier} do \textit{cluster
 
 \subsection{Interpretação}
 
-Seguindo a proposta e metodologia deve ser desenvolvida uma interface gráfica de fácil utilização, capaz de ser executado de forma relativamente rápida em computadores de uso geral e exibir os dados obtidos pela mineração. Assim foi escolhida a biblioteca \textit{Slint} \cite{misc:slint_lib}, uma ferramenta pouco intrusiva para códigos \textit{Rust} que atende às demandas do projeto. Como pode ser visto na figura \ref{fig:project_ui} foi implementado: 1. Links de acesso as bases de dados utilizadas na mineração, 2. Campos de hiper-parâmetros para os algoritmos \textit{PCA} e \textit{K-Means++}, 3. Botão de executar e barra de progresso para acompanhamento da exceção, 4. Tabela de exibição dos resultados obtidos com botões para baixar esses dados e os \textit{clusters} identificados e 5. \textit{Display} para limpar arquivos gerados pelas etapas intermediárias e finais do processamento.
+Seguindo a proposta e metodologia, deve ser desenvolvida uma interface gráfica de fácil utilização, capaz de ser executado de forma relativamente rápida em computadores de uso geral e exibir os dados obtidos pela mineração. Assim, foi escolhida a biblioteca \textit{Slint} \cite{misc:slint_lib}, uma ferramenta pouco intrusiva para códigos \textit{Rust} que atende às demandas do projeto. Como pode ser visto na figura \ref{fig:project_ui} foi implementado: 1. Links de acesso as bases de dados utilizadas na mineração, 2. Campos de hiper-parâmetros para os algoritmos \textit{PCA} e \textit{K-Means++}, 3. Botão de executar e barra de progresso para acompanhamento da exceção, 4. Tabela de exibição dos resultados obtidos com botões para baixar esses dados e os \textit{clusters} identificados e 5. \textit{Display} para limpar arquivos gerados pelas etapas intermediárias e finais do processamento.
 
 \begin{figure}[htbp]
 \centering
@@ -154,7 +165,7 @@ Seguindo a proposta e metodologia deve ser desenvolvida uma interface gráfica d
 
 \section{Resultados e análises}
 
-Antes da geração dos resultados foi necessário a definição dos valores padrão dos hiper-parâmetros dos algoritmos utilizadas, para isso foi efetuado um processo de tentativa e erro buscando uma distribuição harmoniosa entre o número de \textit{clusters} e o número de escolas presentes em cada um. Após esses testes os valores encontrados foram: $K_{PCA} = 70$ para o números de campos selecionados pelo \textit{PCA}, $K_{k-means} = 6$ para o número de \textit{clusters} no \textit{K-Means++} e $I_{k-means} = 10$ para o número de repetições no \textit{K-Means++}. Outro resultado foi também a performance: com um computadores de uso geral (processador \textit{Intel Core i3}, 16GB de memória RAM e GPU integrada) o fluxo completo da mineração nas bases de dados do ENEM \cite{misc:micro_enem} e Censo Escolar \cite{misc:micro_escolas} próximos de 4 milhões de linhas e 200 mil linhas respectivamente tiveram duração inferior à 30min no seu processamento.
+Antes da geração dos resultados foi necessário a definição dos valores padrão dos hiper-parâmetros dos algoritmos utilizadas, para o qual foi efetuado um processo de tentativa e erro buscando uma distribuição harmoniosa entre o número de \textit{clusters} e o número de escolas presentes em cada um. Após esses testes, os valores encontrados foram: $K_{PCA} = 70$ para o números de campos selecionados pelo \textit{PCA}, $K_{k-means} = 6$ para o número de \textit{clusters} no \textit{K-Means++} e $I_{k-means} = 10$ para o número de repetições no \textit{K-Means++}. Outro resultado foi a performance: com um computadores de uso geral (processador \textit{Intel Core i3}, 16GB de memória RAM e GPU integrada), os fluxos completos da mineração nas bases de dados do ENEM \cite{misc:micro_enem} e Censo Escolar \cite{misc:micro_escolas}, próximos, respectivamente, de 4 milhões de linhas e 200 mil linhas, tiveram duração inferior à 30min no seu processamento.
 
 \begin{table}[htbp]
 \centering
@@ -166,7 +177,7 @@ Antes da geração dos resultados foi necessário a definição dos valores padr
 \hline
 1 & \makecell{Institutos Técnicos\\de Excelência} & $220$ & $97$ \\
 \hline
-2 & \makecell{Rede Técnica\\Federal} & $1.444$ & $92$ \\
+2 & \makecell{Rede Técnica\\\\} & $1.444$ & $92$ \\
 \hline
 3 & \makecell{\textit{Outlier}\\\\} & $1$ & N/A \\
 \hline
@@ -179,41 +190,48 @@ Antes da geração dos resultados foi necessário a definição dos valores padr
 \label{tab:res_clusters}
 \end{table}
 
-Após a exceção das $215.545$ escolas $21.093$ foram selecionadas aptas, onde cada uma foi associada a um dos seis \textit{clusters} como pode ser observado na tabela \ref{tab:res_clusters}. Esses foram analisados com base em características em comum e descritos da seguinte forma: 1. Escolas Regulares (\textit{cluster 0}), 2. Institutos Técnicos de Excelência (\textit{cluster 1}), 3. Rede Técnica (\textit{cluster 2}), 4. \textit{Outlier} contendo somente o Programa de Ensino de Jovens e Adultos de Poção de Pedras - MA (\textit{cluster 3}), 5. Grandes Centros Estaduais (cluster 4) e 6. \textit{Outlier} contendo escolas de AL com ensino noturno.
+Após a exceção das $215.545$ escolas, $21.093$ foram selecionadas aptas, onde cada uma foi associada a um dos seis \textit{clusters} como pode ser observado na tabela \ref{tab:res_clusters}. Tais \textit{clusters} foram analisados com base em características em comum e descritos da seguinte forma: 1. Escolas Regulares (\textit{cluster 0}), 2. Instituto Técnico de Excelência (\textit{cluster 1}), 3. Rede Técnica (\textit{cluster 2}), 4. \textit{Outlier} contendo somente o Programa de Ensino de Jovens e Adultos de Poção de Pedras - MA (\textit{cluster 3}), 5. Grande Centro (\textit{cluster 4}) e 6. \textit{Outlier} contendo escolas de AL com ensino noturno.
+
+Para o \textit{cluster 0} (Escolas Regulares) seu indicador mais marcante foi a quantidade de elementos no conjunto, representando $73\%$ do total, o que indica que existe uma hegemonia em relação à demografia e à estrutura das escolas publicas de ensino médio no Brasil. No \textit{cluster 1} (Instituto Técnico de Excelência) identificou-se que $74,1\%$ (figura \ref{fig:res_global_in}) exigem processo seletivo, $100\%$ possuem educação profissionalizante e, como observado na figura \ref{fig:res_global_se}, contém os melhores indicadores socioeconômicos na infraestrutura.
+
+O \textit{cluster 2} (Rede Técnica Federal) se assemelha ao \textit{cluster 1}, em que $65\%$ (figura \ref{fig:res_global_in}) têm processo seletivo e $100\%$ também possuem educação profissionalizante, entretanto possuem indicadores na infraestrutura e maior número de reserva de vagas (figura \ref{fig:res_global_in}). Para o \textit{cluster 4} (Grande Centro) pode se traçar um paralelo  com um \textit{cluster 0}, mas com maior destaque na presença da EJA (Educação de Jovens e Adultos) e um recorte mais marcante nos grupos étnico-raciais e quantidade de alunos por instituição (figuras \ref{fig:res_global_in} e \ref{fig:res_global_er}). Nos \textit{clusters 3} e \textit{5}, a quantidade de elementos, além de ínfima em relação aos outros conjuntos, também representa casos específicos, que poderiam equivocadamente ser classificados como outliers. Optou-se, portanto, por não incluí-los nos gráficos e comparações.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1\textwidth]{images/res_global_se.png}
+\includegraphics[width=.7\textwidth]{images/res_global_se.png}
 \caption{Indicadores socioeconômicos de infraestrutura agrupados por \textit{cluster}}
 \label{fig:res_global_se}
 \end{figure}
 
+Ao analisar os indicadores socioeconômicos de infraestrutura \ref{fig:res_global_se} podemos traçar paralelos ao desempenho de cada cluster, onde aquele com melhor nota também é o que apresenta maiores indicadores (\textit{cluster 1}). Outra relação pode ser feita com a presença de laboratórios de informática, o que indica a relevância da infraestrutura para o aprendizado em TIC.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1\textwidth]{images/res_global_in.png}
+\includegraphics[width=.7\textwidth]{images/res_global_vn.png}
+\caption{Indicadores socioeconômicos de vinculação agrupados por \textit{cluster}}
+\label{fig:res_global_vn}
+\end{figure}
+
+Fatores como vinculações da instituição (figura \ref{fig:res_global_vn}) servem como um indicadores relevantes pois refletem também condições das infraestrutura e dos estudantes. A localização diferenciada se refere a escolas presentes em área de assentamento, terras indígenas, quilombos e outras comunidades tradicionais que por muitas vezes são acometidas por um défice estrutural e instabilidades na presença/demarcação de seus territórios.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.7\textwidth]{images/res_global_in.png}
 \caption{Indicadores socioeconômicos de ingresso agrupados por \textit{cluster}}
 \label{fig:res_global_in}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1\textwidth]{images/res_global_er.png}
-\caption{Indicadores socioeconômicos étnico-raciais agrupados por \textit{cluster}}
+\includegraphics[width=.49\textwidth]{images/res_global_er.png}
+\includegraphics[width=.49\textwidth]{images/res_global_qt.png}
+\caption{Indicadores socioeconômicos demográficos agrupados por \textit{cluster}}
 \label{fig:res_global_er}
 \end{figure}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=1\textwidth]{images/res_global_vn.png}
-\caption{Indicadores socioeconômicos de vinculação agrupados por \textit{cluster}}
-\label{fig:res_global_vn}
-\end{figure}
+Ao correlacionar os indicadores étnico-raciais e de ingresso (figuras \ref{fig:res_global_er} e \ref{fig:res_global_in}), observa-se uma distinção clara entre os perfis dos \textit{clusters}. Os \textit{clusters 1} e \textit{2} (Instituto Técnico de Excelência e Rede Técnica), que apresenta os melhores indicadores de infraestrutura, destacam-se por seu alto índice de seletividade e reserva. Em contrapartida, o \textit{cluster 4} (Grande Centro) demonstra uma configuração social distinta: é o grupo com a maior proporção de alunos pretos e pardos, além de concentrar a maior fatia de ingressantes via EJA. Esses dados sugerem que, enquanto as instituições de excelência técnica tendem a ser mais homogêneas e seletivas, os grande centro atendem a uma população mais diversa racialmente e com maior demanda por modalidades de ensino voltadas para a inclusão e a educação de jovens e adultos.
 
-Para o \textit{cluster 0} (Escolas Regulares) seu indicador mais marcante foi a quantidade de elementos no conjunto, representando $73\%$ do total, o que indica que existe uma hegemonia no que se diz sober a demografia e estrutura das escolas publicas de ensino médio no Brasil. No \textit{cluster 1} (Institutos Técnicos de Excelência) se identificou que $74,1\%$ (figura \ref{fig:res_global_in}) exigem processo seletivo, $100\%$ possuem educação profissionalizante e como observado na figura \ref{fig:res_global_se} contém os melhores indicadores socioeconômicos na infraestrutura.
-
-O \textit{cluster 2} (Rede Técnica Federal) se assemelha ao \textit{cluster 1} onde $65\%$ (figura \ref{fig:res_global_in}) tem processo seletivo e $100\%$ também possuem educação profissionalizante, entretanto possuem indicadores na infraestrutura e maior numero de reserva de vagas (figura \ref{fig:res_global_in}). Para o \textit{cluster 4} (Grandes Centros Estaduais) pode se traçar um paralelo  com um \textit{cluster 0} mas com maior destaque na presença do EJA (Educação de Jovens e Adultos) e um recortes mais marcante nos grupos étnico-raciais (figuras \ref{fig:res_global_in} e \ref{fig:res_global_er}). Nos \textit{clusters 3} e \textit{5} sua quantidade de elementos para além de ínfima em relação a outros conjuntos também representam casos específicos, que podem ser classificados como \textit{outliers}, portanto foi optado por não incluí-los nos gráficos e comparações.
-
-Ao analisar as médias das notas consideradas \textit{outliers} em cada \textit{cluster} foi optado por filtrar os resultados para a região de Belo Horizonte (Minas Gerais) entendendo que a área de atuação do ICEI PUC Minas tem sua sede principal nesse município e é por meio dessa instituição que essa trabalho se desenvolveu. Assim foram identificadas $6$ escolas para uma possível intervenção: 1. Colégio Tiradentes PMMG Unidade Argentino Madeira (\textit{Cluster 4}), 2. Escola Estadual Deputado Alvaro Salles (\textit{Cluster 4}), 3. Colégio Militar de Belo Horizonte (\textit{Cluster 4}), 4. Colégio Tiradentes PMMG Gameleira (\textit{Cluster 4}), 5. Escola Estadual Síria Marques da Silva (\textit{Cluster 0}) e 6. Escola Estadual Margarida de Mello Prado (\textit{Cluster 0}), suas médias podem ser vistas pela tabela \ref{tab:res_outliers}.
+Partindo das médias das notas consideradas \textit{outliers} em cada \textit{cluster} optou-se por filtrar os resultados para a região de Belo Horizonte (Minas Gerais), considerando-se uma IES da capital mineira como protagonista da aplicação do resultado desta pesquisa. Assim foram identificadas $6$ escolas para uma possível intervenção: 1. Colégio Tiradentes PMMG Unidade Argentino Madeira (\textit{Cluster 4}), 2. Escola Estadual Deputado Alvaro Salles (\textit{Cluster 4}), 3. Colégio Militar de Belo Horizonte (\textit{Cluster 4}), 4. Colégio Tiradentes PMMG Gameleira (\textit{Cluster 4}), 5. Escola Estadual Síria Marques da Silva (\textit{Cluster 0}) e 6. Escola Estadual Margarida de Mello Prado (\textit{Cluster 0}), suas médias podem ser vistas pela tabela \ref{tab:res_outliers}.
 
 \begin{table}[htbp]
 \centering
@@ -238,22 +256,22 @@ $0$ & $72$ & \makecell{Escola Estadual\\Margarida de\\Mello Prado} & $154$ \\
 \label{tab:res_outliers}
 \end{table}
 
+Importante observar que, como demostrado na figura \ref{fig:res_global_vn}, o \textit{cluster 4} se mostra como aquele tem maior taxa de vinculação à segurança publica, o que pode ser observado nos resultados, em que, das $4$ escolas classificadas com esse grupo, $3$ demonstram essa relação. Outro achado importante foram as escolas estaduais Deputado Alvaro Salles, Síria Marques da Silva e Margarida de Mello Prado que apresentam um contraste ao comparar com as demais instituições desse conjunto nos indicadores étnico-raciais.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1\textwidth]{images/res_outliers_er.png}
+\includegraphics[width=.7\textwidth]{images/res_outliers_er.png}
 \caption{Indicadores socioeconômicos étnico-raciais agrupados por \textit{outliers}}
 \label{fig:res_outliers_er}
 \end{figure}
-
-Importante se observar que como demostrado na figura \ref{fig:res_global_vn} o \textit{cluster 4} se mostra como aquele tem maior taxa de vinculação a segurança publica, o que pode ser observado nos resultados, onde das $4$ escolas classificadas com esse grupo $3$ demonstram essa relação. Outro achado importante foram as escolas estaduais Deputado Alvaro Salles, Síria Marques da Silva e Margarida de Mello Prado que apresentam um contraste ao comparar com as demais instituições desse conjunto nos indicadores étnico-raciais.
 
 \section{Conclusões e Trabalhos Futuros}
 
 Dentro das propostas do trabalho se demostrou possível a mineração e cruzamento dos dados do INEP de forma que se identifique escolas definidas como \textit{outliers} para futuras intervenções. Outro ganho foi o desenvolvimento de uma ferramenta de código-aberto capaz de analisar uma grande carga de dados em tempo hábil em um computador de uso geral, o que abre portas para futuras modificações e usos do trabalho.
 
-Devido ao caráter da base do ENEM 2024 \cite{misc:micro_enem} náo foi possível incluir no cruzamento dados do questionário socioeconômico. Dentre possíveis adições ao trabalho incluem uma analise de forma mais profunda nos \textit{outliers} e \textit{clusters} identificados, além de possíveis aplicações de outros algoritmos de mineração.
+Devido a decisão do INEP em conformidade com a LGPD (Lei Geral de Proteção dos Dados) para os microdados do ENEM 2024 \cite{misc:micro_enem} não foi possível incluir no cruzamento informações do questionário socioeconômico. Se espera que em futuras edições do exame, se disponibilizada formas de correlacionar essas bases, que o projeto pode ser expandido para incluir múltiplos indicadores para garantir resultados mais específicos e detalhados das instituições identificadas.
 
-E finalmente como principal continuidade: um possível projeto de extensão dentro das escolas identificadas, em principal as escolas estaduais Deputado Alvaro Salles, Síria Marques da Silva e Margarida de Mello Prado, pois essas não contem vinculações terceiras que indiquem melhores investimentos e pertencem a conjuntos identificados como aqueles com indicadores socioeconômicos mais desfavoráveis.
+Outra possíveis adições ao trabalho incluem: 1. Analise de forma mais profunda nos \textit{outliers} e \textit{clusters} identificados, 2. Possíveis aplicações de outros algoritmos de mineração e 3. O uso das notas de outras provas do exame para diferentes focos de trabalho. Finalmente como principal continuidade para uma IES de Belo Horizonte, um projeto de extensão em desenvolvimento em TIC, nas escolas identificadas, em especial as escolas estaduais Deputado Alvaro Salles, Síria Marques da Silva e Margarida de Mello Prado, pois essas não contem vinculações terceiras que indiquem melhores investimentos e pertencem a conjuntos identificados como aqueles com indicadores socioeconômicos mais desfavoráveis.
 
 \pagebreak
 
